@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Dashboard | Care4Removals</title>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/style.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/admin.css"
+    >
+
+</head>
+
+
+<body class="admin-body">
+
+
+    <!-- =========================
+         ADMIN HEADER
+         ========================= -->
+
+    <header class="admin-header">
+
+        <div class="admin-header-inner">
+
+            <a
+                href="../index.html"
+                class="logo"
+            >
+
+                <span class="logo-icon">
+                    C4
+                </span>
+
+                <span>
+                    Care4<span>Removals</span>
+                </span>
+
+            </a>
+
+
+            <div class="admin-header-right">
+
+                <span
+                    id="adminEmail"
+                    class="admin-email"
+                >
+                    Staff
+                </span>
+
+                <button
+                    id="logoutBtn"
+                    class="logout-btn"
+                >
+                    Logout
+                </button>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         DASHBOARD
+         ========================= -->
+
+    <main class="admin-main">
+
+        <div class="admin-container">
+
+
+            <!-- Heading -->
+
+            <div class="dashboard-heading">
+
+                <div>
+
+                    <div class="eyebrow">
+
+                        <span class="eyebrow-dot"></span>
+
+                        Staff dashboard
+
+                    </div>
+
+                    <h1>
+                        Removal enquiries
+                    </h1>
+
+                    <p>
+                        Review and manage customer quote requests.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 STATS
+                 ========================= -->
+
+            <section class="stats-grid">
+
+
+                <div class="stat-card">
+
+                    <span class="stat-label">
+                        New
+                    </span>
+
+                    <strong
+                        id="newCount"
+                        class="stat-number"
+                    >
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <span class="stat-label">
+                        Contacted
+                    </span>
+
+                    <strong
+                        id="contactedCount"
+                        class="stat-number"
+                    >
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <span class="stat-label">
+                        Quoted
+                    </span>
+
+                    <strong
+                        id="quotedCount"
+                        class="stat-number"
+                    >
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <span class="stat-label">
+                        Confirmed
+                    </span>
+
+                    <strong
+                        id="confirmedCount"
+                        class="stat-number"
+                    >
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <span class="stat-label">
+                        Completed
+                    </span>
+
+                    <strong
+                        id="completedCount"
+                        class="stat-number"
+                    >
+                        0
+                    </strong>
+
+                </div>
+
+
+            </section>
+
+
+            <!-- =========================
+                 FILTER
+                 ========================= -->
+
+            <section class="booking-section">
+
+                <div class="section-toolbar">
+
+                    <div>
+
+                        <h2>
+                            All enquiries
+                        </h2>
+
+                        <p>
+                            Most recent requests first.
+                        </p>
+
+                    </div>
+
+
+                    <select
+                        id="statusFilter"
+                        class="status-filter"
+                    >
+
+                        <option value="all">
+                            All statuses
+                        </option>
+
+                        <option value="new">
+                            New
+                        </option>
+
+                        <option value="contacted">
+                            Contacted
+                        </option>
+
+                        <option value="quoted">
+                            Quoted
+                        </option>
+
+                        <option value="confirmed">
+                            Confirmed
+                        </option>
+
+                        <option value="completed">
+                            Completed
+                        </option>
+
+                        <option value="cancelled">
+                            Cancelled
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Booking list -->
+
+                <div
+                    id="bookingsList"
+                    class="bookings-list"
+                >
+
+                    <div class="loading-state">
+                        Loading enquiries...
+                    </div>
+
+                </div>
+
+            </section>
+
+
+        </div>
+
+    </main>
+
+
+    <script
+        type="module"
+        src="../js/dashboard.js"
+    ></script>
+
+</body>
+
+</html>
