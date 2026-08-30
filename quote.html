@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Request a removal quote from Care4Removals.">
+    <title>Get a Quote | Care4Removals</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .quote-page {
+            padding:80px 0 110px;
+            background:#f7fafb;
+        }
+
+        .quote-intro {
+            max-width:760px;
+            margin:0 auto 50px;
+            text-align:center;
+        }
+
+        .quote-intro h1 {
+            font-family:"Baloo 2",sans-serif;
+            color:#173f62;
+            font-size:clamp(3rem,6vw,5rem);
+            line-height:.95;
+            margin:12px 0 20px;
+        }
+
+        .quote-intro h1 span { color:#ef8951; }
+
+        .quote-intro p {
+            color:#637687;
+            font-size:1rem;
+            line-height:1.8;
+            max-width:650px;
+            margin:auto;
+        }
+
+        .quote-form-wrapper {
+            max-width:900px;
+            margin:0 auto;
+            background:#fff;
+            border:1px solid #dfe7eb;
+            border-radius:24px;
+            padding:45px;
+            box-shadow:0 15px 40px rgba(23,63,98,.07);
+        }
+
+        .form-section {
+            padding-bottom:35px;
+            margin-bottom:35px;
+            border-bottom:1px solid #e2e8eb;
+        }
+
+        .form-section:last-of-type {
+            border-bottom:none;
+            margin-bottom:0;
+            padding-bottom:0;
+        }
+
+        .form-section h2 {
+            font-family:"Baloo 2",sans-serif;
+            color:#173f62;
+            font-size:2rem;
+            line-height:1;
+            margin:0 0 8px;
+        }
+
+        .form-section-description {
+            color:#637687;
+            font-size:.88rem;
+            line-height:1.6;
+            margin:0 0 25px;
+        }
+
+        .form-grid {
+            display:grid;
+            grid-template-columns:repeat(2,1fr);
+            gap:20px;
+        }
+
+        .form-group {
+            display:flex;
+            flex-direction:column;
+            gap:8px;
+        }
+
+        .form-group.full {
+            grid-column:1 / -1;
+        }
+
+        .form-group label {
+            font-size:.82rem;
+            font-weight:700;
+            color:#173f62;
+        }
+
+        .required { color:#ef8951; }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width:100%;
+            box-sizing:border-box;
+            border:1px solid #d7e1e6;
+            border-radius:11px;
+            padding:13px 14px;
+            background:#fff;
+            color:#173f62;
+            font-family:inherit;
+            font-size:.9rem;
+            outline:none;
+            transition:border-color .2s,box-shadow .2s;
+        }
+
+        .form-group textarea {
+            min-height:135px;
+            resize:vertical;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color:#ef8951;
+            box-shadow:0 0 0 3px rgba(239,137,81,.12);
+        }
+
+        .form-submit-area {
+            margin-top:35px;
+            text-align:center;
+        }
+
+        .form-submit-area .btn {
+            min-width:240px;
+            border:none;
+            cursor:pointer;
+        }
+
+        .form-note {
+            margin:14px 0 0;
+            color:#7a8993;
+            font-size:.76rem;
+            line-height:1.5;
+        }
+
+        .form-message {
+            display:none;
+            padding:18px 20px;
+            margin-bottom:25px;
+            border-radius:14px;
+            font-size:.88rem;
+            line-height:1.5;
+        }
+
+        .form-message.success {
+            display:block;
+            background:#e9f6ed;
+            color:#27643a;
+            border:1px solid #b9dfc4;
+        }
+
+        .form-message.error {
+            display:block;
+            background:#fff0ed;
+            color:#9b3d2d;
+            border:1px solid #f0c2b8;
+        }
+
+        .submit-loading {
+            opacity:.65;
+            pointer-events:none;
+        }
+
+        @media(max-width:650px) {
+            .quote-page { padding:55px 0 75px; }
+            .quote-form-wrapper { padding:28px 20px; }
+            .form-grid { grid-template-columns:1fr; }
+            .form-group.full { grid-column:auto; }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="site-header">
+    <nav class="navbar container">
+        <a href="index.html" class="brand">
+            <img src="assets/care4properties-logo-transparent.png"
+                 alt="Care4Properties"
+                 class="brand-logo">
+            <span class="brand-divider"></span>
+            <span class="removals-brand">care4<span>removals</span></span>
+        </a>
+
+        <div class="nav-links">
+            <a href="services.html">Services</a>
+            <a href="about.html">About</a>
+            <a href="faq.html">FAQs</a>
+            <a href="contact.html">Contact</a>
+        </div>
+
+        <a href="quote.html" class="nav-cta">Get a Free Quote <span>→</span></a>
+
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">☰</button>
+    </nav>
+
+    <div class="mobile-nav" id="mobileNav">
+        <a href="services.html">Services</a>
+        <a href="about.html">About</a>
+        <a href="faq.html">FAQs</a>
+        <a href="contact.html">Contact</a>
+        <a href="quote.html" class="mobile-nav-cta">Get a Free Quote</a>
+    </div>
+</header>
+
+<main>
+
+        <section class="quote-page">
+
+            <div class="container">
+
+                <div class="quote-intro">
+
+                    <div class="eyebrow">
+
+                        <span class="eyebrow-dot"></span>
+
+                        Get started
+
+                    </div>
+
+                    <h1>
+                        Tell us about
+                        <span>your move.</span>
+                    </h1>
+
+                    <p>
+                        Give us a few details about your move and
+                        our team can get back to you with a quote.
+                    </p>
+
+                </div>
+
+
+                <div class="quote-form-wrapper">
+
+                    <div
+                        id="formMessage"
+                        class="form-message"
+                    ></div>
+
+
+                    <form id="quoteForm">
+
+
+                        <!-- =================
+                             YOUR DETAILS
+                             ================= -->
+
+                        <div class="form-section">
+
+                            <h2>Your details</h2>
+
+                            <p class="form-section-description">
+                                How can we contact you?
+                            </p>
+
+                            <div class="form-grid">
+
+                                <div class="form-group">
+
+                                    <label for="customerName">
+                                        Full name
+                                        <span class="required">*</span>
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        id="customerName"
+                                        name="customerName"
+                                        required
+                                        autocomplete="name"
+                                    >
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label for="phone">
+                                        Phone number
+                                        <span class="required">*</span>
+                                    </label>
+
+                                    <input
+                                        type="tel"
+                                        id="phone"
+                                        name="phone"
+                                        required
+                                        autocomplete="tel"
+                                    >
+
+                                </div>
+
+
+                                <div class="form-group full">
+
+                                    <label for="email">
+                                        Email address
+                                        <span class="required">*</span>
+                                    </label>
+
+                                    <input
+                                        type="email"
+                                        id="email"
+                                        name="email"
+                                        required
+                                        autocomplete="email"
+                                    >
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- =================
+                             CURRENT PROPERTY
+                             ================= -->
+
+                        <div class="form-section">
+
+                            <h2>Current property</h2>
+
+                            <p class="form-section-description">
+                                Tell us where you're moving from.
+                            </p>
+
+                            <div class="form-grid">
+
+                                <div class="form-group full">
+
+                                    <label for="pickupAddress">
+                                        Pickup address
+                                        <span class="required">*</span>
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        id="pickupAddress"
+                                        name="pickupAddress"
+                                        required
+                                        autocomplete="street-address"
+                                    >
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label for="pickupPropertyType">
+                                        Property type
+                                        <span class="required">*</span>
+                                    </label>
+
+                                    <select
+                                        id="pickupPropertyType"
+                                        name="pickupPropertyType"
+                                        required
+                                    >
+
+                                        <option value="">
+                                            Select property type
+                                        </option>
+
+                                        <option value="House">
+                                            House
+                                        </option>
+
+                                        <option value="Flat / Apartment">
+                                            Flat / Apartment
+                                        </option>
+
+                                        <option value="Bungalow">
+                                            Bungalow
+                                        </option>
+
+                                        <option value="Office / Commercial">
+                                            Office / Commercial
+                                        </option>
+
+                                        <option value="Other">
+                                            Other
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label for="pickupGroundFloor">
+                                        Is the property ground floor?
+                                    </label>
+
+                                    <select
+                                        id="pickupGroundFloor"
+                                        name="pickupGroundFloor"
+                                    >
+
+                                        <option value="">
+                                            Select
+                                        </option>
+
+                                        <option value="Yes">
+                                            Yes
+                                        </option>
+
+                                        <option value="No">
+                                            No
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- =================
+                             DESTINATION
+                             ================= -->
+
+                        <div class="form-section">
+
+                            <h2>New property</h2>
+
+                            <p class="form-section-description">
+                                Tell us where you're moving to.
+                            </p>
+
+                            <div class="form-grid">
+
+                                <div class="form-group full">
+
+                                    <label for="deliveryAddress">
+                                        Delivery address
+                                        <span class="required">*</span>
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        id="deliveryAddress"
+                                        name="deliveryAddress"
+                                        required
+                                    >
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label for="deliveryPropertyType">
+                                        Property type
+                                        <span class="required">*</span>
+                                    </label>
+
+                                    <select
+                                        id="deliveryPropertyType"
+                                        name="deliveryPropertyType"
+                                        required
+                                    >
+
+                                        <option value="">
+                                            Select property type
+                                        </option>
+
+                                        <option value="House">
+                                            House
+                                        </option>
+
+                                        <option value="Flat / Apartment">
+                                            Flat / Apartment
+                                        </option>
+
+                                        <option value="Bungalow">
+                                            Bungalow
+                                        </option>
+
+                                        <option value="Office / Commercial">
+                                            Office / Commercial
+                                        </option>
+
+                                        <option value="Other">
+                                            Other
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label for="deliveryGroundFloor">
+                                        Is the property ground floor?
+                                    </label>
+
+                                    <select
+                                        id="deliveryGroundFloor"
+                                        name="deliveryGroundFloor"
+                                    >
+
+                                        <option value="">
+                                            Select
+                                        </option>
+
+                                        <option value="Yes">
+                                            Yes
+                                        </option>
+
+                                        <option value="No">
+                                            No
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- =================
+                             MOVE DETAILS
+                             ================= -->
+
+                        <div class="form-section">
+
+                            <h2>Move details</h2>
+
+                            <p class="form-section-description">
+                                Give us a little more information.
+                            </p>
+
+                            <div class="form-grid">
+
+                                <div class="form-group">
+
+                                    <label for="movingDate">
+                                        Preferred moving date
+                                    </label>
+
+                                    <input
+                                        type="date"
+                                        id="movingDate"
+                                        name="movingDate"
+                                    >
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label for="serviceType">
+                                        Service required
+                                    </label>
+
+                                    <select
+                                        id="serviceType"
+                                        name="serviceType"
+                                    >
+
+                                        <option value="">
+                                            Select service
+                                        </option>
+
+                                        <option value="House Removal">
+                                            House Removal
+                                        </option>
+
+                                        <option value="Office Move">
+                                            Office Move
+                                        </option>
+
+                                        <option value="Packing">
+                                            Packing
+                                        </option>
+
+                                        <option value="Storage">
+                                            Storage
+                                        </option>
+
+                                        <option value="Multiple Services">
+                                            Multiple Services
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+
+                                <div class="form-group full">
+
+                                    <label for="specialInstructions">
+                                        Special instructions
+                                    </label>
+
+                                    <textarea
+                                        id="specialInstructions"
+                                        name="specialInstructions"
+                                        placeholder="Anything else we should know about your move?"
+                                    ></textarea>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- =================
+                             SUBMIT
+                             ================= -->
+
+                        <div class="form-submit-area">
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary"
+                                id="submitQuote"
+                            >
+                                Request My Quote
+                                <span>→</span>
+                            </button>
+
+                            <p class="form-note">
+                                We'll use the information you provide
+                                to respond to your removal enquiry.
+                            </p>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+<footer class="site-footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <a href="index.html" class="removals-footer-logo">care4<span>removals</span></a>
+                <p>Reliable removal services from the Care4Properties team.</p>
+                <a href="quote.html" class="footer-quote-link">Get a Free Quote →</a>
+            </div>
+
+            <div class="footer-column">
+                <h4>Explore</h4>
+                <a href="services.html">Services</a>
+                <a href="about.html">About</a>
+                <a href="faq.html">FAQs</a>
+                <a href="contact.html">Contact</a>
+            </div>
+
+            <div class="footer-column">
+                <h4>Leeds</h4>
+                <p>188a Roundhay Road<br>Leeds<br>LS8 5PL</p>
+                <a href="tel:01132488181">0113 248 8181</a>
+            </div>
+
+            <div class="footer-column">
+                <h4>Birmingham</h4>
+                <p>9 Sheaf Lane<br>Coventry Road<br>Birmingham<br>B26 3EJ</p>
+                <a href="tel:01217268542">0121 726 8542</a>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <span>© 2026 Care4Removals</span>
+            <a href="mailto:info@care4properties.co.uk">info@care4properties.co.uk</a>
+        </div>
+    </div>
+</footer>
+
+<script src="js/main.js"></script>
+
+<script>
+    const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+    const mobileNav = document.getElementById("mobileNav");
+
+    if (mobileMenuBtn && mobileNav) {
+        mobileMenuBtn.addEventListener("click", function () {
+            mobileNav.classList.toggle("open");
+        });
+    }
+</script>
+
+<script type="module" src="js/quote.js"></script>
+
+</body>
+</html>

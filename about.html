@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Learn about Care4Removals and how our removal service connects with the Care4Properties property journey.">
+    <title>About | Care4Removals</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .about-hero {
+            background:#f2f8fa;
+            padding:72px 0 75px;
+        }
+
+        .about-hero-inner {
+            max-width:850px;
+        }
+
+        .about-hero h1 {
+            font-family:"Baloo 2",sans-serif;
+            color:#173f62;
+            font-size:clamp(3rem,6vw,5.2rem);
+            line-height:.95;
+            margin:12px 0 20px;
+        }
+
+        .about-hero h1 span { color:#ef8951; }
+
+        .about-hero p {
+            max-width:700px;
+            color:#637687;
+            font-size:1rem;
+            line-height:1.8;
+        }
+
+        .about-section {
+            padding:90px 0;
+        }
+
+        .about-grid {
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:65px;
+            align-items:center;
+        }
+
+        .about-grid h2 {
+            font-family:"Baloo 2",sans-serif;
+            color:#173f62;
+            font-size:clamp(2.2rem,4vw,3.5rem);
+            line-height:1;
+            margin:12px 0 20px;
+        }
+
+        .about-grid h2 span { color:#ef8951; }
+
+        .about-grid p {
+            color:#637687;
+            line-height:1.8;
+            font-size:.92rem;
+            margin-bottom:15px;
+        }
+
+        .brand-panel {
+            background:#f7f1e8;
+            border-radius:25px;
+            padding:55px 35px;
+            min-height:310px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            position:relative;
+            overflow:hidden;
+        }
+
+        .brand-panel::before {
+            content:"";
+            position:absolute;
+            width:240px;height:240px;
+            border-radius:50%;
+            background:#f8d9c6;
+            right:-70px;top:-80px;
+            opacity:.7;
+        }
+
+        .brand-panel-inner {
+            position:relative;
+            z-index:2;
+            background:#fff;
+            border-radius:20px;
+            padding:32px;
+            width:min(100%,390px);
+            box-shadow:0 15px 35px rgba(23,63,98,.08);
+            text-align:center;
+        }
+
+        .brand-panel-inner img {
+            width:min(100%,300px);
+            margin:0 auto;
+        }
+
+        .brand-panel-inner .removals-logo {
+            font-family:"Baloo 2",sans-serif;
+            font-size:1.8rem;
+            font-weight:800;
+            color:#173f62;
+            margin-top:15px;
+        }
+
+        .brand-panel-inner .removals-logo span { color:#ef8951; }
+
+        .values-section {
+            background:#f7f1e8;
+            padding:90px 0;
+        }
+
+        .values-heading {
+            text-align:center;
+            max-width:700px;
+            margin:0 auto 45px;
+        }
+
+        .values-heading h2 {
+            font-family:"Baloo 2",sans-serif;
+            color:#173f62;
+            font-size:clamp(2.2rem,4vw,3.4rem);
+            line-height:1;
+            margin:12px 0;
+        }
+
+        .values-heading h2 span { color:#ef8951; }
+
+        .values-heading p {
+            color:#637687;
+            line-height:1.7;
+        }
+
+        .values-grid {
+            display:grid;
+            grid-template-columns:repeat(3,1fr);
+            gap:20px;
+        }
+
+        .value-card {
+            background:#fff;
+            border:1px solid #e1e8eb;
+            border-radius:20px;
+            padding:32px;
+            min-height:260px;
+        }
+
+        .value-icon {
+            width:50px;height:50px;
+            display:grid;place-items:center;
+            border-radius:14px;
+            background:#fff0e8;
+            color:#ef8951;
+            font-size:1.25rem;
+            font-weight:800;
+            margin-bottom:22px;
+        }
+
+        .value-card h3 {
+            font-family:"Baloo 2",sans-serif;
+            color:#173f62;
+            font-size:1.4rem;
+            margin-bottom:10px;
+        }
+
+        .value-card p {
+            color:#637687;
+            font-size:.86rem;
+            line-height:1.75;
+        }
+
+        .journey-section {
+            padding:90px 0;
+        }
+
+        .journey-layout {
+            max-width:900px;
+            margin:0 auto;
+        }
+
+        .journey-heading {
+            text-align:center;
+            margin-bottom:50px;
+        }
+
+        .journey-heading h2 {
+            font-family:"Baloo 2",sans-serif;
+            color:#173f62;
+            font-size:clamp(2.2rem,4vw,3.4rem);
+            line-height:1;
+            margin:12px 0;
+        }
+
+        .journey-heading h2 span { color:#ef8951; }
+
+        .journey-heading p {
+            color:#637687;
+            line-height:1.7;
+        }
+
+        .journey-steps {
+            display:grid;
+            grid-template-columns:repeat(3,1fr);
+            position:relative;
+        }
+
+        .journey-steps::before {
+            content:"";
+            position:absolute;
+            top:20px;
+            left:16%;
+            right:16%;
+            height:2px;
+            background:#e3e9ec;
+        }
+
+        .journey-step {
+            position:relative;
+            z-index:2;
+            text-align:center;
+            padding:0 20px;
+        }
+
+        .journey-number {
+            width:42px;height:42px;
+            border-radius:50%;
+            background:#fff;
+            border:2px solid #ef8951;
+            color:#ef8951;
+            display:grid;place-items:center;
+            margin:0 auto 20px;
+            font-size:.75rem;
+            font-weight:800;
+        }
+
+        .journey-step h3 {
+            font-family:"Baloo 2",sans-serif;
+            color:#173f62;
+            font-size:1.3rem;
+            margin-bottom:8px;
+        }
+
+        .journey-step p {
+            color:#637687;
+            font-size:.8rem;
+            line-height:1.65;
+        }
+
+        .about-cta {
+            padding:0 0 90px;
+        }
+
+        .about-cta-card {
+            background:#173f62;
+            border-radius:25px;
+            padding:55px;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:35px;
+        }
+
+        .about-cta-card h2 {
+            font-family:"Baloo 2",sans-serif;
+            color:#fff;
+            font-size:clamp(2.1rem,4vw,3.3rem);
+            line-height:1;
+            margin:10px 0;
+        }
+
+        .about-cta-card h2 span { color:#ef8951; }
+
+        .about-cta-card p {
+            max-width:620px;
+            color:#d5e1e8;
+            line-height:1.7;
+            font-size:.88rem;
+        }
+
+        .about-cta-card .eyebrow { color:#f5b18d; }
+
+        @media(max-width:800px) {
+            .about-grid { grid-template-columns:1fr; gap:40px; }
+            .values-grid { grid-template-columns:1fr; }
+            .journey-steps { grid-template-columns:1fr; gap:35px; }
+            .journey-steps::before { display:none; }
+            .about-cta-card { flex-direction:column; align-items:flex-start; padding:38px 28px; }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="site-header">
+    <nav class="navbar container">
+        <a href="index.html" class="brand">
+            <img src="assets/care4properties-logo-transparent.png"
+                 alt="Care4Properties"
+                 class="brand-logo">
+            <span class="brand-divider"></span>
+            <span class="removals-brand">care4<span>removals</span></span>
+        </a>
+
+        <div class="nav-links">
+            <a href="services.html">Services</a>
+            <a href="about.html">About</a>
+            <a href="faq.html">FAQs</a>
+            <a href="contact.html">Contact</a>
+        </div>
+
+        <a href="quote.html" class="nav-cta">Get a Free Quote <span>→</span></a>
+
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">☰</button>
+    </nav>
+
+    <div class="mobile-nav" id="mobileNav">
+        <a href="services.html">Services</a>
+        <a href="about.html">About</a>
+        <a href="faq.html">FAQs</a>
+        <a href="contact.html">Contact</a>
+        <a href="quote.html" class="mobile-nav-cta">Get a Free Quote</a>
+    </div>
+</header>
+
+<main>
+
+<section class="about-hero">
+    <div class="container">
+        <div class="about-hero-inner">
+            <div class="eyebrow">
+                <span class="eyebrow-dot"></span>
+                About Care4Removals
+            </div>
+
+            <h1>More than a move.<br><span>It's your next step.</span></h1>
+
+            <p>
+                Care4Removals is part of the Care4Properties property journey,
+                providing removal support when it's time to move from one
+                property to another.
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="about-section">
+    <div class="container about-grid">
+        <div>
+            <div class="eyebrow">
+                <span class="eyebrow-dot"></span>
+                Who we are
+            </div>
+
+            <h2>Property support that continues <span>when you move.</span></h2>
+
+            <p>
+                Care4Properties supports customers across different stages of
+                the property journey. Care4Removals extends that support to the
+                practical part of moving between properties.
+            </p>
+
+            <p>
+                Our focus is simple: make the removal process easier to
+                understand, easier to arrange and less stressful for the
+                customer.
+            </p>
+
+            <p>
+                From the first quote request through to delivery, the aim is to
+                provide a straightforward service built around your move.
+            </p>
+        </div>
+
+        <div class="brand-panel">
+            <div class="brand-panel-inner">
+                <img src="assets/care4properties-logo-transparent.png"
+                     alt="Care4Properties">
+                <div class="removals-logo">care4<span>removals</span></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="values-section">
+    <div class="container">
+        <div class="values-heading">
+            <div class="eyebrow">
+                <span class="eyebrow-dot"></span>
+                Our approach
+            </div>
+
+            <h2>What matters on <span>moving day.</span></h2>
+
+            <p>
+                Moving involves enough decisions already. Our service is
+                designed around the things that matter most during a move.
+            </p>
+        </div>
+
+        <div class="values-grid">
+            <article class="value-card">
+                <div class="value-icon">♡</div>
+                <h3>Care</h3>
+                <p>
+                    Your belongings are an important part of your move.
+                    Careful handling is central to the service from collection
+                    through delivery.
+                </p>
+            </article>
+
+            <article class="value-card">
+                <div class="value-icon">✓</div>
+                <h3>Clarity</h3>
+                <p>
+                    We keep the enquiry and quote process straightforward so
+                    you can provide the information the team needs without
+                    unnecessary complication.
+                </p>
+            </article>
+
+            <article class="value-card">
+                <div class="value-icon">→</div>
+                <h3>Reliability</h3>
+                <p>
+                    A move depends on things coming together at the right time.
+                    Our service is focused on dependable transport and delivery.
+                </p>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="journey-section">
+    <div class="container journey-layout">
+        <div class="journey-heading">
+            <div class="eyebrow">
+                <span class="eyebrow-dot"></span>
+                Your removal journey
+            </div>
+
+            <h2>Simple from start to <span>finish.</span></h2>
+
+            <p>
+                The removal process is designed to keep things clear at every stage.
+            </p>
+        </div>
+
+        <div class="journey-steps">
+            <div class="journey-step">
+                <div class="journey-number">01</div>
+                <h3>Request a Quote</h3>
+                <p>
+                    Tell us about your current property, new property and
+                    preferred moving date.
+                </p>
+            </div>
+
+            <div class="journey-step">
+                <div class="journey-number">02</div>
+                <h3>Plan & Move</h3>
+                <p>
+                    Once your move is confirmed, the removal service takes care
+                    of the practical work.
+                </p>
+            </div>
+
+            <div class="journey-step">
+                <div class="journey-number">03</div>
+                <h3>Settle In</h3>
+                <p>
+                    Your belongings are delivered to your new property so you
+                    can get on with settling into your new space.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="about-cta">
+    <div class="container">
+        <div class="about-cta-card">
+            <div>
+                <div class="eyebrow">
+                    <span class="eyebrow-dot"></span>
+                    Start your move
+                </div>
+
+                <h2>Ready to make moving <span>easier?</span></h2>
+
+                <p>
+                    Tell us about your move and request a free quote from the
+                    Care4Removals team.
+                </p>
+            </div>
+
+            <a href="quote.html" class="btn btn-white">
+                Get a Free Quote <span>→</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <a href="index.html" class="removals-footer-logo">care4<span>removals</span></a>
+                <p>Reliable removal services from the Care4Properties team.</p>
+                <a href="quote.html" class="footer-quote-link">Get a Free Quote →</a>
+            </div>
+
+            <div class="footer-column">
+                <h4>Explore</h4>
+                <a href="services.html">Services</a>
+                <a href="about.html">About</a>
+                <a href="faq.html">FAQs</a>
+                <a href="contact.html">Contact</a>
+            </div>
+
+            <div class="footer-column">
+                <h4>Leeds</h4>
+                <p>188a Roundhay Road<br>Leeds<br>LS8 5PL</p>
+                <a href="tel:01132488181">0113 248 8181</a>
+            </div>
+
+            <div class="footer-column">
+                <h4>Birmingham</h4>
+                <p>9 Sheaf Lane<br>Coventry Road<br>Birmingham<br>B26 3EJ</p>
+                <a href="tel:01217268542">0121 726 8542</a>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <span>© 2026 Care4Removals</span>
+            <a href="mailto:info@care4properties.co.uk">info@care4properties.co.uk</a>
+        </div>
+    </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+    const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+    const mobileNav = document.getElementById("mobileNav");
+
+    if (mobileMenuBtn && mobileNav) {
+        mobileMenuBtn.addEventListener("click", () => {
+            mobileNav.classList.toggle("open");
+        });
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Care4Removals removal services — careful packing, reliable transport and safe delivery for moves across Leeds and Birmingham.">
+    <title>Services | Care4Removals</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .page-hero {
+            background: #f2f8fa;
+            padding: 72px 0 68px;
+            border-bottom: 1px solid rgba(23,63,98,.06);
+        }
+
+        .page-hero-grid {
+            display: grid;
+            grid-template-columns: 1.05fr .95fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .page-hero h1 {
+            margin: 14px 0 18px;
+            font-family: "Baloo 2", sans-serif;
+            font-size: clamp(2.8rem, 5vw, 4.6rem);
+            line-height: .95;
+            color: #173f62;
+        }
+
+        .page-hero h1 span {
+            color: #ef8951;
+        }
+
+        .page-hero p {
+            max-width: 590px;
+            color: #637687;
+            line-height: 1.75;
+            font-size: .98rem;
+        }
+
+        .page-hero-actions {
+            display:flex;
+            gap:12px;
+            flex-wrap:wrap;
+            margin-top:28px;
+        }
+
+        .services-illustration {
+            min-height: 330px;
+            border-radius: 28px;
+            background: linear-gradient(145deg,#e9f4f7,#fff7ef);
+            position:relative;
+            overflow:hidden;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+        }
+
+        .services-illustration::before {
+            content:"";
+            position:absolute;
+            width:220px;height:220px;border-radius:50%;
+            background:#f8d8c6;
+            right:8%;top:20px;
+            opacity:.65;
+        }
+
+        .illustration-house {
+            position:relative;
+            z-index:2;
+            width:145px;height:105px;
+            background:#fff;
+            border:4px solid #173f62;
+            border-radius:5px;
+            box-shadow:0 16px 30px rgba(23,63,98,.12);
+        }
+
+        .illustration-house::before {
+            content:"";
+            position:absolute;
+            width:105px;height:105px;
+            background:#173f62;
+            transform:rotate(45deg);
+            left:17px;top:-58px;
+            border-radius:4px;
+        }
+
+        .house-window {
+            position:absolute;z-index:3;
+            width:30px;height:35px;
+            border:3px solid #173f62;
+            background:#b8dce9;
+            left:20px;top:35px;
+        }
+
+        .house-door {
+            position:absolute;z-index:3;
+            width:28px;height:48px;
+            background:#ef8951;
+            border:3px solid #173f62;
+            right:24px;bottom:0;
+        }
+
+        .mini-truck {
+            position:absolute;z-index:4;
+            width:180px;height:70px;
+            background:#ef8951;
+            border:4px solid #173f62;
+            border-radius:8px;
+            bottom:55px;right:55px;
+            box-shadow:0 14px 25px rgba(23,63,98,.14);
+        }
+
+        .mini-truck::before {
+            content:"";
+            position:absolute;
+            width:52px;height:42px;
+            background:#e9f4f7;
+            border:4px solid #173f62;
+            right:-52px;bottom:-4px;
+            border-radius:6px 10px 6px 6px;
+        }
+
+        .mini-truck::after {
+            content:"C4";
+            position:absolute;
+            left:74px;top:18px;
+            color:#fff;
+            font-weight:800;
+            font-size:12px;
+        }
+
+        .truck-wheel {
+            position:absolute;
+            width:30px;height:30px;border-radius:50%;
+            background:#173f62;border:5px solid #fff;
+            bottom:-21px;
+        }
+        .wheel-left{left:22px}.wheel-right{right:22px}
+
+        .service-detail-section {
+            padding: 90px 0;
+        }
+
+        .service-detail-heading {
+            text-align:center;
+            max-width:720px;
+            margin:0 auto 45px;
+        }
+
+        .service-detail-heading h2 {
+            font-family:"Baloo 2",sans-serif;
+            color:#173f62;
+            font-size:clamp(2rem,4vw,3.2rem);
+            line-height:1.05;
+            margin:12px 0;
+        }
+
+        .service-detail-heading h2 span{color:#ef8951}
+        .service-detail-heading p{color:#637687;line-height:1.7}
+
+        .service-detail-grid {
+            display:grid;
+            grid-template-columns:repeat(3,1fr);
+            gap:20px;
+        }
+
+        .service-detail-card {
+            background:#fff;
+            border:1px solid #dfe7eb;
+            border-radius:18px;
+            padding:30px;
+            min-height:265px;
+            transition:transform .2s ease, box-shadow .2s ease;
+        }
+
+        .service-detail-card:hover {
+            transform:translateY(-4px);
+            box-shadow:0 16px 35px rgba(23,63,98,.09);
+        }
+
+        .service-detail-icon {
+            width:48px;height:48px;border-radius:14px;
+            display:grid;place-items:center;
+            background:#fff0e8;color:#ef8951;
+            font-size:1.2rem;font-weight:800;
+            margin-bottom:22px;
+        }
+
+        .service-detail-card h3 {
+            font-family:"Baloo 2",sans-serif;
+            color:#173f62;
+            font-size:1.35rem;
+            margin:0 0 9px;
+        }
+
+        .service-detail-card p {
+            color:#637687;
+            line-height:1.7;
+            font-size:.9rem;
+            margin:0;
+        }
+
+        .move-section {
+            background:#f7f1e8;
+            padding:85px 0;
+        }
+
+        .move-grid {
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:55px;
+            align-items:center;
+        }
+
+        .move-grid h2 {
+            font-family:"Baloo 2",sans-serif;
+            color:#173f62;
+            font-size:clamp(2rem,4vw,3.1rem);
+            line-height:1.05;
+            margin:12px 0 18px;
+        }
+
+        .move-grid h2 span{color:#ef8951}
+
+        .move-grid > div > p {
+            color:#637687;
+            line-height:1.75;
+        }
+
+        .included-list {
+            display:grid;
+            gap:13px;
+            margin-top:25px;
+        }
+
+        .included-item {
+            display:flex;
+            gap:12px;
+            align-items:flex-start;
+            color:#314f64;
+            font-size:.92rem;
+        }
+
+        .included-item strong {
+            color:#173f62;
+        }
+
+        .included-check {
+            flex:0 0 27px;
+            width:27px;height:27px;border-radius:9px;
+            background:#fff;
+            color:#ef8951;
+            display:grid;place-items:center;
+            font-weight:800;
+            box-shadow:0 5px 15px rgba(23,63,98,.06);
+        }
+
+        .process-mini {
+            background:#fff;
+            border-radius:22px;
+            padding:30px;
+            border:1px solid #e2e8eb;
+        }
+
+        .process-mini h3 {
+            font-family:"Baloo 2",sans-serif;
+            color:#173f62;
+            margin:0 0 22px;
+            font-size:1.5rem;
+        }
+
+        .mini-step {
+            display:grid;
+            grid-template-columns:40px 1fr;
+            gap:14px;
+            padding:17px 0;
+            border-bottom:1px solid #edf0f2;
+        }
+
+        .mini-step:last-child{border-bottom:0}
+
+        .mini-step-number {
+            width:34px;height:34px;border-radius:10px;
+            background:#fff0e8;color:#ef8951;
+            display:grid;place-items:center;
+            font-size:.75rem;font-weight:800;
+        }
+
+        .mini-step h4 {
+            margin:0 0 4px;
+            color:#173f62;
+            font-size:.95rem;
+        }
+
+        .mini-step p {
+            margin:0;
+            color:#71808d;
+            font-size:.8rem;
+            line-height:1.5;
+        }
+
+        .service-cta {
+            padding:80px 0;
+        }
+
+        .service-cta-card {
+            background:#173f62;
+            border-radius:24px;
+            padding:50px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:30px;
+        }
+
+        .service-cta-card h2 {
+            font-family:"Baloo 2",sans-serif;
+            color:#fff;
+            font-size:clamp(2rem,4vw,3rem);
+            line-height:1;
+            margin:10px 0;
+        }
+
+        .service-cta-card h2 span{color:#ef8951}
+        .service-cta-card p{color:#d6e2e9;margin:0;max-width:650px;line-height:1.6}
+
+        .eyebrow-light{color:#f5b18d!important}
+        .btn-white{background:#fff;color:#173f62}
+
+        @media(max-width:800px){
+            .page-hero-grid,.move-grid{grid-template-columns:1fr}
+            .service-detail-grid{grid-template-columns:1fr}
+            .services-illustration{min-height:280px}
+            .service-cta-card{flex-direction:column;align-items:flex-start;padding:35px}
+        }
+
+        @media(max-width:520px){
+            .page-hero{padding:55px 0}
+            .services-illustration{min-height:245px}
+            .mini-truck{right:22px;transform:scale(.82);transform-origin:right bottom}
+            .illustration-house{transform:scale(.82);transform-origin:left bottom}
+            .service-detail-section,.move-section,.service-cta{padding:60px 0}
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="site-header">
+    <nav class="navbar container">
+        <a href="index.html" class="brand">
+            <img src="assets/care4properties-logo-transparent.png"
+                 alt="Care4Properties"
+                 class="brand-logo">
+            <span class="brand-divider"></span>
+            <span class="removals-brand">care4<span>removals</span></span>
+        </a>
+
+        <div class="nav-links">
+            <a href="services.html">Services</a>
+            <a href="about.html">About</a>
+            <a href="faq.html">FAQs</a>
+            <a href="contact.html">Contact</a>
+        </div>
+
+        <a href="quote.html" class="nav-cta">Get a Free Quote <span>→</span></a>
+
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">☰</button>
+    </nav>
+
+    <div class="mobile-nav" id="mobileNav">
+        <a href="services.html">Services</a>
+        <a href="about.html">About</a>
+        <a href="faq.html">FAQs</a>
+        <a href="contact.html">Contact</a>
+        <a href="quote.html" class="mobile-nav-cta">Get a Free Quote</a>
+    </div>
+</header>
+
+<main>
+
+<section class="page-hero">
+    <div class="container page-hero-grid">
+        <div>
+            <div class="eyebrow">
+                <span class="eyebrow-dot"></span>
+                Our removal service
+            </div>
+
+            <h1>Moving made <span>simple.</span></h1>
+
+            <p>
+                From heavy furniture to full-house relocations, our removal service
+                is designed to make moving easier — with careful packing, reliable
+                transport and safe delivery.
+            </p>
+
+            <div class="page-hero-actions">
+                <a href="quote.html" class="btn btn-primary">Get a Free Quote <span>→</span></a>
+                <a href="contact.html" class="btn btn-secondary">Contact the Team</a>
+            </div>
+        </div>
+
+        <div class="services-illustration" aria-hidden="true">
+            <div class="illustration-house">
+                <div class="house-window"></div>
+                <div class="house-door"></div>
+            </div>
+
+            <div class="mini-truck">
+                <span class="truck-wheel wheel-left"></span>
+                <span class="truck-wheel wheel-right"></span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="service-detail-section">
+    <div class="container">
+        <div class="service-detail-heading">
+            <div class="eyebrow">
+                <span class="eyebrow-dot"></span>
+                What we do
+            </div>
+            <h2>We take care of the <span>hard part.</span></h2>
+            <p>
+                Our removal service is built around making your move straightforward,
+                dependable and less stressful from the first enquiry to delivery.
+            </p>
+        </div>
+
+        <div class="service-detail-grid">
+            <article class="service-detail-card">
+                <div class="service-detail-icon">⌂</div>
+                <h3>House Removals</h3>
+                <p>
+                    Whether you're moving a few large items or relocating your whole
+                    home, we can help with the move from one property to another.
+                </p>
+            </article>
+
+            <article class="service-detail-card">
+                <div class="service-detail-icon">□</div>
+                <h3>Careful Packing</h3>
+                <p>
+                    We can help prepare your belongings for the move, keeping the
+                    packing process organised and focused on safe handling.
+                </p>
+            </article>
+
+            <article class="service-detail-card">
+                <div class="service-detail-icon">→</div>
+                <h3>Reliable Transport</h3>
+                <p>
+                    Your belongings are transported as part of a planned removal
+                    service designed to keep your move running smoothly.
+                </p>
+            </article>
+
+            <article class="service-detail-card">
+                <div class="service-detail-icon">✓</div>
+                <h3>Safe Delivery</h3>
+                <p>
+                    Once your belongings reach their destination, the team helps
+                    with delivery and unloading so you can settle in comfortably.
+                </p>
+            </article>
+
+            <article class="service-detail-card">
+                <div class="service-detail-icon">£</div>
+                <h3>Clear Pricing</h3>
+                <p>
+                    Request a quote with your move details and receive clear,
+                    upfront pricing with no hidden fees.
+                </p>
+            </article>
+
+            <article class="service-detail-card">
+                <div class="service-detail-icon">♡</div>
+                <h3>Handled With Care</h3>
+                <p>
+                    We treat your belongings with respect throughout the moving
+                    process, helping give you peace of mind.
+                </p>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="move-section">
+    <div class="container move-grid">
+        <div>
+            <div class="eyebrow">
+                <span class="eyebrow-dot"></span>
+                A simpler move
+            </div>
+
+            <h2>From your current home to your <span>new one.</span></h2>
+
+            <p>
+                Tell us what you are moving, where you're moving from and where
+                you're going. We'll use the details you provide to understand
+                your requirements and prepare a personalised quote.
+            </p>
+
+            <div class="included-list">
+                <div class="included-item">
+                    <span class="included-check">✓</span>
+                    <div><strong>Tell us about your properties.</strong><br>Pickup and delivery details help us understand the move.</div>
+                </div>
+
+                <div class="included-item">
+                    <span class="included-check">✓</span>
+                    <div><strong>Choose your preferred moving date.</strong><br>Give us your preferred date and any special instructions.</div>
+                </div>
+
+                <div class="included-item">
+                    <span class="included-check">✓</span>
+                    <div><strong>Receive a personalised quote.</strong><br>Our team can review your enquiry and get back to you.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="process-mini">
+            <h3>How it works</h3>
+
+            <div class="mini-step">
+                <div class="mini-step-number">01</div>
+                <div>
+                    <h4>Request a Quote</h4>
+                    <p>Complete the quick online form with your move details.</p>
+                </div>
+            </div>
+
+            <div class="mini-step">
+                <div class="mini-step-number">02</div>
+                <div>
+                    <h4>We Plan & Move</h4>
+                    <p>Once confirmed, the removal team takes care of the move.</p>
+                </div>
+            </div>
+
+            <div class="mini-step">
+                <div class="mini-step-number">03</div>
+                <div>
+                    <h4>Settle In Comfortably</h4>
+                    <p>Your belongings are delivered and unloaded at your new property.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="service-cta">
+    <div class="container">
+        <div class="service-cta-card">
+            <div>
+                <div class="eyebrow eyebrow-light">
+                    <span class="eyebrow-dot"></span>
+                    Ready when you are
+                </div>
+
+                <h2>Let's make your <span>move easier.</span></h2>
+
+                <p>
+                    Tell us about your move and we'll get back to you with a
+                    clear, personalised quote.
+                </p>
+            </div>
+
+            <a href="quote.html" class="btn btn-white">Request a Free Quote <span>→</span></a>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <a href="index.html" class="removals-footer-logo">care4<span>removals</span></a>
+                <p>Reliable removal services from the Care4Properties team.</p>
+                <a href="quote.html" class="footer-quote-link">Get a Free Quote →</a>
+            </div>
+
+            <div class="footer-column">
+                <h4>Explore</h4>
+                <a href="services.html">Services</a>
+                <a href="about.html">About</a>
+                <a href="faq.html">FAQs</a>
+                <a href="contact.html">Contact</a>
+            </div>
+
+            <div class="footer-column">
+                <h4>Leeds</h4>
+                <p>188a Roundhay Road<br>Leeds<br>LS8 5PL</p>
+                <a href="tel:01132488181">0113 248 8181</a>
+            </div>
+
+            <div class="footer-column">
+                <h4>Birmingham</h4>
+                <p>9 Sheaf Lane<br>Coventry Road<br>Birmingham<br>B26 3EJ</p>
+                <a href="tel:01217268542">0121 726 8542</a>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <span>© 2026 Care4Removals</span>
+            <a href="mailto:info@care4properties.co.uk">info@care4properties.co.uk</a>
+        </div>
+    </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+    const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+    const mobileNav = document.getElementById("mobileNav");
+
+    if (mobileMenuBtn && mobileNav) {
+        mobileMenuBtn.addEventListener("click", () => {
+            mobileNav.classList.toggle("open");
+        });
+    }
+</script>
+
+</body>
+</html>

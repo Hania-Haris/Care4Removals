@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Contact Care4Removals for removal enquiries, support and free quotes.">
+    <title>Contact | Care4Removals</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .contact-hero{background:#f2f8fa;padding:72px 0 70px}
+        .contact-hero-inner{max-width:820px}
+        .contact-hero h1{font-family:"Baloo 2",sans-serif;color:#173f62;font-size:clamp(3rem,6vw,5rem);line-height:.95;margin:12px 0 20px}
+        .contact-hero h1 span{color:#ef8951}
+        .contact-hero p{max-width:680px;color:#637687;line-height:1.8;font-size:1rem}
+
+        .contact-section{padding:85px 0 95px}
+        .contact-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:65px;align-items:start}
+
+        .contact-info h2{font-family:"Baloo 2",sans-serif;color:#173f62;font-size:clamp(2.2rem,4vw,3.2rem);line-height:1;margin:12px 0 18px}
+        .contact-info h2 span{color:#ef8951}
+        .contact-info>p{color:#637687;line-height:1.75;font-size:.9rem}
+
+        .office-card{border:1px solid #dfe7eb;border-radius:18px;padding:25px;margin-top:22px;background:#fff}
+        .office-card h3{font-family:"Baloo 2",sans-serif;color:#173f62;font-size:1.35rem;margin:0 0 12px}
+        .office-card p{color:#637687;font-size:.86rem;line-height:1.7;margin:0 0 12px}
+        .office-card a{display:block;color:#ef8951;font-weight:700;text-decoration:none;margin-top:6px}
+        .office-card a:hover{text-decoration:underline}
+
+        .contact-methods{margin-top:30px;display:grid;gap:12px}
+        .contact-method{display:flex;align-items:center;gap:13px;color:#173f62;font-size:.88rem}
+        .contact-method-icon{width:38px;height:38px;border-radius:11px;background:#fff0e8;color:#ef8951;display:grid;place-items:center;font-weight:800}
+
+        .contact-form-card{background:#fff;border:1px solid #dfe7eb;border-radius:22px;padding:34px;box-shadow:0 12px 30px rgba(23,63,98,.05)}
+        .contact-form-card h2{font-family:"Baloo 2",sans-serif;color:#173f62;font-size:1.8rem;margin:0 0 7px}
+        .contact-form-card>p{color:#637687;font-size:.82rem;line-height:1.6;margin:0 0 25px}
+
+        .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+        .form-group{margin-bottom:17px}
+        .form-group label{display:block;color:#173f62;font-size:.78rem;font-weight:700;margin-bottom:7px}
+        .form-group input,.form-group textarea,.form-group select{
+            width:100%;box-sizing:border-box;border:1px solid #d7e1e6;border-radius:10px;padding:13px 14px;font:inherit;font-size:.84rem;color:#173f62;background:#fff;outline:none;
+        }
+        .form-group textarea{min-height:130px;resize:vertical}
+        .form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:#ef8951;box-shadow:0 0 0 3px rgba(239,137,81,.1)}
+        .required{color:#ef8951}
+        .form-note{color:#7b8a95;font-size:.72rem;line-height:1.5;margin:0 0 18px}
+        .form-status{display:none;margin-top:15px;padding:12px 14px;border-radius:10px;font-size:.8rem}
+        .form-status.show{display:block;background:#edf8f0;color:#28733d}
+
+        .cta-section{padding:0 0 90px}
+        .cta-card{background:#173f62;border-radius:25px;padding:52px;display:flex;justify-content:space-between;align-items:center;gap:35px}
+        .cta-card h2{font-family:"Baloo 2",sans-serif;color:#fff;font-size:clamp(2rem,4vw,3.1rem);line-height:1;margin:10px 0}
+        .cta-card h2 span{color:#ef8951}
+        .cta-card p{max-width:620px;color:#d5e1e8;font-size:.87rem;line-height:1.7;margin:0}
+        .cta-card .eyebrow{color:#f5b18d}
+        .btn-white{background:#fff;color:#173f62}
+
+        @media(max-width:800px){
+            .contact-grid{grid-template-columns:1fr;gap:45px}
+            .cta-card{flex-direction:column;align-items:flex-start;padding:38px 28px}
+        }
+        @media(max-width:520px){
+            .contact-hero{padding:55px 0}
+            .contact-section{padding:65px 0 70px}
+            .form-row{grid-template-columns:1fr}
+            .contact-form-card{padding:25px}
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="site-header">
+    <nav class="navbar container">
+        <a href="index.html" class="brand">
+            <img src="assets/care4properties-logo-transparent.png" alt="Care4Properties" class="brand-logo">
+            <span class="brand-divider"></span>
+            <span class="removals-brand">care4<span>removals</span></span>
+        </a>
+
+        <div class="nav-links">
+            <a href="services.html">Services</a>
+            <a href="about.html">About</a>
+            <a href="faq.html">FAQs</a>
+            <a href="contact.html">Contact</a>
+        </div>
+
+        <a href="quote.html" class="nav-cta">Get a Free Quote <span>→</span></a>
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">☰</button>
+    </nav>
+
+    <div class="mobile-nav" id="mobileNav">
+        <a href="services.html">Services</a>
+        <a href="about.html">About</a>
+        <a href="faq.html">FAQs</a>
+        <a href="contact.html">Contact</a>
+        <a href="quote.html" class="mobile-nav-cta">Get a Free Quote</a>
+    </div>
+</header>
+
+<main>
+
+<section class="contact-hero">
+    <div class="container">
+        <div class="contact-hero-inner">
+            <div class="eyebrow">
+                <span class="eyebrow-dot"></span>
+                Get in touch
+            </div>
+            <h1>Let's talk about<br><span>your move.</span></h1>
+            <p>
+                Have a question, need help with a removal or ready to request
+                a quote? Get in touch with the Care4Removals team.
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="contact-section">
+    <div class="container contact-grid">
+
+        <div class="contact-info">
+            <div class="eyebrow">
+                <span class="eyebrow-dot"></span>
+                Contact the team
+            </div>
+
+            <h2>We're here to make moving <span>easier.</span></h2>
+
+            <p>
+                Contact the relevant office directly, email the team, or use
+                the form on this page. For a full removal enquiry, our free
+                quote form is the quickest way to send your move details.
+            </p>
+
+            <div class="office-card">
+                <h3>Leeds</h3>
+                <p>188a Roundhay Road<br>Leeds<br>LS8 5PL</p>
+                <a href="tel:01132488181">0113 248 8181</a>
+            </div>
+
+            <div class="office-card">
+                <h3>Birmingham</h3>
+                <p>9 Sheaf Lane<br>Coventry Road<br>Birmingham<br>B26 3EJ</p>
+                <a href="tel:01217268542">0121 726 8542</a>
+            </div>
+
+            <div class="contact-methods">
+                <div class="contact-method">
+                    <span class="contact-method-icon">✉</span>
+                    <a href="mailto:info@care4properties.co.uk" style="color:inherit;text-decoration:none;">info@care4properties.co.uk</a>
+                </div>
+                <div class="contact-method">
+                    <span class="contact-method-icon">→</span>
+                    <span>Free removal quotes available online</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="contact-form-card">
+            <h2>Send us a message</h2>
+            <p>
+                Fill in the form below and tell us how we can help.
+            </p>
+
+            <form id="contactForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">Name <span class="required">*</span></label>
+                        <input id="name" name="name" type="text" autocomplete="name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone <span class="required">*</span></label>
+                        <input id="phone" name="phone" type="tel" autocomplete="tel" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email <span class="required">*</span></label>
+                    <input id="email" name="email" type="email" autocomplete="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="subject">What can we help with?</label>
+                    <select id="subject" name="subject">
+                        <option value="General enquiry">General enquiry</option>
+                        <option value="Removal enquiry">Removal enquiry</option>
+                        <option value="Existing booking">Existing booking</option>
+                        <option value="Quote question">Quote question</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Message <span class="required">*</span></label>
+                    <textarea id="message" name="message" required placeholder="Tell us how we can help..."></textarea>
+                </div>
+
+                <p class="form-note">
+                    By submitting this form, you are sending your enquiry to
+                    Care4Removals for review.
+                </p>
+
+                <button type="submit" class="btn btn-primary">
+                    Send Message <span>→</span>
+                </button>
+
+                <div id="formStatus" class="form-status"></div>
+            </form>
+        </div>
+
+    </div>
+</section>
+
+<section class="cta-section">
+    <div class="container">
+        <div class="cta-card">
+            <div>
+                <div class="eyebrow">
+                    <span class="eyebrow-dot"></span>
+                    Planning a move?
+                </div>
+                <h2>Get your free <span>removal quote.</span></h2>
+                <p>
+                    If you're ready to move, send us your property and moving
+                    details through the quote form.
+                </p>
+            </div>
+
+            <a href="quote.html" class="btn btn-white">
+                Get a Free Quote <span>→</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <a href="index.html" class="removals-footer-logo">care4<span>removals</span></a>
+                <p>Reliable removal services from the Care4Properties team.</p>
+                <a href="quote.html" class="footer-quote-link">Get a Free Quote →</a>
+            </div>
+
+            <div class="footer-column">
+                <h4>Explore</h4>
+                <a href="services.html">Services</a>
+                <a href="about.html">About</a>
+                <a href="faq.html">FAQs</a>
+                <a href="contact.html">Contact</a>
+            </div>
+
+            <div class="footer-column">
+                <h4>Leeds</h4>
+                <p>188a Roundhay Road<br>Leeds<br>LS8 5PL</p>
+                <a href="tel:01132488181">0113 248 8181</a>
+            </div>
+
+            <div class="footer-column">
+                <h4>Birmingham</h4>
+                <p>9 Sheaf Lane<br>Coventry Road<br>Birmingham<br>B26 3EJ</p>
+                <a href="tel:01217268542">0121 726 8542</a>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <span>© 2026 Care4Removals</span>
+            <a href="mailto:info@care4properties.co.uk">info@care4properties.co.uk</a>
+        </div>
+    </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+    const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+    const mobileNav = document.getElementById("mobileNav");
+
+    if (mobileMenuBtn && mobileNav) {
+        mobileMenuBtn.addEventListener("click", function () {
+            mobileNav.classList.toggle("open");
+        });
+    }
+
+    // This is intentionally only the UI layer.
+    // Firebase submission can be connected here after the page is installed.
+    const contactForm = document.getElementById("contactForm");
+    const formStatus = document.getElementById("formStatus");
+
+    contactForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        if (!contactForm.checkValidity()) {
+            contactForm.reportValidity();
+            return;
+        }
+
+        formStatus.textContent =
+            "Thanks — your message is ready to be sent. We'll be in touch.";
+        formStatus.classList.add("show");
+
+        contactForm.reset();
+    });
+</script>
+
+</body>
+</html>
