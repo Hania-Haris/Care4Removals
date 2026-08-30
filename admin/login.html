@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Staff Login | Care4Removals</title>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/style.css"
+    >
+
+    <style>
+
+        .login-page {
+
+            min-height:
+                calc(100vh - 78px);
+
+            display: grid;
+
+            place-items: center;
+
+            padding: 60px 20px;
+
+        }
+
+        .login-card {
+
+            width: min(
+                100%,
+                450px
+            );
+
+            padding: 45px;
+
+            background: white;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                var(--radius-large);
+
+            box-shadow:
+                var(--shadow);
+
+        }
+
+        .login-heading {
+
+            text-align: center;
+
+            margin-bottom: 35px;
+
+        }
+
+        .login-heading .logo-icon {
+
+            margin: 0 auto 20px;
+
+        }
+
+        .login-heading h1 {
+
+            font-size: 2.5rem;
+
+            margin-bottom: 10px;
+
+        }
+
+        .login-heading p {
+
+            color:
+                var(--text-soft);
+
+            font-size: 0.9rem;
+
+        }
+
+        .login-form {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 20px;
+
+        }
+
+        .login-group {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 8px;
+
+        }
+
+        .login-group label {
+
+            font-size: 0.85rem;
+
+            font-weight: 700;
+
+        }
+
+        .login-group input {
+
+            padding: 14px 15px;
+
+            border:
+                1px solid #d9dfe4;
+
+            border-radius: 12px;
+
+            font-family: inherit;
+
+            font-size: 0.95rem;
+
+            outline: none;
+
+        }
+
+        .login-group input:focus {
+
+            border-color:
+                var(--coral);
+
+            box-shadow:
+                0 0 0 3px
+                rgba(
+                    244,
+                    137,
+                    74,
+                    0.12
+                );
+
+        }
+
+        .login-button {
+
+            border: none;
+
+            cursor: pointer;
+
+            width: 100%;
+
+        }
+
+        .login-message {
+
+            display: none;
+
+            padding: 14px;
+
+            border-radius: 12px;
+
+            font-size: 0.85rem;
+
+        }
+
+        .login-message.error {
+
+            display: block;
+
+            background: #fff0ed;
+
+            color: #9b3d2d;
+
+            border:
+                1px solid #f0c2b8;
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <header class="site-header">
+
+        <nav class="navbar container">
+
+            <a
+                href="../index.html"
+                class="logo"
+            >
+
+                <span class="logo-icon">
+                    C4
+                </span>
+
+                <span>
+                    Care4<span>Removals</span>
+                </span>
+
+            </a>
+
+            <a
+                href="../index.html"
+                class="nav-cta"
+            >
+                Back to Website
+            </a>
+
+        </nav>
+
+    </header>
+
+
+    <main>
+
+        <section class="login-page">
+
+            <div class="login-card">
+
+                <div class="login-heading">
+
+                    <div class="logo-icon">
+                        C4
+                    </div>
+
+                    <h1>
+                        Staff Login
+                    </h1>
+
+                    <p>
+                        Sign in to manage removal enquiries.
+                    </p>
+
+                </div>
+
+
+                <div
+                    id="loginMessage"
+                    class="login-message"
+                ></div>
+
+
+                <form
+                    id="loginForm"
+                    class="login-form"
+                >
+
+                    <div class="login-group">
+
+                        <label for="email">
+                            Email address
+                        </label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            required
+                            autocomplete="email"
+                        >
+
+                    </div>
+
+
+                    <div class="login-group">
+
+                        <label for="password">
+                            Password
+                        </label>
+
+                        <input
+                            type="password"
+                            id="password"
+                            required
+                            autocomplete="current-password"
+                        >
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary login-button"
+                    >
+                        Sign In
+                    </button>
+
+                </form>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script
+        type="module"
+        src="../js/auth.js"
+    ></script>
+
+</body>
+
+</html>

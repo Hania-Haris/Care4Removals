@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Booking | Care4Removals</title>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/style.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/admin.css"
+    >
+
+    <style>
+
+        .booking-detail-main {
+            padding: 55px 0 100px;
+        }
+
+        .booking-detail-container {
+            width: min(
+                calc(100% - 50px),
+                1100px
+            );
+            margin: auto;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 30px;
+            color: var(--text-soft);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .back-link:hover {
+            color: var(--coral);
+        }
+
+        .booking-detail-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 25px;
+            margin-bottom: 35px;
+        }
+
+        .booking-detail-header h1 {
+            font-size: clamp(
+                2.5rem,
+                5vw,
+                4rem
+            );
+            margin-bottom: 8px;
+        }
+
+        .booking-id {
+            color: var(--text-soft);
+            font-size: 0.78rem;
+            word-break: break-all;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .detail-card {
+            background: white;
+            border: 1px solid rgba(
+                27,
+                58,
+                92,
+                0.08
+            );
+            border-radius: 20px;
+            padding: 30px;
+        }
+
+        .detail-card.full {
+            grid-column: 1 / -1;
+        }
+
+        .detail-card h2 {
+            font-size: 1.8rem;
+            margin-bottom: 22px;
+        }
+
+        .detail-item {
+            margin-bottom: 18px;
+        }
+
+        .detail-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .detail-label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--text-soft);
+            font-size: 0.76rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .detail-value {
+            color: var(--navy);
+            font-size: 0.95rem;
+            font-weight: 600;
+            word-break: break-word;
+        }
+
+        .contact-link {
+            color: var(--coral);
+        }
+
+        .contact-link:hover {
+            text-decoration: underline;
+        }
+
+        .status-management {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .status-management label {
+            color: var(--text-soft);
+            font-size: 0.82rem;
+            font-weight: 700;
+        }
+
+        .booking-status-select {
+            min-width: 170px;
+            padding: 11px 13px;
+            border: 1px solid #d9dfe4;
+            border-radius: 10px;
+            background: white;
+            color: var(--navy);
+            font-family: inherit;
+            font-weight: 600;
+            outline: none;
+        }
+
+        .booking-status-select:focus {
+            border-color: var(--coral);
+        }
+
+        .save-status-btn {
+            border: none;
+            cursor: pointer;
+            padding: 11px 18px;
+            border-radius: 10px;
+            background: var(--navy);
+            color: white;
+            font-family: inherit;
+            font-weight: 700;
+        }
+
+        .save-status-btn:hover {
+            background: var(--coral);
+        }
+
+        .save-status-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .update-message {
+            display: none;
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 10px;
+            font-size: 0.82rem;
+        }
+
+        .update-message.success {
+            display: block;
+            background: #e9f6ed;
+            color: #27643a;
+        }
+
+        .update-message.error {
+            display: block;
+            background: #fff0ed;
+            color: #9b3d2d;
+        }
+
+        .instructions-box {
+            padding: 18px;
+            border-radius: 12px;
+            background: #f6f8fa;
+            color: var(--text-soft);
+            white-space: pre-wrap;
+            min-height: 80px;
+        }
+
+        .loading-detail {
+            padding: 100px 20px;
+            text-align: center;
+            color: var(--text-soft);
+        }
+
+        .error-detail {
+            padding: 50px 20px;
+            text-align: center;
+            color: #9b3d2d;
+        }
+
+        @media (max-width: 750px) {
+
+            .booking-detail-container {
+                width: min(
+                    calc(100% - 30px),
+                    1100px
+                );
+            }
+
+            .booking-detail-header {
+                flex-direction: column;
+            }
+
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .detail-card.full {
+                grid-column: auto;
+            }
+
+            .detail-card {
+                padding: 22px;
+            }
+
+            .status-management {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .booking-status-select,
+            .save-status-btn {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body class="admin-body">
+
+
+    <!-- =========================
+         HEADER
+         ========================= -->
+
+    <header class="admin-header">
+
+        <div class="admin-header-inner">
+
+            <a
+                href="../index.html"
+                class="logo"
+            >
+
+                <span class="logo-icon">
+                    C4
+                </span>
+
+                <span>
+                    Care4<span>Removals</span>
+                </span>
+
+            </a>
+
+
+            <div class="admin-header-right">
+
+                <span
+                    id="adminEmail"
+                    class="admin-email"
+                >
+                    Staff
+                </span>
+
+                <button
+                    id="logoutBtn"
+                    class="logout-btn"
+                >
+                    Logout
+                </button>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         BOOKING DETAILS
+         ========================= -->
+
+    <main class="booking-detail-main">
+
+        <div class="booking-detail-container">
+
+            <a
+                href="dashboard.html"
+                class="back-link"
+            >
+                ← Back to enquiries
+            </a>
+
+
+            <div
+                id="bookingContent"
+                class="loading-detail"
+            >
+                Loading enquiry...
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <script
+        type="module"
+        src="../js/booking.js"
+    ></script>
+
+</body>
+
+</html>
