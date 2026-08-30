@@ -1,0 +1,583 @@
+ /* =========================================================
+   CARE4REMOVALS ADMIN
+   ========================================================= */
+
+
+.admin-body {
+
+    background: #f4f6f8;
+
+}
+
+
+/* =========================
+   HEADER
+   ========================= */
+
+.admin-header {
+
+    background: var(--navy-dark);
+
+    color: white;
+
+}
+
+.admin-header-inner {
+
+    width:
+        min(
+            calc(100% - 50px),
+            1280px
+        );
+
+    min-height: 72px;
+
+    margin: auto;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+}
+
+.admin-header .logo {
+
+    color: white;
+
+}
+
+.admin-header-right {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 20px;
+
+}
+
+.admin-email {
+
+    font-size: 0.82rem;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.65
+        );
+
+}
+
+.logout-btn {
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.2
+        );
+
+    background: transparent;
+
+    color: white;
+
+    border-radius: 999px;
+
+    padding: 9px 16px;
+
+    cursor: pointer;
+
+    font-family: inherit;
+
+    font-weight: 600;
+
+}
+
+.logout-btn:hover {
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.08
+        );
+
+}
+
+
+/* =========================
+   MAIN
+   ========================= */
+
+.admin-main {
+
+    padding: 60px 0 100px;
+
+}
+
+.admin-container {
+
+    width:
+        min(
+            calc(100% - 50px),
+            1280px
+        );
+
+    margin: auto;
+
+}
+
+.dashboard-heading {
+
+    margin-bottom: 35px;
+
+}
+
+.dashboard-heading h1 {
+
+    font-size:
+        clamp(
+            2.5rem,
+            5vw,
+            4rem
+        );
+
+    margin-bottom: 10px;
+
+}
+
+.dashboard-heading p {
+
+    color: var(--text-soft);
+
+}
+
+
+/* =========================
+   STATS
+   ========================= */
+
+.stats-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, 1fr);
+
+    gap: 15px;
+
+    margin-bottom: 50px;
+
+}
+
+.stat-card {
+
+    background: white;
+
+    border:
+        1px solid
+        rgba(
+            27,
+            58,
+            92,
+            0.08
+        );
+
+    border-radius: 18px;
+
+    padding: 25px;
+
+}
+
+.stat-label {
+
+    display: block;
+
+    color: var(--text-soft);
+
+    font-size: 0.8rem;
+
+    font-weight: 600;
+
+    margin-bottom: 10px;
+
+}
+
+.stat-number {
+
+    display: block;
+
+    color: var(--navy);
+
+    font-family:
+        "Baloo 2",
+        sans-serif;
+
+    font-size: 2.5rem;
+
+    line-height: 1;
+
+}
+
+
+/* =========================
+   BOOKINGS
+   ========================= */
+
+.booking-section {
+
+    background: white;
+
+    border:
+        1px solid
+        rgba(
+            27,
+            58,
+            92,
+            0.08
+        );
+
+    border-radius: 24px;
+
+    padding: 30px;
+
+}
+
+.section-toolbar {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-bottom: 25px;
+
+}
+
+.section-toolbar h2 {
+
+    font-size: 2rem;
+
+    margin-bottom: 5px;
+
+}
+
+.section-toolbar p {
+
+    color: var(--text-soft);
+
+    font-size: 0.85rem;
+
+}
+
+.status-filter {
+
+    padding: 11px 14px;
+
+    border:
+        1px solid #d9dfe4;
+
+    border-radius: 10px;
+
+    background: white;
+
+    font-family: inherit;
+
+}
+
+
+/* =========================
+   BOOKING ROW
+   ========================= */
+
+.booking-row {
+
+    display: grid;
+
+    grid-template-columns:
+        1.5fr
+        1.3fr
+        1fr
+        0.9fr
+        100px;
+
+    align-items: center;
+
+    gap: 20px;
+
+    padding: 20px 10px;
+
+    border-top:
+        1px solid
+        rgba(
+            27,
+            58,
+            92,
+            0.08
+        );
+
+}
+
+.booking-row:hover {
+
+    background:
+        #fafbfc;
+
+}
+
+.booking-customer {
+
+    font-weight: 700;
+
+    color: var(--navy);
+
+}
+
+.booking-email {
+
+    color: var(--text-soft);
+
+    font-size: 0.78rem;
+
+    margin-top: 3px;
+
+}
+
+.booking-route {
+
+    font-size: 0.82rem;
+
+    color: var(--text-soft);
+
+}
+
+.booking-date {
+
+    font-size: 0.82rem;
+
+    color: var(--navy);
+
+}
+
+.booking-status {
+
+    display: inline-flex;
+
+    width: fit-content;
+
+    padding: 5px 10px;
+
+    border-radius: 999px;
+
+    font-size: 0.7rem;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+}
+
+.status-new {
+
+    background: #fff0e7;
+
+    color: #c75a21;
+
+}
+
+.status-contacted {
+
+    background: #eaf2fb;
+
+    color: #3c70a5;
+
+}
+
+.status-quoted {
+
+    background: #f1eafb;
+
+    color: #7450a6;
+
+}
+
+.status-confirmed {
+
+    background: #e8f6ec;
+
+    color: #36704a;
+
+}
+
+.status-completed {
+
+    background: #e7edf1;
+
+    color: #49606e;
+
+}
+
+.status-cancelled {
+
+    background: #f9e7e7;
+
+    color: #a13d3d;
+
+}
+
+.view-booking {
+
+    border: none;
+
+    background: var(--navy);
+
+    color: white;
+
+    padding: 8px 12px;
+
+    border-radius: 8px;
+
+    font-family: inherit;
+
+    font-size: 0.75rem;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+}
+
+.view-booking:hover {
+
+    background: var(--coral);
+
+}
+
+
+/* =========================
+   EMPTY / LOADING
+   ========================= */
+
+.loading-state,
+.empty-state {
+
+    padding: 60px 20px;
+
+    text-align: center;
+
+    color: var(--text-soft);
+
+}
+
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+
+@media (max-width: 1000px) {
+
+    .stats-grid {
+
+        grid-template-columns:
+            repeat(3, 1fr);
+
+    }
+
+    .booking-row {
+
+        grid-template-columns:
+            1.5fr
+            1fr
+            100px;
+
+    }
+
+    .booking-route,
+    .booking-date {
+
+        display: none;
+
+    }
+
+}
+
+@media (max-width: 650px) {
+
+    .admin-header-inner,
+    .admin-container {
+
+        width:
+            min(
+                calc(100% - 30px),
+                1280px
+            );
+
+    }
+
+    .admin-email {
+
+        display: none;
+
+    }
+
+    .admin-main {
+
+        padding-top: 40px;
+
+    }
+
+    .stats-grid {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+    .booking-section {
+
+        padding: 20px 15px;
+
+    }
+
+    .section-toolbar {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+    }
+
+    .booking-row {
+
+        grid-template-columns:
+            1fr auto;
+
+        gap: 10px;
+
+    }
+
+    .booking-status {
+
+        grid-column: 1;
+
+    }
+
+    .view-booking {
+
+        grid-column: 2;
+
+        grid-row: 1 / 3;
+
+    }
+
+}
