@@ -6,6 +6,7 @@ import {
   quoteFormSchema,
   contactFormSchema,
 } from "@/lib/validation/lead";
+import { notifyNewLead } from "@/lib/email/notify";
 
 export type ActionResult = {
   status: "idle" | "success" | "error";
@@ -105,13 +106,19 @@ export async function submitQuoteLead(
       createdAt: FieldValue.serverTimestamp(),
     });
 
-    // Phase 7 will add: staff email notification + customer acknowledgement
-    // via Resend, logged to emailLogs. Not wired up yet — see
-    // DECISIONS_REQUIRED.md #12.
+    const reference = docRef.id.slice(0, 8).toUpperCase();
+    await notifyNewLead({
+      leadId: docRef.id,
+      customerName: data.customerName,
+      customerEmail: data.email,
+      source: "quote-form",
+      summary: `${data.pickupAddress} -> ${data.deliveryAddress}\nDate: ${data.movingDate || "flexible"} | Service: ${data.serviceType || "not specified"}`,
+      reference,
+    });
 
     return {
       status: "success",
-      message: `Thank you! Your removal enquiry has been received. Reference: ${docRef.id.slice(0, 8).toUpperCase()}. Our team will be in touch shortly.`,
+      message: `Thank you! Your removal enquiry has been received. Reference: ${reference}. Our team will be in touch shortly.`,
     };
   } catch (error) {
     console.error("submitQuoteLead failed:", error);
@@ -185,6 +192,15 @@ export async function submitContactMessage(
       actor: "system",
       metadata: { source: "contact-form" },
       createdAt: FieldValue.serverTimestamp(),
+    });
+
+    await notifyNewLead({
+      leadId: docRef.id,
+      customerName: data.name,
+      customerEmail: data.email,
+      source: "contact-form",
+      summary: `Subject: ${data.subject}\n\n${data.message}`,
+      reference: docRef.id.slice(0, 8).toUpperCase(),
     });
 
     return {

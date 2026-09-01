@@ -7,7 +7,11 @@ import { FieldValue } from "firebase-admin/firestore";
 import { requireStaff, canWrite } from "@/lib/auth/session";
 import { getSettings } from "@/lib/settings";
 import { calculateQuote, type RawLineItem, type VatMode } from "@/lib/quote/calc";
-import { createQuoteFromLead } from "@/lib/data/quotes";
+import { createQuoteFromLead, getQuoteVersion } from "@/lib/data/quotes";
+import { generateAndStoreQuotePdf, getQuotePdfBuffer } from "@/lib/pdf/generate";
+import { sendTransactionalEmail } from "@/lib/email/send";
+import { quotationEmail } from "@/lib/email/templates";
+import { customerQuoteUrl } from "@/lib/urls";
 import type { QuoteStatus } from "@/lib/types";
 
 export type QuoteActionResult = {
@@ -245,12 +249,139 @@ export async function sendQuote(quoteId: string): Promise<QuoteActionResult> {
     createdAt: FieldValue.serverTimestamp(),
   });
 
-  // Phase 7 will: generate the PDF from this immutable version, email the
-  // customer the secure link + PDF, and log to emailLogs. Not wired yet.
+  // ---- PDF + email delivery (Phase 7) ----
+  // Best-effort: a delivery failure doesn't roll back the issued version
+  // (it's immutable and real). The failure is visible in emailLogs and the
+  // activity feed, and staff can use the resend action.
+  let deliveryNote = "";
+  try {
+    const version = await getQuoteVersion(versionRef.id);
+    if (version) {
+      const pdfPath = await generateAndStoreQuotePdf(quoteId, versionRef.id, {
+        quoteNumber: q.quoteNumber,
+        legalEntityName: settings.legalEntityName,
+        customerName: q.customerName ?? "",
+        customerEmail: q.customerEmail ?? "",
+        moveSummary: q.moveSummary ?? "See enquiry details",
+        issuedAt: new Date().toLocaleDateString("en-GB"),
+        expiresAt: tokenExpiry.toLocaleDateString("en-GB"),
+        version,
+      });
+      await versionRef.update({ pdfStoragePath: pdfPath });
+
+      const pdfBuffer = await getQuotePdfBuffer(pdfPath);
+      const tpl = quotationEmail({
+        customerName: q.customerName ?? "there",
+        quoteNumber: q.quoteNumber,
+        total: q.draftTotal ?? 0,
+        expiresAt: tokenExpiry.toLocaleDateString("en-GB"),
+        secureUrl: customerQuoteUrl(token),
+      });
+      const res = await sendTransactionalEmail({
+        to: q.customerEmail,
+        from: settings.emailSenderAddress,
+        subject: tpl.subject,
+        html: tpl.html,
+        text: tpl.text,
+        attachments: [
+          { filename: `${q.quoteNumber}.pdf`, content: pdfBuffer },
+        ],
+        entityType: "quote",
+        entityId: quoteId,
+        templateType: "quotation",
+      });
+      deliveryNote = res.ok
+        ? " Emailed to the customer with the PDF attached."
+        : ` PDF stored, but the email did not send (${res.error}). Use "resend" once configured.`;
+    }
+  } catch (e) {
+    console.error("quote delivery failed:", e);
+    deliveryNote =
+      " The version is issued, but PDF/email delivery failed — check emailLogs.";
+  }
 
   revalidatePath(`/admin/quotes/${quoteId}`);
   return {
     ok: true,
-    message: `Version ${versionNumber} issued. (Email + PDF delivery is Phase 7.)`,
+    message: `Version ${versionNumber} issued.${deliveryNote}`,
   };
+}
+
+export async function resendQuoteEmail(
+  quoteId: string
+): Promise<QuoteActionResult> {
+  let user;
+  try {
+    user = await requireWriter();
+  } catch {
+    return { ok: false, message: "Not authorised." };
+  }
+
+  const db = getAdminDb();
+  const snap = await db.collection("quotes").doc(quoteId).get();
+  if (!snap.exists) return { ok: false, message: "Quote not found." };
+  const q = snap.data()!;
+  if (!q.currentVersionId) {
+    return { ok: false, message: "No issued version to resend." };
+  }
+
+  // Resend must NOT create a new version unless quote content changed —
+  // this reuses the existing currentVersionId and its stored PDF.
+  const version = await getQuoteVersion(q.currentVersionId);
+  if (!version) return { ok: false, message: "Issued version missing." };
+
+  const tokSnap = await db
+    .collection("customerTokens")
+    .where("quoteId", "==", quoteId)
+    .where("revoked", "==", false)
+    .orderBy("createdAt", "desc")
+    .limit(1)
+    .get();
+  if (tokSnap.empty) {
+    return { ok: false, message: "No active customer link — re-send the quote." };
+  }
+  const token = tokSnap.docs[0]!.data().token as string;
+  const settings = await getSettings();
+
+  try {
+    const pdfBuffer = version.pdfStoragePath
+      ? await getQuotePdfBuffer(version.pdfStoragePath)
+      : undefined;
+    const tpl = quotationEmail({
+      customerName: q.customerName ?? "there",
+      quoteNumber: q.quoteNumber,
+      total: version.total,
+      expiresAt: q.expiresAt?.toDate
+        ? q.expiresAt.toDate().toLocaleDateString("en-GB")
+        : "",
+      secureUrl: customerQuoteUrl(token),
+    });
+    const res = await sendTransactionalEmail({
+      to: q.customerEmail,
+      from: settings.emailSenderAddress,
+      subject: tpl.subject,
+      html: tpl.html,
+      text: tpl.text,
+      attachments: pdfBuffer
+        ? [{ filename: `${q.quoteNumber}.pdf`, content: pdfBuffer }]
+        : undefined,
+      entityType: "quote",
+      entityId: quoteId,
+      templateType: "quotation-resend",
+    });
+    await db.collection("activities").add({
+      entityType: "quote",
+      entityId: quoteId,
+      type: "quote-resent",
+      actor: user.uid,
+      metadata: { ok: res.ok },
+      createdAt: FieldValue.serverTimestamp(),
+    });
+    revalidatePath(`/admin/quotes/${quoteId}`);
+    return res.ok
+      ? { ok: true, message: "Quote email resent." }
+      : { ok: false, message: `Resend failed: ${res.error}` };
+  } catch {
+    return { ok: false, message: "Resend failed." };
+  }
 }
