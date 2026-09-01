@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Logo from "@/components/Logo";
 
 // NOTE: contact details below are carried over from the current live site
 // unverified (see DECISIONS_REQUIRED.md #3). They will move to the
@@ -12,8 +13,8 @@ export default function SiteFooter() {
       <div className="container">
         <div className="footer-grid">
           <div className="footer-brand">
-            <Link href="/" className="removals-footer-logo">
-              care4<span>removals</span>
+            <Link href="/" className="removals-footer-logo" aria-label="Care4Removals home">
+              <Logo tone="onDark" />
             </Link>
             <p>Reliable removal services from the Care4Properties team.</p>
             <Link href="/get-a-quote" className="footer-quote-link">

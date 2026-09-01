@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import Logo from "@/components/Logo";
 
 const NAV_LINKS = [
   { href: "/services", label: "Services" },
@@ -49,10 +50,8 @@ export default function SiteHeader() {
   return (
     <header className="site-header">
       <nav className="navbar container">
-        <Link href="/" className="brand">
-          <span className="removals-brand">
-            care4<span>removals</span>
-          </span>
+        <Link href="/" className="brand" aria-label="Care4Removals home">
+          <Logo tone="onDark" />
         </Link>
 
         <div className="nav-links">

@@ -838,3 +838,135 @@ textarea:focus {
   opacity: 1 !important;
   transform: none !important;
 }
+
+/* =========================================================================
+   LOGO LOCKUP
+========================================================================= */
+
+.c4r-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  line-height: 1;
+  text-decoration: none;
+}
+.c4r-logo-mark {
+  width: 34px;
+  height: auto;
+  flex-shrink: 0;
+}
+.c4r-logo-word {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  font-size: 1.28rem;
+}
+.site-footer .c4r-logo-word {
+  font-size: 1.15rem;
+}
+.brand,
+.removals-footer-logo {
+  display: inline-flex !important;
+}
+
+/* =========================================================================
+   HERO ILLUSTRATION — foot (labels + progress track)
+========================================================================= */
+
+.hero-illustration {
+  padding: 22px 22px 18px;
+}
+.hero-illustration-foot {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 16px;
+  margin-top: 4px;
+}
+.hero-tag {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: -0.005em;
+  color: #0c1f38;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.hero-tag span {
+  display: block;
+  width: 30px;
+  height: 3px;
+  border-radius: 2px;
+  background: #37c4e0;
+}
+.hero-tag-to {
+  color: var(--amber);
+  text-align: right;
+  align-items: flex-end;
+}
+.hero-tag-to span {
+  background: var(--amber);
+}
+.hero-progress {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+.hero-progress-line {
+  flex: 1;
+  height: 2px;
+  background: #e2e8f0;
+}
+.hero-progress-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #d5dde7;
+  flex-shrink: 0;
+}
+.hero-progress-dot.is-done {
+  background: #1e3a5f;
+}
+.hero-progress-dot.is-active {
+  width: 13px;
+  height: 13px;
+  background: var(--amber);
+  box-shadow: 0 0 0 5px rgba(226, 102, 15, 0.18);
+}
+
+@media (max-width: 520px) {
+  .hero-illustration-foot {
+    grid-template-columns: 1fr 1fr;
+    row-gap: 12px;
+  }
+  .hero-progress {
+    grid-column: 1 / -1;
+    order: 3;
+  }
+}
+
+/* =========================================================================
+   PASS 6 — hero tightening + illustration padding
+========================================================================= */
+
+.hero {
+  padding-top: clamp(60px, 7vw, 96px) !important;
+  padding-bottom: clamp(48px, 5vw, 72px) !important;
+}
+.hero-grid {
+  align-items: center;
+}
+.hero-illustration {
+  padding: 20px 22px 16px;
+}
+.hero-illustration svg {
+  margin-bottom: 2px;
+}
+
+/* logo mark a touch bigger for presence */
+.c4r-logo-mark {
+  width: 36px;
+}
+.site-header .c4r-logo-word {
+  font-size: 1.3rem;
+}
