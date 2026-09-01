@@ -1051,24 +1051,40 @@ textarea:focus {
 
 /* ---- mobile: image is busy, use a near-solid vertical scrim ---- */
 @media (max-width: 720px) {
+  /* On mobile the copy sits in the top half and the van gets the lower half,
+     roughly centred, with a top-heavy scrim so the headline stays readable
+     while the vehicle is clearly visible. */
   .hero--image {
-    min-height: 0;
+    min-height: 560px;
+    align-items: flex-start;
   }
   .hero-bg {
-    object-position: 64% center;
+    /* pushed right + down so the van lands roughly centred in the crop */
+    object-position: 84% 54%;
   }
   .hero-scrim {
     background: linear-gradient(
       180deg,
-      rgba(6, 20, 36, 0.82) 0%,
-      rgba(6, 20, 36, 0.72) 40%,
-      rgba(6, 20, 36, 0.86) 100%
+      rgba(6, 20, 36, 0.95) 0%,
+      rgba(6, 20, 36, 0.9) 28%,
+      rgba(6, 20, 36, 0.58) 50%,
+      rgba(6, 20, 36, 0.24) 70%,
+      rgba(6, 20, 36, 0.42) 100%
     );
   }
   .hero--image .hero-content {
     max-width: none;
   }
   .hero-inner {
-    padding: clamp(48px, 12vw, 72px) 0;
+    padding: 44px 0 150px;
+  }
+}
+
+@media (max-width: 420px) {
+  .hero-bg {
+    object-position: 84% 52%;
+  }
+  .hero-inner {
+    padding-bottom: 130px;
   }
 }
