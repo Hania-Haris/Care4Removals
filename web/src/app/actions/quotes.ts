@@ -183,16 +183,15 @@ export async function sendQuote(quoteId: string): Promise<QuoteActionResult> {
     };
   }
 
-  // Next immutable version number
+  // Next immutable version number (single-filter query, max in memory)
   const versionsSnap = await db
     .collection("quoteVersions")
     .where("quoteId", "==", quoteId)
-    .orderBy("versionNumber", "desc")
-    .limit(1)
     .get();
-  const lastVersion = versionsSnap.empty
-    ? 0
-    : (versionsSnap.docs[0]!.data().versionNumber as number);
+  const lastVersion = versionsSnap.docs.reduce(
+    (max, d) => Math.max(max, (d.data().versionNumber as number) ?? 0),
+    0
+  );
   const versionNumber = lastVersion + 1;
 
   const versionRef = db.collection("quoteVersions").doc();
@@ -333,14 +332,17 @@ export async function resendQuoteEmail(
   const tokSnap = await db
     .collection("customerTokens")
     .where("quoteId", "==", quoteId)
-    .where("revoked", "==", false)
-    .orderBy("createdAt", "desc")
-    .limit(1)
     .get();
-  if (tokSnap.empty) {
+  const activeTokens = tokSnap.docs
+    .map((d) => d.data())
+    .filter((t) => !t.revoked)
+    .sort(
+      (a, b) => (b.createdAt?.toMillis?.() ?? 0) - (a.createdAt?.toMillis?.() ?? 0)
+    );
+  if (activeTokens.length === 0) {
     return { ok: false, message: "No active customer link — re-send the quote." };
   }
-  const token = tokSnap.docs[0]!.data().token as string;
+  const token = activeTokens[0]!.token as string;
   const settings = await getSettings();
 
   try {

@@ -38,8 +38,15 @@ function getFirebaseAdminApp(): App {
 
   const serviceAccount = JSON.parse(serviceAccountJson);
 
+  const projectId =
+    serviceAccount.project_id ||
+    process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
+
   cachedApp = initializeApp({
     credential: cert(serviceAccount),
+    storageBucket:
+      process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET ||
+      (projectId ? `${projectId}.appspot.com` : undefined),
   });
 
   return cachedApp;

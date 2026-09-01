@@ -65,8 +65,13 @@ export async function getJobByQuote(quoteId: string): Promise<JobRecord | null> 
 }
 
 export async function listJobs(status?: JobStatus): Promise<JobRecord[]> {
-  let q: FirebaseFirestore.Query = getAdminDb().collection("jobs");
-  if (status) q = q.where("status", "==", status);
-  const snap = await q.orderBy("createdAt", "desc").limit(50).get();
-  return snap.docs.map(mapJob);
+  // Order by createdAt only (auto-indexed); status filter applied in memory.
+  const snap = await getAdminDb()
+    .collection("jobs")
+    .orderBy("createdAt", "desc")
+    .limit(status ? 200 : 50)
+    .get();
+  let rows = snap.docs.map(mapJob);
+  if (status) rows = rows.filter((j) => j.status === status).slice(0, 50);
+  return rows;
 }

@@ -184,12 +184,15 @@ function mapVersion(
 export async function listQuoteVersions(
   quoteId: string
 ): Promise<QuoteVersionRecord[]> {
+  // Single equality filter (auto-indexed); sort in memory — a quote has a
+  // handful of versions at most.
   const snap = await getAdminDb()
     .collection("quoteVersions")
     .where("quoteId", "==", quoteId)
-    .orderBy("versionNumber", "desc")
     .get();
-  return snap.docs.map(mapVersion);
+  return snap.docs
+    .map(mapVersion)
+    .sort((a, b) => b.versionNumber - a.versionNumber);
 }
 
 export async function getQuoteVersion(

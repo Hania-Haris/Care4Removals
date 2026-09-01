@@ -57,8 +57,12 @@ function mapDoc(
 }
 
 /**
- * Paginated, filterable lead list. Cursor-based (createdAt of the last item)
- * so it stays cheap as the collection grows — never an unbounded read.
+ * Paginated, filterable lead list. Ordered by `createdAt` only (a single-field
+ * index Firestore maintains automatically — no composite index to deploy);
+ * status/source filters are applied in memory over a bounded fetch window.
+ * Fine for this scale; if the collection ever grows large enough that the
+ * over-fetch hurts, add the composite indexes in firestore.indexes.json and
+ * push the filters back into the query.
  */
 export async function listLeads(opts: {
   status?: LeadStatus;
@@ -66,12 +70,14 @@ export async function listLeads(opts: {
   cursor?: string;
 }): Promise<LeadPage> {
   const db = getAdminDb();
-  let q: FirebaseFirestore.Query = db.collection("leads");
+  const filtered = !!(opts.status || opts.source);
+  // Over-fetch when filtering so a page can still be filled.
+  const fetchLimit = (filtered ? PAGE_SIZE * 6 : PAGE_SIZE) + 1;
 
-  if (opts.status) q = q.where("status", "==", opts.status);
-  if (opts.source) q = q.where("source", "==", opts.source);
-
-  q = q.orderBy("createdAt", "desc").limit(PAGE_SIZE + 1);
+  let q: FirebaseFirestore.Query = db
+    .collection("leads")
+    .orderBy("createdAt", "desc")
+    .limit(fetchLimit);
 
   if (opts.cursor) {
     const cursorDoc = await db.collection("leads").doc(opts.cursor).get();
@@ -79,13 +85,18 @@ export async function listLeads(opts: {
   }
 
   const snap = await q.get();
-  const docs = snap.docs.slice(0, PAGE_SIZE);
-  const hasMore = snap.docs.length > PAGE_SIZE;
+  let rows = snap.docs.map(mapDoc);
+  if (opts.status) rows = rows.filter((r) => r.status === opts.status);
+  if (opts.source) rows = rows.filter((r) => r.source === opts.source);
+
+  const items = rows.slice(0, PAGE_SIZE);
+  const hasMore = rows.length > PAGE_SIZE || snap.docs.length === fetchLimit;
 
   return {
-    items: docs.map(mapDoc),
-    hasMore,
-    nextCursor: hasMore ? docs[docs.length - 1]!.id : null,
+    items,
+    hasMore: hasMore && items.length > 0,
+    nextCursor:
+      hasMore && items.length > 0 ? items[items.length - 1]!.id : null,
   };
 }
 
@@ -126,24 +137,34 @@ export type Activity = {
 };
 
 export async function getLeadActivities(leadId: string): Promise<Activity[]> {
+  // Single equality filter (auto-indexed); entityType filter + ordering done
+  // in memory — activities per entity are a small, bounded set.
   const snap = await getAdminDb()
     .collection("activities")
-    .where("entityType", "==", "lead")
     .where("entityId", "==", leadId)
-    .orderBy("createdAt", "desc")
-    .limit(50)
+    .limit(200)
     .get();
 
-  return snap.docs.map((doc) => {
-    const d = doc.data();
-    return {
-      id: doc.id,
-      type: d.type ?? "",
-      actor: d.actor ?? "system",
-      metadata: d.metadata ?? {},
-      createdAt: toIso(d.createdAt),
-    };
-  });
+  return snap.docs
+    .map((doc) => {
+      const d = doc.data();
+      return {
+        id: doc.id,
+        entityType: d.entityType ?? "",
+        type: d.type ?? "",
+        actor: d.actor ?? "system",
+        metadata: d.metadata ?? {},
+        createdAt: toIso(d.createdAt),
+        _ts: d.createdAt?.toMillis?.() ?? 0,
+      };
+    })
+    .filter((a) => a.entityType === "lead")
+    .sort((a, b) => b._ts - a._ts)
+    .map(({ _ts, entityType, ...rest }) => {
+      void _ts;
+      void entityType;
+      return rest;
+    });
 }
 
 export async function listStaffUsers(): Promise<
