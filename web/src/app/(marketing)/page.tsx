@@ -1,761 +1,260 @@
+import Link from "next/link";
+import Icon from "@/components/Icon";
+import HeroIllustration from "@/components/HeroIllustration";
+
+const BENEFITS = [
+  {
+    icon: "shield-check" as const,
+    title: "Handled with care",
+    body: "Your belongings are protected at every step — proper packing, secure loading, careful handling from door to door.",
+  },
+  {
+    icon: "box" as const,
+    title: "One team, start to finish",
+    body: "The team behind Care4Properties handles your whole move — packing, transport and delivery organised as one job.",
+  },
+  {
+    icon: "tag" as const,
+    title: "Clear, upfront pricing",
+    body: "A written quotation based on your actual move. No hidden fees, no surprises on the day.",
+  },
+];
+
+const SERVICES = [
+  { icon: "box" as const, title: "House removals", body: "Full-home moves, planned around your date and your access." },
+  { icon: "shield-check" as const, title: "Careful packing", body: "Professional materials and methodical packing for fragile and bulky items." },
+  { icon: "truck" as const, title: "Reliable transport", body: "The right vehicle for your move, loaded and secured properly." },
+  { icon: "home" as const, title: "Safe delivery", body: "Everything placed where you want it in your new home." },
+];
+
+const STEPS = [
+  {
+    icon: "route" as const,
+    title: "Request a quote",
+    body: "Tell us about your current property, your new property and your preferred date.",
+  },
+  {
+    icon: "truck" as const,
+    title: "We plan & move",
+    body: "Once you accept your quotation, our team takes care of the packing and transport.",
+  },
+  {
+    icon: "home" as const,
+    title: "Settle in",
+    body: "Your belongings arrive at your new home so you can get on with settling in.",
+  },
+];
+
 export default function HomePage() {
   return (
-    <>
-
-
-
-
-{/* =====================================================
-     HERO
-===================================================== */}
-
-<main>
-
-
-<section className="hero">
-
-    <div className="hero-decoration hero-decoration-one"></div>
-    <div className="hero-decoration hero-decoration-two"></div>
-
-
-    <div className="container hero-grid">
-
-
-        <div className="hero-content">
-
-
+    <main>
+      {/* ---------- HERO ---------- */}
+      <section className="hero">
+        <div className="container hero-grid">
+          <div className="hero-content">
             <div className="eyebrow">
-
-                <span className="eyebrow-dot"></span>
-
-                Moving made easier
-
+              <span className="eyebrow-dot" />
+              Moving made easier
             </div>
-
 
             <h1>
-
-                Your move.
-
-                <span>
-                    Our care.
-                </span>
-
+              Your move.
+              <br />
+              <span>Our care.</span>
             </h1>
 
-
             <p className="hero-text">
-
-                Reliable removal services from the team
-                behind Care4Properties. From careful packing
-                to safe delivery, we&apos;ll take care of the hard work.
-
+              Reliable removal services from the team behind Care4Properties —
+              from careful packing to safe delivery, we take care of the hard
+              work.
             </p>
-
 
             <div className="hero-actions">
-
-                <a href="/get-a-quote" className="btn btn-primary">
-
-                    Get a Free Quote
-
-                    <span>→</span>
-
-                </a>
-
-
-                <a href="/services" className="btn btn-secondary">
-
-                    Explore Our Services
-
-                </a>
-
+              <Link href="/get-a-quote" className="btn btn-primary">
+                Get a free quote
+                <Icon name="arrow-right" size={18} />
+              </Link>
+              <Link href="/services" className="btn btn-secondary">
+                Explore our services
+              </Link>
             </div>
 
-
-            <div className="hero-trust">
-
-                <div className="trust-item">
-
-                    <strong>
-                        Care4Properties
-                    </strong>
-
-                    <span>
-                        Property professionals
-                    </span>
-
-                </div>
-
-
-                <div className="trust-line"></div>
-
-
-                <div className="trust-item">
-
-                    <strong>
-                        Leeds & Birmingham
-                    </strong>
-
-                    <span>
-                        Local office support
-                    </span>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-
-        {/* HERO VISUAL */}
-
-        <div className="hero-visual">
-
-
-            <div className="hero-card hero-card-main">
-
-                <div className="route-line">
-
-                    <span className="route-point"></span>
-
-                    <span className="route-dash"></span>
-
-                    <span className="route-point route-point-end"></span>
-
-                </div>
-
-
-                <div className="hero-location">
-
-                    <span>
-                        FROM
-                    </span>
-
-                    <strong>
-                        Your current home
-                    </strong>
-
-                </div>
-
-
-                <a href="/get-a-quote" className="hero-arrow" aria-label="Get a Free Quote">
-                    →
-                </a>
-
-
-                <div className="hero-location hero-location-right">
-
-                    <span>
-                        TO
-                    </span>
-
-                    <strong>
-                        Your new home
-                    </strong>
-
-                </div>
-
-            </div>
-
-
-            <div className="floating-card floating-card-top">
-
-                <span className="floating-icon">
-                    ✓
-                </span>
-
-                <div>
-
-                    <strong>
-                        Handled with care
-                    </strong>
-
-                    <span>
-                        Every step of the way
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            <div className="floating-card floating-card-bottom">
-
-                <span className="floating-icon">
-                    £
-                </span>
-
-                <div>
-
-                    <strong>
-                        Clear pricing
-                    </strong>
-
-                    <span>
-                        No hidden fees
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            <div className="hero-circle"></div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-
-{/* =====================================================
-     WHY US
-===================================================== */}
-
-<section className="section why-section">
-
-    <div className="container">
-
-
-        <div className="section-heading centered">
-
-            <div className="eyebrow">
-
-                <span className="eyebrow-dot"></span>
-
-                Why Care4Removals
-
-            </div>
-
-
-            <h2>
-                Moving doesn&apos;t have to be
-                <span>stressful.</span>
-            </h2>
-
-
-            <p>
-
-                We take care of the difficult parts so
-                you can focus on settling into your new home.
-
+            <p className="hero-trust">
+              <Icon name="check" size={16} /> Leeds &amp; Birmingham &nbsp;·&nbsp;
+              Local office support &nbsp;·&nbsp; Part of Care4Properties
             </p>
+          </div>
 
+          <div className="hero-visual">
+            <HeroIllustration />
+          </div>
         </div>
-
-
-
-        <div className="feature-grid">
-
-
-            <article className="feature-card">
-
-                <div className="feature-number">
-                    01
-                </div>
-
-                <div className="feature-icon">
-                    ♡
-                </div>
-
-                <h3>
-                    Stress-Free Moves
-                </h3>
-
-                <p>
-
-                    From careful packing to reliable
-                    transport, we handle the moving process
-                    so you can focus on what&apos;s next.
-
-                </p>
-
-            </article>
-
-
-
-            <article className="feature-card feature-card-highlight">
-
-                <div className="feature-number">
-                    02
-                </div>
-
-                <div className="feature-icon">
-                    ✓
-                </div>
-
-                <h3>
-                    Handled With Care
-                </h3>
-
-                <p>
-
-                    Our professional team treats your
-                    belongings with respect, helping give
-                    you confidence throughout your move.
-
-                </p>
-
-            </article>
-
-
-
-            <article className="feature-card">
-
-                <div className="feature-number">
-                    03
-                </div>
-
-                <div className="feature-icon">
-                    £
-                </div>
-
-                <h3>
-                    Fair & Transparent Pricing
-                </h3>
-
-                <p>
-
-                    Clear, upfront quotes with no hidden
-                    fees, so you know where you stand
-                    before moving day.
-
-                </p>
-
-            </article>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-
-{/* =====================================================
-     SERVICES
-===================================================== */}
-
-
-<section className="home-stats-band" data-reveal>
-  <div className="container stats-grid">
-    <div className="stat-intro"><span className="eyebrow">A smoother move</span><h2>Less stress. <span>More settled.</span></h2><p>From the first box to the final door, Care4Removals keeps the moving day organised, careful and clear.</p></div>
-    <div className="stat-item"><strong>01</strong><span>Careful planning</span><p>Clear steps before moving day.</p></div>
-    <div className="stat-item"><strong>02</strong><span>Reliable transport</span><p>Handled with attention from pickup to delivery.</p></div>
-    <div className="stat-item accent-stat"><strong>03</strong><span>One less thing to worry about</span><p>A straightforward experience built around your move.</p></div>
-  </div>
-</section>
-
-<section className="section services-preview">
-
-    <div className="container">
-
-
-        <div className="split-heading">
-
-            <div>
-
-                <div className="eyebrow">
-
-                    <span className="eyebrow-dot"></span>
-
-                    Our removal service
-
-                </div>
-
-
-                <h2>
-                    We handle the
-                    <span>hard part.</span>
-                </h2>
-
-            </div>
-
-
-            <a href="/services" className="text-link">
-
-                View services
-
-                <span>→</span>
-
-            </a>
-
-        </div>
-
-
-
-        <div className="service-list">
-
-
-            <div className="service-item">
-
-                <div className="service-item-number">
-                    01
-                </div>
-
-                <div className="service-item-content">
-
-                    <h3>
-                        Careful Packing
-                    </h3>
-
-                    <p>
-
-                        Help with preparing your belongings
-                        so they are ready for a safe move.
-
-                    </p>
-
-                </div>
-
-                <a href="/services" className="service-arrow" aria-label="View Services">
-                    ↗
-                </a>
-
-            </div>
-
-
-
-            <div className="service-item">
-
-                <div className="service-item-number">
-                    02
-                </div>
-
-                <div className="service-item-content">
-
-                    <h3>
-                        Reliable Transport
-                    </h3>
-
-                    <p>
-
-                        From heavy furniture to full-house
-                        relocations, we&apos;ll handle the move.
-
-                    </p>
-
-                </div>
-
-                <a href="/services" className="service-arrow" aria-label="View Services">
-                    ↗
-                </a>
-
-            </div>
-
-
-
-            <div className="service-item">
-
-                <div className="service-item-number">
-                    03
-                </div>
-
-                <div className="service-item-content">
-
-                    <h3>
-                        Safe Delivery
-                    </h3>
-
-                    <p>
-
-                        Your belongings are transported and
-                        delivered with care.
-
-                    </p>
-
-                </div>
-
-                <a href="/services" className="service-arrow" aria-label="View Services">
-                    ↗
-                </a>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-
-{/* =====================================================
-     HOW IT WORKS
-===================================================== */}
-
-
-<section className="home-visual-band" data-reveal>
-  <div className="container visual-band-grid">
-    <div className="visual-copy"><span className="eyebrow">From door to door</span><h2>Your move has a <span>plan.</span></h2><p>We keep the experience simple: prepare, collect, transport and deliver. Every stage has a purpose, so you always know what happens next.</p><div className="mini-points"><span>✓ Clear communication</span><span>✓ Careful handling</span><span>✓ Practical support</span></div></div>
-    <div className="move-visual" aria-hidden="true"><div className="road-line"></div><div className="visual-house house-a"><i></i></div><div className="visual-truck"><b>care4</b><span></span><em></em></div><div className="visual-house house-b"><i></i></div><div className="visual-bubble bubble-a">PICK UP</div><div className="visual-bubble bubble-b">DELIVER</div></div>
-  </div>
-</section>
-
-<section className="section process-section">
-
-    <div className="container">
-
-
-        <div className="section-heading centered">
-
+      </section>
+
+      {/* ---------- BENEFITS ---------- */}
+      <section className="section why-section">
+        <div className="container">
+          <div className="section-heading centered">
             <div className="eyebrow">
-
-                <span className="eyebrow-dot"></span>
-
-                Simple from start to finish
-
+              <span className="eyebrow-dot" />
+              Why Care4Removals
             </div>
+            <h2>Moving day, without the stress</h2>
+            <p>
+              We take care of the difficult parts so you can focus on settling
+              into your new home.
+            </p>
+          </div>
 
+          <div className="feature-grid">
+            {BENEFITS.map((b, i) => (
+              <article
+                key={b.title}
+                className={`feature-card${i === 1 ? " feature-card-highlight" : ""}`}
+              >
+                <span className="feature-icon">
+                  <Icon name={b.icon} />
+                </span>
+                <h3>{b.title}</h3>
+                <p>{b.body}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
 
+      {/* ---------- SERVICES ---------- */}
+      <section className="section services-preview">
+        <div className="container">
+          <div className="section-heading centered">
+            <div className="eyebrow">
+              <span className="eyebrow-dot" />
+              What we do
+            </div>
+            <h2>Everything your move needs</h2>
+            <p>
+              Choose the services that fit your move — or let us handle all of
+              it.
+            </p>
+          </div>
+
+          <div className="home-services-grid">
+            {SERVICES.map((s) => (
+              <div key={s.title} className="home-service-item">
+                <span className="feature-icon">
+                  <Icon name={s.icon} />
+                </span>
+                <div>
+                  <h3>{s.title}</h3>
+                  <p>{s.body}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="home-services-cta">
+            <Link href="/services" className="btn btn-primary">
+              See all services
+              <Icon name="arrow-right" size={18} />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ---------- HOW IT WORKS ---------- */}
+      <section className="section process-section">
+        <div className="container">
+          <div className="section-heading centered">
+            <div className="eyebrow">
+              <span className="eyebrow-dot" />
+              How it works
+            </div>
+            <h2>Simple from start to finish</h2>
+            <p>
+              Three clear stages, so you always know what happens next.
+            </p>
+          </div>
+
+          <div className="process-grid">
+            {STEPS.map((step, i) => (
+              <article
+                key={step.title}
+                className={`process-card${i === 1 ? " process-card-active" : ""}`}
+              >
+                <span className="process-step-no">{`0${i + 1}`}</span>
+                <span className="process-icon">
+                  <Icon name={step.icon} />
+                </span>
+                <h3>{step.title}</h3>
+                <p>{step.body}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ---------- ABOUT TEASER ---------- */}
+      <section className="section company-section">
+        <div className="container company-grid">
+          <div>
+            <div className="eyebrow eyebrow-light">
+              <span className="eyebrow-dot" />
+              Backed by Care4Properties
+            </div>
             <h2>
-                How your move
-                <span>works.</span>
+              More than a move — <span>part of your property journey</span>
             </h2>
-
+            <p>
+              Care4Properties supports customers across the property journey in
+              Leeds and Birmingham. Care4Removals extends that support to the
+              moving stage, with the same focus on doing things properly.
+            </p>
+            <Link href="/about" className="btn btn-white">
+              Learn about us
+              <Icon name="arrow-right" size={18} />
+            </Link>
+          </div>
+          <ul className="company-points">
+            <li>
+              <Icon name="sparkle" size={20} />
+              <span>People first, homes respected</span>
+            </li>
+            <li>
+              <Icon name="clock" size={20} />
+              <span>A dependable process you can follow</span>
+            </li>
+            <li>
+              <Icon name="check" size={20} />
+              <span>Clear communication start to finish</span>
+            </li>
+          </ul>
         </div>
-
-
-
-        <div className="process-grid">
-
-
-            <div className="process-card">
-
-                <div className="process-top">
-
-                    <span>
-                        01
-                    </span>
-
-                    <a href="/get-a-quote" className="process-icon" aria-label="Request a Quote">
-                        →
-                    </a>
-
-                </div>
-
-                <h3>
-                    Request a Quote
-                </h3>
-
-                <p>
-
-                    Tell us a few details about your move
-                    through our quick online form.
-
-                </p>
-
-            </div>
-
-
-
-            <div className="process-card process-card-active">
-
-                <div className="process-top">
-
-                    <span>
-                        02
-                    </span>
-
-                    {/* Step 2 is an in-progress status, not an action — it previously
-                        reused the "Request a Quote" link/label from step 1, which made
-                        no sense (Phase 2 QA finding). It's a decorative icon now, not a link. */}
-                    <span className="process-icon" aria-hidden="true">
-                        →
-                    </span>
-
-                </div>
-
-                <h3>
-                    We Plan & Move
-                </h3>
-
-                <p>
-
-                    Once confirmed, our removal team takes
-                    care of the packing and transport.
-
-                </p>
-
-            </div>
-
-
-
-            <div className="process-card">
-
-                <div className="process-top">
-
-                    <span>
-                        03
-                    </span>
-
-                    <a href="/contact" className="process-icon" aria-label="Contact Us">
-                        ✓
-                    </a>
-
-                </div>
-
-                <h3>
-                    Settle In Comfortably
-                </h3>
-
-                <p>
-
-                    Your belongings arrive safely, leaving
-                    you free to settle into your new space.
-
-                </p>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-
-{/* =====================================================
-     CARE4PROPERTIES CONNECTION
-===================================================== */}
-
-<section className="section company-section">
-
-    <div className="container">
-
-
-        <div className="company-card">
-
-
-            <div className="company-content">
-
-                <div className="eyebrow">
-
-                    <span className="eyebrow-dot"></span>
-
-                    Backed by Care4Properties
-
-                </div>
-
-
-                <h2>
-
-                    More than a move.
-
-                    <span>
-                        It&apos;s part of your property journey.
-                    </span>
-
-                </h2>
-
-
-                <p>
-
-                    Care4Properties supports customers across
-                    the property journey with residential,
-                    commercial and property services in Leeds.
-                    Care4Removals extends that support to the
-                    moving stage.
-
-                </p>
-
-
-                <a href="/about" className="btn btn-light">
-
-                    Learn About Us
-
-                    <span>→</span>
-
-                </a>
-
-            </div>
-
-
-            <div className="company-visual" aria-label="Care4Removals property journey">
-                <div className="company-visual-ring"></div>
-                <div className="company-visual-text">
-                    <span>CARE4</span>
-                    <strong>REMOVALS</strong>
-                    <small>Part of the property journey</small>
-                </div>
-            </div>
-
-
-        </div>
-
-    </div>
-
-</section>
-
-
-
-{/* =====================================================
-     CTA
-===================================================== */}
-
-<section className="cta-section">
-
-    <div className="container">
-
-        <div className="cta-card">
-
-
+      </section>
+
+      {/* ---------- CTA ---------- */}
+      <section className="cta-section">
+        <div className="container">
+          <div className="cta-card">
             <div>
-
-                <div className="eyebrow eyebrow-light">
-
-                    <span className="eyebrow-dot"></span>
-
-                    Ready when you are
-
-                </div>
-
-
-                <h2>
-                    Let&apos;s make your
-                    <span>move easier.</span>
-                </h2>
-
-
-                <p>
-
-                    Tell us about your move and we&apos;ll get
-                    back to you with a clear, personalised quote.
-
-                </p>
-
+              <div className="eyebrow eyebrow-light">
+                <span className="eyebrow-dot" />
+                Ready when you are
+              </div>
+              <h2>
+                Let&apos;s make your <span>move easier</span>
+              </h2>
+              <p>
+                Tell us about your move and we&apos;ll get back to you with a
+                clear, personalised quote.
+              </p>
             </div>
-
-
-            <a href="/get-a-quote" className="btn btn-white">
-
-                Request a Free Quote
-
-                <span>→</span>
-
-            </a>
-
+            <Link href="/get-a-quote" className="btn btn-white">
+              Request a free quote
+              <Icon name="arrow-right" size={18} />
+            </Link>
+          </div>
         </div>
-
-    </div>
-
-</section>
-
-
-
-</main>
-
-
-
-{/* =====================================================
-     FOOTER
-===================================================== */}
-
-    </>
+      </section>
+    </main>
   );
 }

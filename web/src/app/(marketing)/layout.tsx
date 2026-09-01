@@ -1,7 +1,7 @@
 import "../site.css";
+import "../refresh.css";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
-import ScrollReveal from "@/components/ScrollReveal";
 import StructuredData from "@/components/StructuredData";
 
 export default function MarketingLayout({
@@ -18,7 +18,7 @@ export default function MarketingLayout({
       <SiteHeader />
       <div id="main-content">{children}</div>
       <SiteFooter />
-      <ScrollReveal />
+      
     </>
   );
 }
