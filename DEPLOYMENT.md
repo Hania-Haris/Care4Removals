@@ -83,7 +83,31 @@ Only when staging UAT has passed and you're ready:
 The legacy site + old admin (`admin/*.html`, `js/*.js`) remain in the repo and
 deployable throughout — that's the ultimate rollback.
 
-## 6. Monitoring checklist (post-launch)
+## 6. Cost & quota controls (Blaze plan)
+
+The project is on Blaze (pay-as-you-go) because Storage requires it. The build
+is designed to stay inside the free allowances at realistic volume:
+
+| Service | Free allowance | What the app does | Guard |
+|---|---|---|---|
+| Firestore reads | 50k/day | Marketing pages are **static** (0 reads). Admin dashboard ≈ 1 read/60s (cached). Settings ≈ 1 read/5min (cached). A lead view ≈ 3–5 reads. | caching + `.limit()` everywhere |
+| Firestore writes | 20k/day | 1 lead ≈ 2 writes + 3 rate-limit writes. A quote send ≈ 5 writes. | public-form rate limit (per-IP 4/hr·12/day, global 250/day, fails closed) |
+| Storage stored | 5 GB | quote PDFs ≈ 3–5 KB each (~1M PDFs to fill 5 GB) | none needed |
+| Storage downloads | 1 GB/day | customer PDF views, proxied | low volume |
+| Resend emails | 100/day, 3,000/mo | lead ≈ 2, quote send ≈ 1, customer response ≈ 1 | daily cap **90/day** in code |
+
+**If you ever see cost:** the first place to look is the `rateLimits` and
+`emailLogs` collections and Firestore usage graphs. A spike almost certainly
+means the public form is being scripted — the rate limiter caps the damage,
+but you can also tighten `LIMITS` in `src/lib/rate-limit.ts` or add Firebase
+**App Check** (Console banner) which blocks non-app traffic entirely.
+
+**App Check** is optional here: public writes go through server actions (Admin
+SDK, not subject to App Check) and the public site makes no client-side
+Firestore/Storage calls, so the rate limiter is the effective guard. Add App
+Check if you later expose any client-side Firestore access.
+
+## 7. Monitoring checklist (post-launch)
 
 - [ ] Firebase Console → Firestore usage (watch read/write spikes = missing pagination or abuse)
 - [ ] `emailLogs` collection — `status: "failed"` entries
