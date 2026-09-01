@@ -1,5 +1,23 @@
 # Security Model
 
+## Implementation status (Phase 3)
+
+- `firestore.rules` and `storage.rules` written at repo root, matching the
+  intent below. **Not yet deployed** — deploying requires the Firebase CLI
+  authenticated to the project, which needs to happen from a machine with
+  console access; not done as part of this session to avoid touching the
+  live project's rules without a deliberate, confirmed step.
+- `web/src/lib/firebase/admin.ts` — server-only Admin SDK wrapper, gated by
+  the `server-only` package so importing it from a client component is a
+  build error, not just a lint warning.
+- `web/src/lib/env.ts` — validates required environment variables at
+  startup via `zod`, separated into client-safe and server-only schemas.
+- Role enforcement is designed around a custom claim (`role`) on the Firebase
+  Auth token, set only via the Admin SDK — not yet wired up because no
+  `users` documents or admin auth flow exist yet (Phase 5).
+- Rules unit tests (Firebase emulator) — **not yet written**, tracked as a
+  Phase 3 exit-gate gap, to close before Phase 5 auth work is considered done.
+
 ## Environment isolation — OPEN RISK
 
 The repo currently has exactly one Firebase project, `care4removals-fd53c`, which

@@ -1,0 +1,41 @@
+rules_version = '2';
+
+// Care4Removals Storage security rules — Phase 3.
+// See SECURITY_MODEL.md.
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isStaff() {
+      return isSignedIn() && request.auth.token.role in ['admin', 'manager', 'staff', 'viewer'];
+    }
+
+    // Lead attachments: public can upload during quote/contact submission,
+    // scoped to a specific lead path, size/type limited. No public read —
+    // staff only, so an uploaded file isn't guessable/public.
+    match /leads/{leadId}/{fileName} {
+      allow create: if
+        request.resource.size < 15 * 1024 * 1024 && // 15MB cap
+        request.resource.contentType.matches('image/.*|application/pdf');
+      allow read: if isStaff();
+      allow update, delete: if isStaff();
+    }
+
+    // Generated quote PDFs: staff read/write via server (Admin SDK bypasses
+    // rules for generation); the *customer-facing* download goes through a
+    // server route validated against a customerTokens token, not direct
+    // Storage access — no public rule here at all.
+    match /quotes/{quoteId}/{fileName} {
+      allow read, write: if isStaff();
+    }
+
+    // Everything else: deny by default.
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

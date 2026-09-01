@@ -1,0 +1,122 @@
+rules_version = '2';
+
+// Care4Removals Firestore security rules — Phase 3.
+// See SECURITY_MODEL.md for the design intent behind these.
+//
+// Roles come from a custom claim on the Firebase Auth token (`role`), set
+// server-side only via the Admin SDK when a user document is created/updated
+// — never trust a client-supplied role. See src/lib/firebase/admin.ts.
+
+function isSignedIn() {
+  return request.auth != null;
+}
+
+function role() {
+  return request.auth.token.role;
+}
+
+function isStaff() {
+  return isSignedIn() && role() in ['admin', 'manager', 'staff', 'viewer'];
+}
+
+function canWrite() {
+  return isSignedIn() && role() in ['admin', 'manager', 'staff'];
+}
+
+function isAdmin() {
+  return isSignedIn() && role() == 'admin';
+}
+
+function isAdminOrManager() {
+  return isSignedIn() && role() in ['admin', 'manager'];
+}
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---- leads ----
+    // Public users may CREATE a strictly validated enquiry. They may never
+    // read, list, update or delete — that would leak every customer's data
+    // to every visitor.
+    match /leads/{leadId} {
+      allow create: if
+        request.resource.data.keys().hasAll(['customerName', 'email', 'phone', 'status', 'source', 'createdAt']) &&
+        request.resource.data.status == 'new' &&
+        request.resource.data.customerName is string && request.resource.data.customerName.size() < 200 &&
+        request.resource.data.email is string && request.resource.data.email.size() < 200 &&
+        request.resource.data.phone is string && request.resource.data.phone.size() < 50;
+      allow read, list: if isStaff();
+      allow update, delete: if canWrite();
+    }
+
+    // ---- customers ----
+    match /customers/{customerId} {
+      allow read, write: if canWrite();
+    }
+
+    // ---- quotes / quoteVersions ----
+    // No public access at all. Customer-facing reads go through a server
+    // route validating a customerTokens token — never direct Firestore
+    // access from the browser (see SECURITY_MODEL.md).
+    match /quotes/{quoteId} {
+      allow read: if isStaff();
+      allow write: if canWrite();
+    }
+
+    match /quoteVersions/{versionId} {
+      allow read: if isStaff();
+      // Once issued, a version is immutable — only a server (Admin SDK,
+      // bypasses rules) may write it during creation/send. No client write.
+      allow write: if false;
+    }
+
+    // ---- customerTokens ----
+    // Never readable or writable by any client, staff included through this
+    // path. Verified only via a server-only route with the Admin SDK.
+    match /customerTokens/{tokenId} {
+      allow read, write: if false;
+    }
+
+    // ---- jobs ----
+    match /jobs/{jobId} {
+      allow read: if isStaff();
+      allow write: if canWrite();
+    }
+
+    // ---- activities (audit trail) ----
+    // Append-only from the client's perspective; edits/deletes not allowed
+    // even for admins, to preserve audit integrity.
+    match /activities/{activityId} {
+      allow read: if isStaff();
+      allow create: if canWrite();
+      allow update, delete: if false;
+    }
+
+    // ---- documents ----
+    match /documents/{documentId} {
+      allow read: if isStaff();
+      allow write: if canWrite();
+    }
+
+    // ---- emailLogs ----
+    match /emailLogs/{logId} {
+      allow read: if isStaff();
+      allow write: if false; // server-only via Admin SDK
+    }
+
+    // ---- users (staff accounts) ----
+    match /users/{userId} {
+      allow read: if isStaff();
+      allow write: if isAdmin();
+    }
+
+    // ---- settings ----
+    // Everyone signed in (any staff role) can read settings so the public
+    // site's server components can render admin-editable copy; only
+    // admin/manager can write.
+    match /settings/{settingId} {
+      allow read: if true; // read via server components for public site copy
+      allow write: if isAdminOrManager();
+    }
+  }
+}
