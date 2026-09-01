@@ -28,6 +28,32 @@ Firebase project: `care4removals-fd53c` (single project — no staging/prod sepa
 
 10. **Forms write directly to Firestore from the client** (`js/quote.js`, `js/contact.js`) with no server-side validation, no rate limiting, no spam control, no email notification on new lead — matches brief's Phase 4 concerns exactly.
 
+## Phase 2 findings (fixed on `dev`)
+
+11. **Quote form advertised unconfirmed services.** `quote.html`'s service dropdown
+    offered "Office Move" and "Storage" — neither appears anywhere on
+    `services.html`. Fixed in `web/src/app/get-a-quote/page.tsx`: dropdown now
+    matches the confirmed service list only (House Removal, Packing, Transport,
+    Multiple Services). Per DECISIONS_REQUIRED.md #4.
+
+12. **Homepage process-card step 2 reused step 1's link and label.** "We Plan &
+    Move" (step 2 of the 3-step process) linked to `quote.html` with
+    `aria-label="Request a Quote"` — identical to step 1. Nonsensical: step 2 is
+    an in-progress status, not something to click. Fixed by making it a
+    decorative, non-interactive icon.
+
+## Deferred (flagged, not silently dropped)
+
+- **Repetitive homepage sections.** The brief asks for exactly one benefits
+  section, one services section, one process section. The current homepage has
+  overlapping messaging across `why-section`, a `stat-intro` band, and
+  `company-section` (all cover care/reliability/clarity in different words), plus
+  two separate "how it works" style bands. Consolidating these is a real content
+  and layout restructuring, not a text edit — it touches shared CSS grid classes
+  and risks breaking the approved visual identity if rushed. Deferred to a
+  dedicated content pass rather than done hastily tonight; tracked here so it
+  isn't forgotten.
+
 ## Confirmed working
 
 - `contactMessages` and `bookings` writes succeed client-side with `status: "new"` and dual `createdAt`/`updatedAt` timestamps — **submissions are real, not simulated.**

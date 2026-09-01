@@ -561,9 +561,12 @@ export default function HomePage() {
                         02
                     </span>
 
-                    <a href="/get-a-quote" className="process-icon" aria-label="Request a Quote">
+                    {/* Step 2 is an in-progress status, not an action — it previously
+                        reused the "Request a Quote" link/label from step 1, which made
+                        no sense (Phase 2 QA finding). It's a decorative icon now, not a link. */}
+                    <span className="process-icon" aria-hidden="true">
                         →
-                    </a>
+                    </span>
 
                 </div>
 

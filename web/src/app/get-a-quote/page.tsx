@@ -319,6 +319,11 @@ export default function GetAQuotePageStatic() {
                                         Service required
                                     </label>
 
+                                    {/* Options aligned to the confirmed services listed on /services —
+                                        "Office Move" and "Storage" were removed here: they were offered
+                                        in the legacy form but are not sellable services on the site
+                                        (Phase 2 QA finding, DECISIONS_REQUIRED.md #4). Add them back only
+                                        once confirmed and published as real services. */}
                                     <select id="serviceType" name="serviceType">
 
                                         <option value="">
@@ -329,16 +334,12 @@ export default function GetAQuotePageStatic() {
                                             House Removal
                                         </option>
 
-                                        <option value="Office Move">
-                                            Office Move
-                                        </option>
-
                                         <option value="Packing">
                                             Packing
                                         </option>
 
-                                        <option value="Storage">
-                                            Storage
+                                        <option value="Transport">
+                                            Reliable Transport
                                         </option>
 
                                         <option value="Multiple Services">
