@@ -581,3 +581,1377 @@
     }
 
 }
+
+/* =========================================================
+   CARE4REMOVALS ADMIN — ELECTRIC / DEEP TWILIGHT THEME
+   Visual-only enhancement layer. Existing functionality unchanged.
+   ========================================================= */
+
+:root {
+    --admin-black: #020300;
+    --admin-amber: #e57c04;
+    --admin-aqua: #87f5fb;
+    --admin-baltic: #065a82;
+    --admin-twilight: #090b47;
+    --admin-text: #eafcff;
+    --admin-muted: #9db8c5;
+    --admin-line: rgba(135,245,251,.14);
+    --admin-glow: rgba(135,245,251,.22);
+}
+
+/* Animated ambient background */
+.admin-body {
+    min-height: 100vh;
+    color: var(--admin-text);
+    background:
+        radial-gradient(circle at 12% 8%, rgba(6,90,130,.34), transparent 28%),
+        radial-gradient(circle at 88% 18%, rgba(135,245,251,.10), transparent 25%),
+        radial-gradient(circle at 55% 100%, rgba(229,124,4,.10), transparent 30%),
+        linear-gradient(135deg, #020300 0%, #090b47 52%, #053f5d 100%);
+    position: relative;
+    overflow-x: hidden;
+}
+
+.admin-body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: .16;
+    background-image:
+        linear-gradient(rgba(135,245,251,.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(135,245,251,.08) 1px, transparent 1px);
+    background-size: 42px 42px;
+    mask-image: linear-gradient(to bottom, #000, transparent 85%);
+    animation: adminGrid 18s linear infinite;
+    z-index: 0;
+}
+
+.admin-body::after {
+    content: "";
+    position: fixed;
+    width: 420px;
+    height: 420px;
+    border-radius: 50%;
+    border: 1px solid rgba(135,245,251,.10);
+    box-shadow: 0 0 80px rgba(135,245,251,.07);
+    right: -170px;
+    top: 110px;
+    pointer-events: none;
+    animation: adminOrbit 9s ease-in-out infinite;
+    z-index: 0;
+}
+
+.admin-header,
+.admin-main {
+    position: relative;
+    z-index: 1;
+}
+
+.admin-header {
+    background: rgba(2,3,0,.88);
+    border-bottom: 1px solid rgba(135,245,251,.14);
+    box-shadow: 0 8px 35px rgba(0,0,0,.22);
+    backdrop-filter: blur(14px);
+}
+
+.admin-header-inner {
+    min-height: 70px;
+}
+
+.admin-header .logo {
+    color: #fff;
+    letter-spacing: -.03em;
+}
+
+.admin-header .logo span:last-child {
+    color: #fff;
+}
+
+.admin-header .logo span:last-child span {
+    color: var(--admin-aqua);
+}
+
+.admin-header .logo-icon {
+    background: linear-gradient(135deg, var(--admin-amber), var(--admin-aqua));
+    color: var(--admin-black);
+    box-shadow: 0 0 22px rgba(135,245,251,.20);
+    border: 1px solid rgba(255,255,255,.18);
+}
+
+.admin-email {
+    color: rgba(234,252,255,.72);
+}
+
+.logout-btn {
+    border-color: rgba(135,245,251,.25);
+    background: rgba(135,245,251,.05);
+    color: var(--admin-aqua);
+    transition: .22s ease;
+}
+
+.logout-btn:hover {
+    background: var(--admin-aqua);
+    color: var(--admin-black);
+    border-color: var(--admin-aqua);
+    box-shadow: 0 0 22px rgba(135,245,251,.24);
+}
+
+.admin-main {
+    padding: 42px 0 70px;
+}
+
+.dashboard-heading {
+    margin-bottom: 28px;
+}
+
+.dashboard-heading h1,
+.section-toolbar h2 {
+    color: #fff;
+}
+
+.dashboard-heading p,
+.section-toolbar p {
+    color: var(--admin-muted);
+}
+
+.eyebrow {
+    color: var(--admin-aqua) !important;
+}
+
+.eyebrow-dot {
+    background: var(--admin-amber) !important;
+    box-shadow: 0 0 12px rgba(229,124,4,.55);
+}
+
+/* Stats */
+.stats-grid {
+    gap: 13px;
+    margin-bottom: 28px;
+}
+
+.stat-card {
+    position: relative;
+    overflow: hidden;
+    background:
+        linear-gradient(145deg, rgba(6,90,130,.42), rgba(9,11,71,.72));
+    border: 1px solid var(--admin-line);
+    border-radius: 15px;
+    padding: 20px 21px;
+    box-shadow: 0 12px 35px rgba(0,0,0,.18);
+    transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+}
+
+.stat-card::after {
+    content: "";
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    right: -45px;
+    top: -45px;
+    background: rgba(135,245,251,.08);
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(135,245,251,.36);
+    box-shadow: 0 15px 40px rgba(0,0,0,.25), 0 0 22px rgba(135,245,251,.07);
+}
+
+.stat-label {
+    color: var(--admin-muted);
+}
+
+.stat-number {
+    color: var(--admin-aqua);
+    text-shadow: 0 0 18px rgba(135,245,251,.20);
+}
+
+/* Main enquiry panel */
+.booking-section {
+    background: rgba(3,12,24,.68);
+    border: 1px solid rgba(135,245,251,.14);
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.24);
+    backdrop-filter: blur(12px);
+}
+
+.section-toolbar {
+    margin-bottom: 18px;
+}
+
+.status-filter,
+.booking-status-select {
+    border-color: rgba(135,245,251,.22) !important;
+    background: rgba(2,3,0,.55) !important;
+    color: #eafcff !important;
+}
+
+.status-filter:focus,
+.booking-status-select:focus {
+    border-color: var(--admin-aqua) !important;
+    box-shadow: 0 0 0 3px rgba(135,245,251,.10);
+}
+
+.booking-row {
+    padding: 16px 9px;
+    border-top-color: rgba(135,245,251,.10);
+    transition: background .2s ease, transform .2s ease;
+}
+
+.booking-row:hover {
+    background: rgba(6,90,130,.15);
+}
+
+.booking-customer,
+.booking-date {
+    color: #fff;
+}
+
+.booking-email,
+.booking-route {
+    color: var(--admin-muted);
+}
+
+.booking-status {
+    border: 1px solid rgba(255,255,255,.10);
+}
+
+.status-new {
+    background: rgba(229,124,4,.18);
+    color: #ffb85e;
+}
+
+.status-contacted {
+    background: rgba(135,245,251,.13);
+    color: var(--admin-aqua);
+}
+
+.status-quoted {
+    background: rgba(94,88,210,.20);
+    color: #b8b6ff;
+}
+
+.status-confirmed {
+    background: rgba(65,188,128,.16);
+    color: #86e7b1;
+}
+
+.status-completed {
+    background: rgba(157,184,197,.13);
+    color: #b9cbd3;
+}
+
+.status-cancelled {
+    background: rgba(230,77,77,.16);
+    color: #ff9b9b;
+}
+
+.view-booking,
+.save-status-btn {
+    background: linear-gradient(135deg, var(--admin-baltic), var(--admin-twilight));
+    color: #fff;
+    border: 1px solid rgba(135,245,251,.18);
+    transition: .22s ease;
+}
+
+.view-booking:hover,
+.save-status-btn:hover {
+    background: var(--admin-amber);
+    color: #fff;
+    box-shadow: 0 0 20px rgba(229,124,4,.20);
+}
+
+.loading-state,
+.empty-state {
+    color: var(--admin-muted);
+}
+
+/* Booking detail */
+.booking-detail-main {
+    padding: 40px 0 70px !important;
+}
+
+.back-link {
+    color: var(--admin-muted) !important;
+}
+
+.back-link:hover {
+    color: var(--admin-aqua) !important;
+}
+
+.booking-detail-header h1 {
+    color: #fff;
+}
+
+.booking-id {
+    color: var(--admin-muted);
+}
+
+.detail-card {
+    background: rgba(3,12,24,.68);
+    border-color: rgba(135,245,251,.13);
+    border-radius: 17px;
+    padding: 25px;
+    box-shadow: 0 16px 45px rgba(0,0,0,.18);
+    backdrop-filter: blur(10px);
+}
+
+.detail-card:hover {
+    border-color: rgba(135,245,251,.22);
+}
+
+.detail-card h2 {
+    color: #fff;
+}
+
+.detail-label {
+    color: var(--admin-muted);
+}
+
+.detail-value {
+    color: #eefcff;
+}
+
+.contact-link {
+    color: var(--admin-aqua);
+}
+
+.booking-status-select {
+    min-height: 43px;
+}
+
+.instructions-box {
+    background: rgba(6,90,130,.14);
+    border: 1px solid rgba(135,245,251,.10);
+    color: var(--admin-muted);
+}
+
+/* Login page */
+.login-page {
+    position: relative;
+    min-height: calc(100vh - 70px) !important;
+    padding: 35px 20px !important;
+}
+
+.login-page::before {
+    content: "";
+    position: absolute;
+    width: 520px;
+    height: 520px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(135,245,251,.10), transparent 68%);
+    left: -220px;
+    top: -180px;
+    animation: adminFloat 8s ease-in-out infinite;
+}
+
+.login-card {
+    position: relative;
+    overflow: hidden;
+    background: rgba(3,12,24,.72) !important;
+    border: 1px solid rgba(135,245,251,.18) !important;
+    border-radius: 20px !important;
+    padding: 38px !important;
+    box-shadow: 0 25px 80px rgba(0,0,0,.34), 0 0 35px rgba(135,245,251,.06) !important;
+    backdrop-filter: blur(16px);
+}
+
+.login-card::before {
+    content: "";
+    position: absolute;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    border: 1px solid rgba(135,245,251,.14);
+    right: -110px;
+    top: -110px;
+    animation: adminOrbit 8s ease-in-out infinite;
+}
+
+.login-heading {
+    margin-bottom: 28px !important;
+}
+
+.login-heading .logo-icon {
+    background: linear-gradient(135deg, var(--admin-amber), var(--admin-aqua)) !important;
+    color: var(--admin-black) !important;
+    box-shadow: 0 0 26px rgba(135,245,251,.22);
+}
+
+.login-heading h1 {
+    color: #fff !important;
+}
+
+.login-heading p {
+    color: var(--admin-muted) !important;
+}
+
+.login-group label {
+    color: #dff9fc !important;
+}
+
+.login-group input {
+    background: rgba(2,3,0,.45) !important;
+    border-color: rgba(135,245,251,.20) !important;
+    color: #fff !important;
+}
+
+.login-group input::placeholder {
+    color: rgba(157,184,197,.55);
+}
+
+.login-group input:focus {
+    border-color: var(--admin-aqua) !important;
+    box-shadow: 0 0 0 3px rgba(135,245,251,.10), 0 0 20px rgba(135,245,251,.08) !important;
+}
+
+.login-button {
+    background: linear-gradient(135deg, var(--admin-amber), #c86400) !important;
+    box-shadow: 0 10px 28px rgba(229,124,4,.22);
+}
+
+.login-button:hover {
+    background: var(--admin-aqua) !important;
+    color: var(--admin-black) !important;
+    box-shadow: 0 0 26px rgba(135,245,251,.25);
+}
+
+/* Motion */
+@keyframes adminGrid {
+    from { transform: translateY(0); }
+    to { transform: translateY(42px); }
+}
+
+@keyframes adminFloat {
+    0%, 100% { transform: translate(0,0) scale(1); }
+    50% { transform: translate(28px,20px) scale(1.05); }
+}
+
+@keyframes adminOrbit {
+    0%, 100% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(12deg) scale(1.04); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .admin-body::before,
+    .admin-body::after,
+    .login-page::before,
+    .login-card::before {
+        animation: none !important;
+    }
+
+    .stat-card,
+    .booking-row,
+    .view-booking,
+    .save-status-btn {
+        transition: none !important;
+    }
+}
+
+@media (max-width: 650px) {
+    .admin-main {
+        padding: 32px 0 55px;
+    }
+
+    .booking-section {
+        padding: 18px 14px;
+    }
+
+    .stat-card {
+        padding: 17px;
+    }
+
+    .login-card {
+        padding: 28px 22px !important;
+    }
+}
+
+
+/* V5 admin/public logo parity */
+.admin-header .brand{display:flex;align-items:center;text-decoration:none;color:#fff!important;font-weight:800;font-size:1.2rem;letter-spacing:-.03em}
+.admin-header .removals-brand{color:#fff!important}
+.admin-header .removals-brand span{color:#87F5FB!important}
+.admin-header .brand:focus-visible{outline:3px solid #87F5FB;outline-offset:4px;border-radius:6px}
+/* Strong contrast tokens for admin controls */
+.admin-header .logout-btn{color:#87F5FB!important}
+.admin-header .logout-btn:hover{color:#020300!important;background:#87F5FB!important}
+/* =========================================================
+   ADMIN BOOKING DETAIL — CONTRAST + COMPACT FIX
+   ========================================================= */
+
+
+/* =========================================================
+   1. DETAIL CARDS — MORE COMPACT
+   ========================================================= */
+
+.detail-card {
+    background: #ffffff !important;
+
+    border: 1px solid #d8e5ea !important;
+
+    border-radius: 16px !important;
+
+    padding: 20px !important;
+
+    box-shadow:
+        0 8px 24px rgba(2, 3, 0, 0.10) !important;
+}
+
+
+/* Reduce gaps between cards */
+
+.booking-detail-grid {
+    gap: 14px !important;
+}
+
+
+/* =========================================================
+   2. CARD HEADINGS
+   ========================================================= */
+
+.detail-card h2 {
+    color: #090B47 !important;
+
+    font-size: 1.15rem !important;
+
+    margin-bottom: 16px !important;
+}
+
+
+/* =========================================================
+   3. FIELD LABELS
+   ========================================================= */
+
+.detail-label {
+    color: #496878 !important;
+
+    font-size: 0.68rem !important;
+
+    font-weight: 700 !important;
+
+    letter-spacing: 0.06em;
+
+    text-transform: uppercase;
+
+    margin-bottom: 3px !important;
+}
+
+
+/* =========================================================
+   4. FIELD VALUES
+   ========================================================= */
+
+.detail-value {
+    color: #065A82 !important;
+
+    font-size: 0.82rem !important;
+
+    font-weight: 600 !important;
+
+    line-height: 1.4;
+}
+
+
+/* =========================================================
+   5. ORANGE CONTACT VALUES
+   ========================================================= */
+
+.contact-link {
+    color: #E57C04 !important;
+
+    font-weight: 700 !important;
+
+    text-decoration: none;
+}
+
+.contact-link:hover {
+    color: #b96100 !important;
+}
+
+
+/* =========================================================
+   6. DETAIL ROW SPACING
+   ========================================================= */
+
+.detail-item {
+    margin-bottom: 12px !important;
+}
+
+.detail-item:last-child {
+    margin-bottom: 0 !important;
+}
+
+
+/* =========================================================
+   7. INSTRUCTIONS CARD
+   ========================================================= */
+
+.instructions-card {
+    padding: 20px !important;
+}
+
+
+/* Instructions text box */
+
+.instructions-box {
+    background: #f2f7f9 !important;
+
+    border: 1px solid #d9e8ed !important;
+
+    border-radius: 10px !important;
+
+    padding: 18px !important;
+
+    color: #496878 !important;
+
+    font-size: 0.78rem !important;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   8. STATUS / UPDATE CARD
+   ========================================================= */
+
+.status-card {
+    padding: 18px 20px !important;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+}
+
+
+/* Status label */
+
+.status-card label,
+.status-label {
+    color: #496878 !important;
+
+    font-size: 0.7rem !important;
+
+    font-weight: 700 !important;
+}
+
+
+/* =========================================================
+   9. STATUS SELECT
+   ========================================================= */
+
+.booking-status-select {
+    background: #eef4f6 !important;
+
+    color: #173f62 !important;
+
+    border: 1px solid #cbdde4 !important;
+
+    border-radius: 8px !important;
+
+    min-height: 38px !important;
+
+    padding: 7px 12px !important;
+
+    font-size: 0.78rem !important;
+
+    font-weight: 600;
+}
+
+.booking-status-select:focus {
+    border-color: #87F5FB !important;
+
+    outline: none;
+
+    box-shadow:
+        0 0 0 3px rgba(135,245,251,.14) !important;
+}
+
+
+/* =========================================================
+   10. SAVE BUTTON
+   ========================================================= */
+
+.save-status-btn {
+    background: #065A82 !important;
+
+    color: #ffffff !important;
+
+    border: none !important;
+
+    border-radius: 8px !important;
+
+    padding: 9px 15px !important;
+
+    font-size: 0.76rem !important;
+
+    font-weight: 700 !important;
+
+    transition:
+        background .2s ease,
+        transform .2s ease;
+}
+
+.save-status-btn:hover {
+    background: #E57C04 !important;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   11. BOOKING HEADER
+   ========================================================= */
+
+.booking-detail-header h1 {
+    color: #ffffff !important;
+
+    font-size: clamp(2rem, 4vw, 3rem) !important;
+
+    margin-bottom: 4px !important;
+}
+
+
+.booking-id {
+    color: #8eafbf !important;
+
+    font-size: 0.7rem !important;
+}
+
+
+/* Status badge */
+
+.booking-status {
+    font-size: 0.68rem !important;
+
+    padding: 6px 11px !important;
+
+    border-radius: 999px !important;
+}
+
+
+/* =========================================================
+   12. COMPACT WHOLE DETAIL PAGE
+   ========================================================= */
+
+.booking-detail-main {
+    padding-top: 28px !important;
+
+    padding-bottom: 45px !important;
+}
+
+
+.booking-detail-header {
+    margin-bottom: 22px !important;
+}
+
+
+/* =========================================================
+   13. MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    .detail-card {
+        padding: 17px !important;
+
+        border-radius: 14px !important;
+    }
+
+    .booking-detail-grid {
+        gap: 10px !important;
+    }
+
+    .detail-item {
+        margin-bottom: 10px !important;
+    }
+
+    .status-card {
+        flex-wrap: wrap;
+
+        padding: 16px !important;
+    }
+
+}
+
+/* =========================================================
+   ADMIN LOGIN PAGE
+   ========================================================= */
+
+/*
+   The login page currently has:
+   .login-page
+   .login-card
+   .login-heading
+   .login-group
+   .login-button
+   etc.
+
+   These overrides keep the existing HTML and functionality.
+*/
+
+
+/* Full login background */
+
+.login-page {
+    position: relative;
+    overflow: hidden;
+
+    min-height: calc(100vh - 78px);
+
+    background:
+        radial-gradient(
+            circle at 88% 18%,
+            rgba(0, 207, 255, 0.15),
+            transparent 27%
+        ),
+        linear-gradient(
+            110deg,
+            #030719 0%,
+            #090d45 40%,
+            #0c2860 70%,
+            #075b82 100%
+        ) !important;
+}
+
+
+/* Decorative circle on login page */
+
+.login-page::before {
+    content: "";
+
+    position: absolute;
+
+    width: 430px;
+    height: 430px;
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(116, 239, 255, 0.22);
+
+    right: -150px;
+    top: -170px;
+
+    pointer-events: none;
+}
+
+
+/* Bottom glow */
+
+.login-page::after {
+    content: "";
+
+    position: absolute;
+
+    width: 300px;
+    height: 300px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(239, 133, 0, 0.10),
+            transparent 70%
+        );
+
+    left: -130px;
+    bottom: -150px;
+
+    pointer-events: none;
+}
+
+
+/* Login card */
+
+.login-card {
+    position: relative;
+    z-index: 2;
+
+    background: rgba(255, 255, 255, 0.97) !important;
+
+    border: 1px solid rgba(255, 255, 255, 0.35) !important;
+
+    border-radius: 26px !important;
+
+    padding: 45px !important;
+
+    box-shadow:
+        0 30px 80px rgba(0, 0, 0, 0.28),
+        0 10px 30px rgba(4, 20, 60, 0.18) !important;
+}
+
+
+/* C4 logo circle */
+
+.login-heading .logo-icon {
+    background: #090d45 !important;
+    color: #ffffff !important;
+
+    border: 3px solid #72edf7;
+
+    box-shadow:
+        0 8px 25px rgba(0, 190, 220, 0.18);
+}
+
+
+/* Login heading */
+
+.login-heading h1 {
+    color: #090d45 !important;
+}
+
+
+/* Login subtitle */
+
+.login-heading p {
+    color: #637687 !important;
+}
+
+
+/* Form labels */
+
+.login-group label {
+    color: #173f62 !important;
+}
+
+
+/* Inputs */
+
+.login-group input {
+    background: #f8fbfc !important;
+
+    color: #173f62 !important;
+
+    border: 1px solid #d5e2e7 !important;
+
+    border-radius: 13px !important;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+
+/* Input focus */
+
+.login-group input:focus {
+    background: #ffffff !important;
+
+    border-color: #20d8e8 !important;
+
+    box-shadow:
+        0 0 0 3px rgba(32, 216, 232, 0.14) !important;
+}
+
+
+/* Login button */
+
+.login-button {
+    background:
+        linear-gradient(
+            135deg,
+            #ef8500 0%,
+            #f59b18 100%
+        ) !important;
+
+    color: #ffffff !important;
+
+    border: none !important;
+
+    border-radius: 999px !important;
+
+    min-height: 52px;
+
+    font-weight: 700;
+
+    box-shadow:
+        0 10px 25px rgba(239, 133, 0, 0.24);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+/* Login button hover */
+
+.login-button:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 14px 30px rgba(239, 133, 0, 0.32);
+}
+
+
+/* Error message */
+
+.login-message.error {
+    background: #fff1ec !important;
+
+    color: #9b3d2d !important;
+
+    border: 1px solid #f1c4b7 !important;
+}
+
+
+/* =========================================================
+   LOGIN MOBILE
+   ========================================================= */
+
+@media (max-width: 520px) {
+
+    .faq-hero::before {
+        width: 300px;
+        height: 300px;
+
+        right: -150px;
+        top: -110px;
+    }
+
+    .login-page::before {
+        width: 300px;
+        height: 300px;
+
+        right: -150px;
+        top: -100px;
+    }
+
+    .login-card {
+        padding: 30px 24px !important;
+
+        border-radius: 22px !important;
+    }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .login-button {
+        transition: none;
+    }
+
+}/* =========================================================
+   FINAL VISUAL OVERRIDES
+   FAQ HERO + ADMIN LOGIN
+   ========================================================= */
+
+
+/* =========================================================
+   FAQ HERO
+   Dark blue gradient — matching the About hero style
+   ========================================================= */
+
+.faq-hero {
+    position: relative;
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 88% 25%,
+            rgba(0, 207, 255, 0.16),
+            transparent 28%
+        ),
+        linear-gradient(
+            110deg,
+            #030719 0%,
+            #090d45 38%,
+            #0c2860 68%,
+            #075b82 100%
+        ) !important;
+
+    border: none !important;
+}
+
+
+/* Decorative large circle */
+
+.faq-hero::before {
+    content: "";
+
+    position: absolute;
+
+    width: 420px;
+    height: 420px;
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(116, 239, 255, 0.25);
+
+    right: -100px;
+    top: -115px;
+
+    pointer-events: none;
+}
+
+
+/* Smaller glow */
+
+.faq-hero::after {
+    content: "";
+
+    position: absolute;
+
+    width: 260px;
+    height: 260px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(42, 224, 247, 0.13),
+            transparent 70%
+        );
+
+    left: -120px;
+    bottom: -150px;
+
+    pointer-events: none;
+}
+
+
+/* Keep content above decoration */
+
+.faq-hero .container {
+    position: relative;
+    z-index: 2;
+}
+
+
+/* FAQ eyebrow */
+
+.faq-hero .eyebrow {
+    color: #79edf7 !important;
+}
+
+.faq-hero .eyebrow-dot {
+    background: #ef8500 !important;
+}
+
+
+/* FAQ heading */
+
+.faq-hero h1 {
+    color: #ffffff !important;
+}
+
+.faq-hero h1 span {
+    color: #ef8500 !important;
+}
+
+
+/* FAQ description */
+
+.faq-hero p {
+    color: #c9dce5 !important;
+}
+
+
+/* =========================================================
+   CONTACT MESSAGES
+   ========================================================= */
+
+.messages-section {
+    margin-top: 28px;
+}
+
+.messages-list {
+    width: 100%;
+}
+
+.message-row {
+    display: grid;
+    grid-template-columns:
+        1.1fr
+        1.3fr
+        2fr
+        150px;
+
+    align-items: center;
+    gap: 20px;
+
+    padding: 18px 9px;
+
+    border-top:
+        1px solid
+        rgba(135,245,251,.10);
+
+    transition:
+        background .2s ease,
+        transform .2s ease;
+}
+
+.message-row:hover {
+    background: rgba(6,90,130,.15);
+}
+
+.message-customer {
+    color: #fff;
+    font-weight: 700;
+}
+
+.message-contact {
+    color: var(--admin-muted);
+    font-size: 0.76rem;
+    margin-top: 3px;
+}
+
+.message-subject {
+    color: var(--admin-aqua);
+    font-weight: 700;
+    font-size: 0.84rem;
+}
+
+.message-preview {
+    color: var(--admin-muted);
+    font-size: 0.78rem;
+    line-height: 1.5;
+
+    margin-top: 4px;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.message-date {
+    color: var(--admin-muted);
+    font-size: 0.72rem;
+    margin-top: 5px;
+}
+
+.message-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.message-status-select {
+    min-height: 38px;
+
+    padding: 7px 9px;
+
+    border:
+        1px solid
+        rgba(135,245,251,.22);
+
+    border-radius: 8px;
+
+    background:
+        rgba(2,3,0,.55);
+
+    color: #eafcff;
+
+    font-family: inherit;
+
+    font-size: 0.72rem;
+
+    cursor: pointer;
+}
+
+.message-status-select:focus {
+    outline: none;
+
+    border-color:
+        var(--admin-aqua);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(135,245,251,.10);
+}
+
+.save-message-btn {
+    border:
+        1px solid
+        rgba(135,245,251,.18);
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--admin-baltic),
+            var(--admin-twilight)
+        );
+
+    color: #fff;
+
+    padding: 8px 11px;
+
+    border-radius: 8px;
+
+    font-family: inherit;
+
+    font-size: 0.72rem;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: .22s ease;
+}
+
+.save-message-btn:hover {
+    background:
+        var(--admin-amber);
+
+    box-shadow:
+        0 0 20px
+        rgba(229,124,4,.20);
+}
+
+.message-status-new {
+    border-left:
+        3px solid
+        var(--admin-amber);
+}
+
+.message-status-read {
+    border-left:
+        3px solid
+        var(--admin-aqua);
+}
+
+.message-status-replied {
+    border-left:
+        3px solid
+        #65d391;
+}
+
+@media (max-width: 850px) {
+
+    .message-row {
+        grid-template-columns:
+            1fr
+            1fr;
+
+        gap: 12px;
+    }
+
+    .message-actions {
+        justify-content: flex-start;
+    }
+
+}
+
+@media (max-width: 650px) {
+
+    .message-row {
+        grid-template-columns: 1fr;
+    }
+
+    .message-actions {
+        flex-wrap: wrap;
+    }
+
+}

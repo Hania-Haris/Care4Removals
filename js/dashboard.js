@@ -2,7 +2,9 @@ import {
     collection,
     getDocs,
     query,
-    orderBy
+    orderBy,
+    doc,
+    updateDoc
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 import {
@@ -16,8 +18,15 @@ import {
 } from "./firebase-config.js";
 
 
+/* =========================
+   ELEMENTS
+   ========================= */
+
 const bookingsList =
     document.getElementById("bookingsList");
+
+const messagesList =
+    document.getElementById("messagesList");
 
 const statusFilter =
     document.getElementById("statusFilter");
@@ -29,7 +38,13 @@ const adminEmail =
     document.getElementById("adminEmail");
 
 
+/* =========================
+   DATA
+   ========================= */
+
 let allBookings = [];
+
+let allMessages = [];
 
 
 /* =========================
@@ -38,7 +53,7 @@ let allBookings = [];
 
 onAuthStateChanged(
     auth,
-    (user) => {
+    async (user) => {
 
         if (!user) {
 
@@ -46,13 +61,14 @@ onAuthStateChanged(
                 "login.html";
 
             return;
-
         }
 
         adminEmail.textContent =
             user.email;
 
-        loadBookings();
+        await loadBookings();
+
+        await loadMessages();
 
     }
 );
@@ -84,9 +100,12 @@ async function loadBookings() {
 
         allBookings =
             snapshot.docs.map(
-                (doc) => ({
-                    id: doc.id,
-                    ...doc.data()
+                (document) => ({
+
+                    id: document.id,
+
+                    ...document.data()
+
                 })
             );
 
@@ -105,6 +124,7 @@ async function loadBookings() {
             error
         );
 
+
         bookingsList.innerHTML = `
             <div class="empty-state">
                 Unable to load enquiries.
@@ -117,7 +137,7 @@ async function loadBookings() {
 
 
 /* =========================
-   UPDATE STATS
+   UPDATE BOOKING STATS
    ========================= */
 
 function updateStats() {
@@ -125,9 +145,13 @@ function updateStats() {
     const counts = {
 
         new: 0,
+
         contacted: 0,
+
         quoted: 0,
+
         confirmed: 0,
+
         completed: 0
 
     };
@@ -154,27 +178,32 @@ function updateStats() {
 
     document.getElementById(
         "newCount"
-    ).textContent = counts.new;
+    ).textContent =
+        counts.new;
 
 
     document.getElementById(
         "contactedCount"
-    ).textContent = counts.contacted;
+    ).textContent =
+        counts.contacted;
 
 
     document.getElementById(
         "quotedCount"
-    ).textContent = counts.quoted;
+    ).textContent =
+        counts.quoted;
 
 
     document.getElementById(
         "confirmedCount"
-    ).textContent = counts.confirmed;
+    ).textContent =
+        counts.confirmed;
 
 
     document.getElementById(
         "completedCount"
-    ).textContent = counts.completed;
+    ).textContent =
+        counts.completed;
 
 }
 
@@ -196,7 +225,6 @@ function renderBookings(
         `;
 
         return;
-
     }
 
 
@@ -282,7 +310,9 @@ function renderBookings(
                                     status-${status}
                                 "
                             >
-                                ${status}
+                                ${escapeHtml(
+                                    status
+                                )}
                             </span>
 
                         </div>
@@ -290,7 +320,9 @@ function renderBookings(
 
                         <button
                             class="view-booking"
-                            data-id="${booking.id}"
+                            data-id="${escapeHtml(
+                                booking.id
+                            )}"
                         >
                             View
                         </button>
@@ -330,7 +362,364 @@ function renderBookings(
 
 
 /* =========================
-   FILTER
+   LOAD CONTACT MESSAGES
+   ========================= */
+
+async function loadMessages() {
+
+    if (!messagesList) {
+        return;
+    }
+
+
+    try {
+
+        const messagesQuery =
+            query(
+                collection(
+                    db,
+                    "contactMessages"
+                ),
+                orderBy(
+                    "createdAt",
+                    "desc"
+                )
+            );
+
+
+        const snapshot =
+            await getDocs(
+                messagesQuery
+            );
+
+
+        allMessages =
+            snapshot.docs.map(
+                (document) => ({
+
+                    id: document.id,
+
+                    ...document.data()
+
+                })
+            );
+
+
+        renderMessages(
+            allMessages
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Error loading contact messages:",
+            error
+        );
+
+
+        messagesList.innerHTML = `
+            <div class="empty-state">
+                Unable to load contact messages.
+            </div>
+        `;
+
+    }
+
+}
+
+
+/* =========================
+   RENDER CONTACT MESSAGES
+   ========================= */
+
+function renderMessages(
+    messages
+) {
+
+    if (!messages.length) {
+
+        messagesList.innerHTML = `
+            <div class="empty-state">
+                No contact messages yet.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    messagesList.innerHTML =
+        messages.map(
+            (message) => {
+
+                const date =
+                    message.createdAt
+                        ?.toDate()
+                        ?.toLocaleDateString(
+                            "en-GB",
+                            {
+                                day: "numeric",
+                                month: "short",
+                                year: "numeric"
+                            }
+                        ) ||
+                    "Unknown";
+
+
+                const status =
+                    message.status ||
+                    "new";
+
+
+                const statusClass =
+                    `message-status-${status}`;
+
+
+                return `
+
+                    <div
+                        class="
+                            message-row
+                            ${statusClass}
+                        "
+                    >
+
+                        <div>
+
+                            <div
+                                class="message-customer"
+                            >
+                                ${escapeHtml(
+                                    message.name
+                                )}
+                            </div>
+
+                            <div
+                                class="message-contact"
+                            >
+                                ${escapeHtml(
+                                    message.email
+                                )}
+                            </div>
+
+                            <div
+                                class="message-contact"
+                            >
+                                ${escapeHtml(
+                                    message.phone
+                                )}
+                            </div>
+
+                        </div>
+
+
+                        <div>
+
+                            <div
+                                class="message-subject"
+                            >
+                                ${escapeHtml(
+                                    message.subject
+                                )}
+                            </div>
+
+                            <div
+                                class="message-date"
+                            >
+                                ${date}
+                            </div>
+
+                        </div>
+
+
+                        <div>
+
+                            <div
+                                class="message-preview"
+                            >
+                                ${escapeHtml(
+                                    message.message
+                                )}
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            class="message-actions"
+                        >
+
+                            <select
+                                class="message-status-select"
+                                data-id="${escapeHtml(
+                                    message.id
+                                )}"
+                            >
+
+                                <option
+                                    value="new"
+                                    ${status === "new"
+                                        ? "selected"
+                                        : ""}
+                                >
+                                    New
+                                </option>
+
+                                <option
+                                    value="read"
+                                    ${status === "read"
+                                        ? "selected"
+                                        : ""}
+                                >
+                                    Read
+                                </option>
+
+                                <option
+                                    value="replied"
+                                    ${status === "replied"
+                                        ? "selected"
+                                        : ""}
+                                >
+                                    Replied
+                                </option>
+
+                            </select>
+
+
+                            <button
+                                class="save-message-btn"
+                                data-id="${escapeHtml(
+                                    message.id
+                                )}"
+                            >
+                                Save
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            }
+        ).join("");
+
+
+    attachMessageEvents();
+
+}
+
+
+/* =========================
+   MESSAGE STATUS EVENTS
+   ========================= */
+
+function attachMessageEvents() {
+
+    document
+        .querySelectorAll(
+            ".save-message-btn"
+        )
+        .forEach(
+            (button) => {
+
+                button.addEventListener(
+                    "click",
+                    async () => {
+
+                        const id =
+                            button.dataset.id;
+
+
+                        const select =
+                            document.querySelector(
+                                `.message-status-select[data-id="${CSS.escape(id)}"]`
+                            );
+
+
+                        if (!select) {
+                            return;
+                        }
+
+
+                        const newStatus =
+                            select.value;
+
+
+                        button.disabled =
+                            true;
+
+                        button.textContent =
+                            "Saving...";
+
+
+                        try {
+
+                            await updateDoc(
+                                doc(
+                                    db,
+                                    "contactMessages",
+                                    id
+                                ),
+                                {
+                                    status:
+                                        newStatus
+                                }
+                            );
+
+
+                            const message =
+                                allMessages.find(
+                                    (item) =>
+                                        item.id === id
+                                );
+
+
+                            if (message) {
+
+                                message.status =
+                                    newStatus;
+
+                            }
+
+
+                            renderMessages(
+                                allMessages
+                            );
+
+
+                        } catch (error) {
+
+                            console.error(
+                                "Error updating message:",
+                                error
+                            );
+
+
+                            button.disabled =
+                                false;
+
+                            button.textContent =
+                                "Save";
+
+                            alert(
+                                "Unable to update message status."
+                            );
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+}
+
+
+/* =========================
+   BOOKING FILTER
    ========================= */
 
 statusFilter.addEventListener(
@@ -350,14 +739,14 @@ statusFilter.addEventListener(
             );
 
             return;
-
         }
 
 
         renderBookings(
             allBookings.filter(
                 (booking) =>
-                    booking.status === selected
+                    booking.status ===
+                    selected
             )
         );
 
@@ -375,10 +764,14 @@ logoutBtn.addEventListener(
 
         try {
 
-            await signOut(auth);
+            await signOut(
+                auth
+            );
+
 
             window.location.href =
                 "login.html";
+
 
         } catch (error) {
 
@@ -397,15 +790,40 @@ logoutBtn.addEventListener(
    SECURITY
    ========================= */
 
-function escapeHtml(value) {
+function escapeHtml(
+    value
+) {
 
-    if (!value) return "";
+    if (!value) {
+        return "";
+    }
+
 
     return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
 
 }
