@@ -19,13 +19,22 @@ const clientSchema = z.object({
   NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: z.string().optional(),
 });
 
+// Treat an empty-string env var (e.g. `FOO=` in .env.local) as "not set".
+const optionalStr = z.preprocess(
+  (v) => (v === "" || v === undefined ? undefined : v),
+  z.string().optional()
+);
+
 const serverOnlySchema = z.object({
-  FIREBASE_SERVICE_ACCOUNT_KEY: z
-    .string()
-    .min(1, "FIREBASE_SERVICE_ACCOUNT_KEY is required for server-side Admin SDK use")
-    .optional(), // optional at the schema level so client-side import doesn't crash local dev before it's set; enforced by getFirebaseAdminApp() at call time.
-  RESEND_API_KEY: z.string().optional(), // required starting Phase 7
-  LEAD_NOTIFICATION_EMAIL: z.string().email().optional(),
+  // Optional at the schema level so importing this module doesn't crash local
+  // dev before a service account key exists; getFirebaseAdminApp() enforces
+  // its presence at call time with a helpful message.
+  FIREBASE_SERVICE_ACCOUNT_KEY: optionalStr,
+  RESEND_API_KEY: optionalStr, // required starting Phase 7
+  LEAD_NOTIFICATION_EMAIL: z.preprocess(
+    (v) => (v === "" || v === undefined ? undefined : v),
+    z.string().email().optional()
+  ),
 });
 
 export function getClientEnv() {

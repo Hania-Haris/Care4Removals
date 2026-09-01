@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import ContactForm from "@/components/ContactForm";
 
 export const metadata: Metadata = {
   title: "Contact Us",
@@ -6,7 +7,7 @@ export const metadata: Metadata = {
     "Get in touch with the Care4Removals team to discuss your upcoming move.",
 };
 
-export default function ContactPageStatic() {
+export default function ContactPage() {
   return (
     <>
 
@@ -76,50 +77,7 @@ export default function ContactPageStatic() {
                 Fill in the form below and tell us how we can help.
             </p>
 
-            <form id="contactForm">
-                <div className="form-row">
-                    <div className="form-group">
-                        <label htmlFor="name">Name <span className="required">*</span></label>
-                        <input id="name" name="name" type="text" autoComplete="name" required />
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="phone">Phone <span className="required">*</span></label>
-                        <input id="phone" name="phone" type="tel" autoComplete="tel" required />
-                    </div>
-                </div>
-
-                <div className="form-group">
-                    <label htmlFor="email">Email <span className="required">*</span></label>
-                    <input id="email" name="email" type="email" autoComplete="email" required />
-                </div>
-
-                <div className="form-group">
-                    <label htmlFor="subject">What can we help with?</label>
-                    <select id="subject" name="subject">
-                        <option value="General enquiry">General enquiry</option>
-                        <option value="Removal enquiry">Removal enquiry</option>
-                        <option value="Existing booking">Existing booking</option>
-                        <option value="Quote question">Quote question</option>
-                    </select>
-                </div>
-
-                <div className="form-group">
-                    <label htmlFor="message">Message <span className="required">*</span></label>
-                    <textarea id="message" name="message" required placeholder="Tell us how we can help..."></textarea>
-                </div>
-
-                <p className="form-note">
-                    By submitting this form, you are sending your enquiry to
-                    Care4Removals for review.
-                </p>
-
-                <button type="submit" className="btn btn-primary">
-                    Send Message <span>→</span>
-                </button>
-
-                <div id="formStatus" className="form-status"></div>
-            </form>
+            <ContactForm />
         </div>
 
     </div>

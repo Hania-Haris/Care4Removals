@@ -42,6 +42,47 @@ Firebase project: `care4removals-fd53c` (single project — no staging/prod sepa
     an in-progress status, not something to click. Fixed by making it a
     decorative, non-interactive icon.
 
+## Phase 4 findings & changes (on `dev`)
+
+13. **Forms wired to server actions.** `web/src/app/actions/leads.ts` —
+    `submitQuoteLead` / `submitContactMessage` validate with the shared zod
+    schema (`web/src/lib/validation/lead.ts`), server validation authoritative,
+    write to `leads` via the Admin SDK with `source`, `status: "new"`,
+    server timestamps, plus an `activities` audit entry.
+14. **Idempotent lead creation** — each form mount carries a fresh UUID
+    `submissionId`; a duplicate submit (double-click / retry) with the same id
+    is recognized server-side and returns success without creating a second
+    lead. Regenerated after a successful submit.
+15. **Past moving dates rejected server-side** (also `min=today` on the input).
+16. **Contact "subject" now has a non-selectable default** — previously
+    "General enquiry" was pre-selected so an untouched dropdown silently
+    submitted the wrong routing category.
+17. **Accessible errors** — `aria-invalid`, `aria-describedby`, per-field
+    error text, an error-summary message, and `role="status" aria-live`
+    on the result region. Verified in-browser.
+18. **Privacy acknowledgement checkbox** required on both forms (not
+    pre-checked). Links to a real Privacy Policy / Terms are a Phase 10
+    deliverable — the checkbox text says so explicitly for now.
+
+### Phase 4 known limitations (documented, not silently skipped)
+
+- **`<select>` values are not preserved on a validation error** (they reset to
+  the placeholder). Text and textarea inputs — the high-effort fields — are
+  preserved via server-echoed values. React 19's automatic form reset doesn't
+  re-apply a changed `defaultValue` to a native `<select>` the way it does for
+  `<input>`; making the 5 selects fully controlled was judged not worth the
+  added state for a low-cost re-selection. Revisit if UAT flags it.
+- **Expanded move-detail fields** from the brief (lift availability, parking
+  restrictions, bedroom/size indicator, heavy/special items, inventory upload)
+  are **not** added yet — the form still collects the legacy field set plus the
+  privacy checkbox. Inventory/image upload in particular needs the
+  malware-safe Storage handling described in the brief and is deferred to a
+  focused pass.
+- **Rate limiting / spam control / App Check** — not implemented this phase.
+  The idempotency key stops accidental duplicates but not deliberate abuse.
+  Tracked for a dedicated hardening pass (brief Phase 3/10).
+- **Staff notification + customer acknowledgement emails** — Phase 7.
+
 ## Deferred (flagged, not silently dropped)
 
 - **Repetitive homepage sections.** The brief asks for exactly one benefits

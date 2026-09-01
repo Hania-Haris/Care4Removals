@@ -4245,3 +4245,56 @@ textarea:focus-visible {
         scroll-behavior: auto !important;
     }
 }
+
+/* =========================================================
+   PHASE 4 ADDITIONS — form validation states
+   Not present in the legacy stylesheet; added for the new server-action-
+   backed forms (field-level errors, privacy checkbox).
+========================================================= */
+
+.field-error {
+    display: block;
+    margin-top: 6px;
+    color: #d64545;
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+[aria-invalid="true"] {
+    border-color: #d64545 !important;
+}
+
+.form-checkbox-group {
+    margin-top: 4px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+    margin-top: 4px;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    accent-color: var(--coral, #ff6b4a);
+}
+
+.checkbox-label em {
+    opacity: 0.7;
+    font-style: italic;
+}
+
+.form-message.success,
+.form-status.show:not(.error) {
+    color: #1f8a4c;
+}
+
+.form-message.error,
+.form-status.error {
+    color: #d64545;
+}
