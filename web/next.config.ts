@@ -13,6 +13,19 @@ const nextConfig: NextConfig = {
         destination: "/get-a-quote",
         permanent: true,
       },
+      // Legacy admin HTML pages → new admin routes
+      { source: "/admin/login.html", destination: "/admin/login", permanent: true },
+      {
+        source: "/admin/dashboard.html",
+        destination: "/admin/dashboard",
+        permanent: true,
+      },
+      { source: "/dashboard.html", destination: "/admin/dashboard", permanent: true },
+      {
+        source: "/admin/booking.html",
+        destination: "/admin/leads",
+        permanent: true,
+      },
     ];
   },
 };

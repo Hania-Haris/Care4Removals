@@ -1,8 +1,4 @@
 import type { Metadata } from "next";
-import "./site.css";
-import SiteHeader from "@/components/SiteHeader";
-import SiteFooter from "@/components/SiteFooter";
-import ScrollReveal from "@/components/ScrollReveal";
 
 export const metadata: Metadata = {
   title: {
@@ -28,15 +24,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           rel="stylesheet"
         />
       </head>
-      <body>
-        <a href="#main-content" className="skip-link">
-          Skip to content
-        </a>
-        <SiteHeader />
-        <div id="main-content">{children}</div>
-        <SiteFooter />
-        <ScrollReveal />
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

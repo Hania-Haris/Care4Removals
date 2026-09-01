@@ -83,6 +83,46 @@ Firebase project: `care4removals-fd53c` (single project — no staging/prod sepa
   Tracked for a dedicated hardening pass (brief Phase 3/10).
 - **Staff notification + customer acknowledgement emails** — Phase 7.
 
+## Phase 5 — staff auth + lead dashboard (on `dev`)
+
+19. **Auth**: `/admin/login` signs in with Firebase, exchanges the ID token
+    for an httpOnly session cookie via `/api/admin/session` (Admin SDK
+    `createSessionCookie`). The route **rejects any account without a staff
+    `role` custom claim** — a valid Firebase user alone can't get in.
+20. **Server-side role enforcement**: `getSessionUser()` verifies the cookie
+    and reads the role from the token claim (never client input). The
+    `(protected)` route-group layout redirects unauthenticated users; every
+    admin server action re-checks `requireStaff()` + `canWrite(role)`.
+    `viewer` is read-only end to end.
+21. **Edge proxy** (`src/proxy.ts`) does a fast cookie-presence redirect so
+    the protected shell never renders for signed-out requests.
+22. **noindex**: admin layout sets `robots: { index:false, follow:false }`;
+    `robots.ts` also disallows `/admin/`; login page repeats it. The
+    "Team access / Admin Login" footer link was already removed in Phase 1.
+23. **Leads list** (`/admin/leads`): cursor-paginated (25/page, never an
+    unbounded read), filter by status + source, in-page text search,
+    status/priority badges.
+24. **Lead detail** (`/admin/leads/[id]`): full enquiry data, activity
+    timeline, staff assignment, **status changes gated by an allowed-
+    transition map** (can't jump new→won), internal notes and call/email
+    logging — all as `activities` entries. Internal notes are never copied
+    into any customer-facing payload.
+25. **Dashboard** (`/admin/dashboard`): per-status count tiles (Firestore
+    `count()` aggregation, not full reads) + recent enquiries.
+26. Legacy `/admin/*.html` and `/dashboard.html` now redirect to the new
+    routes.
+27. `web/scripts/set-staff-role.mjs` — grants a user a role claim + upserts
+    their `users/{uid}` doc. Needed once per staff member.
+
+### Phase 5 verification status
+
+- Login page + redirect-when-signed-out verified in-browser.
+- **Authenticated flows (list/detail/status/assignment/notes) are built but
+  not yet run end-to-end** — needs a real `FIREBASE_SERVICE_ACCOUNT_KEY` and
+  a staff user created via the script above; no Firebase console access in
+  this session. Same constraint as Phase 4's form persistence.
+- Rules unit tests still outstanding (carried from Phase 3).
+
 ## Deferred (flagged, not silently dropped)
 
 - **Repetitive homepage sections.** The brief asks for exactly one benefits
