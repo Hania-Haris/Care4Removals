@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { getAdminDb } from "@/lib/firebase/admin";
 import { FieldValue } from "firebase-admin/firestore";
 import { requireStaff, canWrite } from "@/lib/auth/session";
@@ -56,6 +56,7 @@ export async function updateLeadStatus(
   revalidatePath(`/admin/leads/${leadId}`);
   revalidatePath("/admin/leads");
   revalidatePath("/admin/dashboard");
+  revalidateTag("leads", { expire: 0 });
   return { ok: true, message: "Status updated." };
 }
 

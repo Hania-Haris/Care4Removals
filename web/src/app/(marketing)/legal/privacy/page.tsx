@@ -7,7 +7,7 @@ export const metadata: Metadata = {
     "How Care4Removals collects, uses and protects the personal information you provide.",
 };
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 export default async function PrivacyPage() {
   const settings = await getSettings();

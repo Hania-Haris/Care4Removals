@@ -1,4 +1,5 @@
 import "server-only";
+import { unstable_cache } from "next/cache";
 import { getAdminDb } from "@/lib/firebase/admin";
 import type { Lead, LeadStatus, LeadSource } from "@/lib/types";
 
@@ -71,8 +72,9 @@ export async function listLeads(opts: {
 }): Promise<LeadPage> {
   const db = getAdminDb();
   const filtered = !!(opts.status || opts.source);
-  // Over-fetch when filtering so a page can still be filled.
-  const fetchLimit = (filtered ? PAGE_SIZE * 6 : PAGE_SIZE) + 1;
+  // Over-fetch a little when filtering so a page can still be filled, but
+  // keep it bounded so a filtered view can't read hundreds of docs.
+  const fetchLimit = (filtered ? PAGE_SIZE * 3 : PAGE_SIZE) + 1;
 
   let q: FirebaseFirestore.Query = db
     .collection("leads")
@@ -106,27 +108,34 @@ export async function getLead(id: string): Promise<LeadListItem | null> {
   return mapDoc(snap);
 }
 
-export async function getLeadStatusCounts(): Promise<
-  Record<LeadStatus, number>
-> {
+async function readLeadStatusCounts(): Promise<Record<LeadStatus, number>> {
   const db = getAdminDb();
   const counts = Object.fromEntries(
     LEAD_STATUSES.map((s) => [s, 0])
   ) as Record<LeadStatus, number>;
 
-  await Promise.all(
-    LEAD_STATUSES.map(async (status) => {
-      const agg = await db
-        .collection("leads")
-        .where("status", "==", status)
-        .count()
-        .get();
-      counts[status] = agg.data().count;
-    })
-  );
-
+  // One bounded read (200 most recent leads) tallied in memory, instead of
+  // 8 count() aggregation queries per dashboard load. Accurate for the
+  // realistic pipeline size; if the collection outgrows 200 active leads
+  // this can move back to count() with the trade-off understood.
+  const snap = await db
+    .collection("leads")
+    .orderBy("createdAt", "desc")
+    .limit(200)
+    .get();
+  for (const doc of snap.docs) {
+    const s = doc.data().status as LeadStatus;
+    if (s in counts) counts[s]++;
+  }
   return counts;
 }
+
+/** Cached 60s — dashboard navigation shouldn't re-read on every click. */
+export const getLeadStatusCounts = unstable_cache(
+  readLeadStatusCounts,
+  ["lead-status-counts"],
+  { revalidate: 60, tags: ["leads"] }
+);
 
 export type Activity = {
   id: string;
@@ -142,7 +151,7 @@ export async function getLeadActivities(leadId: string): Promise<Activity[]> {
   const snap = await getAdminDb()
     .collection("activities")
     .where("entityId", "==", leadId)
-    .limit(200)
+    .limit(80)
     .get();
 
   return snap.docs

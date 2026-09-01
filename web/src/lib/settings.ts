@@ -1,4 +1,5 @@
 import "server-only";
+import { unstable_cache } from "next/cache";
 import { getAdminDb } from "@/lib/firebase/admin";
 
 // Admin-editable business settings — see DECISIONS_REQUIRED.md.
@@ -55,19 +56,25 @@ const SETTINGS_DOC_ID = "general";
  * ever been saved). Never throws for a missing document — that's the normal
  * state before Phase 5's admin UI exists.
  */
-export async function getSettings(): Promise<Settings> {
+async function readSettings(): Promise<Settings> {
   try {
     const snap = await getAdminDb().collection("settings").doc(SETTINGS_DOC_ID).get();
-
-    if (!snap.exists) {
-      return DEFAULT_SETTINGS;
-    }
-
+    if (!snap.exists) return DEFAULT_SETTINGS;
     return { ...DEFAULT_SETTINGS, ...(snap.data() as Partial<Settings>) };
   } catch (error) {
-    // If the Admin SDK isn't configured yet (local dev without a service
-    // account key), fail safe to defaults rather than crashing every page.
-    console.error("getSettings() failed, using defaults:", error);
+    console.error("readSettings() failed, using defaults:", error);
     return DEFAULT_SETTINGS;
   }
 }
+
+/**
+ * Cached settings read. Settings change rarely (admin edits), so this is
+ * cached for 5 minutes to collapse what would otherwise be a Firestore read
+ * on every quote action, customer view, and legal-page hit into ~1 read per
+ * 5 minutes. `revalidateTag("settings")` in the settings-save action busts
+ * it immediately.
+ */
+export const getSettings = unstable_cache(readSettings, ["care4-settings"], {
+  revalidate: 300,
+  tags: ["settings"],
+});

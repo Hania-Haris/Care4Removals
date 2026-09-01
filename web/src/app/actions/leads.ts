@@ -1,5 +1,7 @@
 "use server";
 
+import { headers } from "next/headers";
+import { revalidateTag } from "next/cache";
 import { getAdminDb } from "@/lib/firebase/admin";
 import { FieldValue } from "firebase-admin/firestore";
 import {
@@ -7,6 +9,16 @@ import {
   contactFormSchema,
 } from "@/lib/validation/lead";
 import { notifyNewLead } from "@/lib/email/notify";
+import { checkPublicSubmissionRate } from "@/lib/rate-limit";
+
+async function clientIp(): Promise<string> {
+  const h = await headers();
+  return (
+    h.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+    h.get("x-real-ip") ??
+    "unknown"
+  );
+}
 
 export type ActionResult = {
   status: "idle" | "success" | "error";
@@ -56,6 +68,11 @@ export async function submitQuoteLead(
   }
 
   const data = parsed.data;
+
+  const rate = await checkPublicSubmissionRate(await clientIp());
+  if (!rate.allowed) {
+    return { status: "error", message: rate.reason, values: collectValues(formData) };
+  }
 
   try {
     const db = getAdminDb();
@@ -116,6 +133,9 @@ export async function submitQuoteLead(
       reference,
     });
 
+    revalidateTag("leads", { expire: 0 });
+
+
     return {
       status: "success",
       message: `Thank you! Your removal enquiry has been received. Reference: ${reference}. Our team will be in touch shortly.`,
@@ -153,6 +173,11 @@ export async function submitContactMessage(
   }
 
   const data = parsed.data;
+
+  const rate = await checkPublicSubmissionRate(await clientIp());
+  if (!rate.allowed) {
+    return { status: "error", message: rate.reason, values: collectValues(formData) };
+  }
 
   try {
     const db = getAdminDb();
@@ -202,6 +227,9 @@ export async function submitContactMessage(
       summary: `Subject: ${data.subject}\n\n${data.message}`,
       reference: docRef.id.slice(0, 8).toUpperCase(),
     });
+
+    revalidateTag("leads", { expire: 0 });
+
 
     return {
       status: "success",

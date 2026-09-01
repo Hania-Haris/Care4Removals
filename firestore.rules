@@ -116,6 +116,12 @@ service cloud.firestore {
       allow read, write: if false;
     }
 
+    // ---- rateLimits (public-form + email throttling counters) ----
+    // Server-only. No client access.
+    match /rateLimits/{key} {
+      allow read, write: if false;
+    }
+
     // ---- settings ----
     // Everyone signed in (any staff role) can read settings so the public
     // site's server components can render admin-editable copy; only

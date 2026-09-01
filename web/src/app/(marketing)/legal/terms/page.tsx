@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description: "The terms that apply to using the Care4Removals website and services.",
 };
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 export default async function TermsPage() {
   const settings = await getSettings();

@@ -52,6 +52,27 @@ export async function sendTransactionalEmail(
     return { ok: false, error: "Email provider not configured." };
   }
 
+  // Resend free tier: 100/day, 3,000/month. Cap at 90/day so a burst can't
+  // blow the quota (and, combined with public-form rate limiting, can't be
+  // driven by an attacker). Counter is 1 read + 1 write per send — trivial.
+  const DAILY_EMAIL_CAP = 90;
+  const capRef = db
+    .collection("rateLimits")
+    .doc(`email:${new Date().toISOString().slice(0, 10)}`);
+  try {
+    const capSnap = await capRef.get();
+    if (((capSnap.data()?.count as number) ?? 0) >= DAILY_EMAIL_CAP) {
+      await logRef.set({
+        ...baseLog,
+        status: "skipped",
+        note: `daily email cap (${DAILY_EMAIL_CAP}) reached`,
+      });
+      return { ok: false, error: "Daily email limit reached." };
+    }
+  } catch {
+    // fail-open on counter read error
+  }
+
   await logRef.set({ ...baseLog, status: "queued" });
 
   try {
@@ -82,6 +103,16 @@ export async function sendTransactionalEmail(
       providerMessageId: data?.id ?? null,
       updatedAt: FieldValue.serverTimestamp(),
     });
+    // Only count sends that actually went out.
+    await capRef
+      .set(
+        {
+          count: FieldValue.increment(1),
+          updatedAt: FieldValue.serverTimestamp(),
+        },
+        { merge: true }
+      )
+      .catch(() => {});
     return { ok: true, id: data?.id };
   } catch (e) {
     await logRef.update({
