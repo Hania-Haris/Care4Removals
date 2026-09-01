@@ -110,6 +110,12 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    // ---- counters (quote-number allocation) ----
+    // Server-only (Admin SDK bypasses rules). No client access.
+    match /counters/{counterId} {
+      allow read, write: if false;
+    }
+
     // ---- settings ----
     // Everyone signed in (any staff role) can read settings so the public
     // site's server components can render admin-editable copy; only

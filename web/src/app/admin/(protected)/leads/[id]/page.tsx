@@ -8,7 +8,9 @@ import {
   LEAD_TRANSITIONS,
 } from "@/lib/data/leads";
 import { getSessionUser, canWrite } from "@/lib/auth/session";
+import { getQuoteByLead } from "@/lib/data/quotes";
 import LeadManagePanel from "@/components/admin/LeadManagePanel";
+import StartQuoteButton from "@/components/admin/StartQuoteButton";
 
 export const metadata: Metadata = { title: "Lead" };
 export const dynamic = "force-dynamic";
@@ -19,11 +21,12 @@ export default async function LeadDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const [lead, activities, staff, user] = await Promise.all([
+  const [lead, activities, staff, user, quote] = await Promise.all([
     getLead(id),
     getLeadActivities(id),
     listStaffUsers(),
     getSessionUser(),
+    getQuoteByLead(id),
   ]);
 
   if (!lead) notFound();
@@ -89,10 +92,24 @@ export default async function LeadDetailPage({
               </div>
             ))}
           </dl>
-          {lead.source === "quote-form" && lead.status === "qualified" && (
-            <p className="admin-muted">
-              Ready to quote — the quotation builder arrives in Phase 6.
-            </p>
+          {lead.source === "quote-form" && (
+            <div className="admin-quote-cta">
+              {quote ? (
+                <Link
+                  href={`/admin/quotes/${quote.id}`}
+                  className="btn btn-primary"
+                >
+                  Open quote {quote.quoteNumber} ({quote.status})
+                </Link>
+              ) : writable &&
+                ["qualified", "quote-in-preparation"].includes(lead.status) ? (
+                <StartQuoteButton leadId={lead.id} />
+              ) : (
+                <p className="admin-muted">
+                  Qualify this lead to start a quotation.
+                </p>
+              )}
+            </div>
           )}
         </section>
 

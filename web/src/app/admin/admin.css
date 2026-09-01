@@ -501,3 +501,43 @@
     padding: 20px;
   }
 }
+
+/* Phase 6 — quote builder */
+.quote-line-table input,
+.quote-line-table select {
+  width: 100%;
+  background: #0c1a30;
+  border: 1px solid #2b3e5a;
+  color: #e6edf6;
+  padding: 6px 8px;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-family: inherit;
+}
+.quote-line-table td { padding: 6px 8px; }
+.admin-row-remove {
+  background: none;
+  border: none;
+  color: #f08a8a;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+.admin-add-row {
+  background: none;
+  border: 1px dashed #2b3e5a;
+  color: #37c4e0;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.82rem;
+  margin-top: 8px;
+}
+.quote-preview-total {
+  margin: 14px 0;
+  font-size: 0.9rem;
+  color: #e6edf6;
+}
+.quote-actions { flex-wrap: wrap; }
+.quote-actions .btn { background: #16273f; color: #e6edf6; }
+.quote-actions .btn.btn-primary { background: #ff6b4a; color: #fff; }
+.admin-quote-cta { margin-top: 16px; }

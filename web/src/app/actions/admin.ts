@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { getAdminDb } from "@/lib/firebase/admin";
 import { FieldValue } from "firebase-admin/firestore";
 import { requireStaff, canWrite } from "@/lib/auth/session";
-import { LEAD_TRANSITIONS } from "@/lib/data/leads";
+import { LEAD_TRANSITIONS } from "@/lib/data/lead-constants";
 import type { LeadStatus } from "@/lib/types";
 
 export type AdminActionResult = { ok: boolean; message: string };
