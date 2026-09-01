@@ -970,3 +970,105 @@ textarea:focus {
 .site-header .c4r-logo-word {
   font-size: 1.3rem;
 }
+
+/* =========================================================================
+   HERO — full-bleed image background (responsive)
+========================================================================= */
+
+.hero--image {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: #071627 !important;
+  padding: 0 !important;
+  min-height: clamp(540px, 72vh, 760px);
+  display: flex;
+  align-items: center;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 74% center;
+  z-index: 0;
+}
+
+/* left-weighted scrim so the copy stays readable over the empty navy area
+   while the van / route / houses stay visible on the right */
+.hero-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(
+      90deg,
+      #061424 0%,
+      rgba(6, 20, 36, 0.95) 24%,
+      rgba(6, 20, 36, 0.62) 48%,
+      rgba(6, 20, 36, 0.12) 78%,
+      rgba(6, 20, 36, 0) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(6, 20, 36, 0.35) 0%,
+      rgba(6, 20, 36, 0) 30%,
+      rgba(6, 20, 36, 0) 70%,
+      rgba(6, 20, 36, 0.4) 100%
+    );
+}
+
+.hero-inner {
+  position: relative;
+  z-index: 2;
+  width: min(calc(100% - 40px), 1240px);
+  margin: 0 auto;
+  padding: clamp(56px, 8vw, 96px) 0;
+}
+.hero--image .hero-content {
+  max-width: 36rem;
+}
+
+/* ---- tablet ---- */
+@media (max-width: 1024px) {
+  .hero-bg {
+    object-position: 70% center;
+  }
+  .hero-scrim {
+    background:
+      linear-gradient(
+        90deg,
+        #061424 0%,
+        rgba(6, 20, 36, 0.94) 34%,
+        rgba(6, 20, 36, 0.68) 62%,
+        rgba(6, 20, 36, 0.35) 100%
+      ),
+      linear-gradient(180deg, rgba(6, 20, 36, 0.4), rgba(6, 20, 36, 0.5));
+  }
+}
+
+/* ---- mobile: image is busy, use a near-solid vertical scrim ---- */
+@media (max-width: 720px) {
+  .hero--image {
+    min-height: 0;
+  }
+  .hero-bg {
+    object-position: 64% center;
+  }
+  .hero-scrim {
+    background: linear-gradient(
+      180deg,
+      rgba(6, 20, 36, 0.82) 0%,
+      rgba(6, 20, 36, 0.72) 40%,
+      rgba(6, 20, 36, 0.86) 100%
+    );
+  }
+  .hero--image .hero-content {
+    max-width: none;
+  }
+  .hero-inner {
+    padding: clamp(48px, 12vw, 72px) 0;
+  }
+}

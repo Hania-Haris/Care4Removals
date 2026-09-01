@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Icon from "@/components/Icon";
-import HeroIllustration from "@/components/HeroIllustration";
+import Image from "next/image";
 
 const BENEFITS = [
   {
@@ -49,8 +49,18 @@ export default function HomePage() {
   return (
     <main>
       {/* ---------- HERO ---------- */}
-      <section className="hero">
-        <div className="container hero-grid">
+      <section className="hero hero--image">
+        <Image
+          src="/assets/hero-journey.jpg"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="hero-bg"
+        />
+        <div className="hero-scrim" />
+
+        <div className="container hero-inner">
           <div className="hero-content">
             <div className="eyebrow">
               <span className="eyebrow-dot" />
@@ -83,10 +93,6 @@ export default function HomePage() {
               <Icon name="check" size={16} /> Leeds &amp; Birmingham &nbsp;·&nbsp;
               Local office support &nbsp;·&nbsp; Part of Care4Properties
             </p>
-          </div>
-
-          <div className="hero-visual">
-            <HeroIllustration />
           </div>
         </div>
       </section>
