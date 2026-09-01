@@ -541,3 +541,7 @@
 .quote-actions .btn { background: #16273f; color: #e6edf6; }
 .quote-actions .btn.btn-primary { background: #ff6b4a; color: #fff; }
 .admin-quote-cta { margin-top: 16px; }
+
+.admin-quote-actions-bar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;}
+.admin-quote-actions-bar .btn{background:#16273f;color:#e6edf6;}
+.admin-quote-actions-bar .btn.btn-primary{background:#ff6b4a;color:#fff;}

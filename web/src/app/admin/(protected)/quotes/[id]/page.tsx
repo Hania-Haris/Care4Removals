@@ -3,9 +3,12 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getAdminDb } from "@/lib/firebase/admin";
 import { getQuote, listQuoteVersions } from "@/lib/data/quotes";
+import { getJobByQuote } from "@/lib/data/jobs";
 import { getSettings } from "@/lib/settings";
 import { formatPence } from "@/lib/quote/calc";
 import QuoteBuilder from "@/components/admin/QuoteBuilder";
+import ConvertToJobButton from "@/components/admin/ConvertToJobButton";
+import ResendQuoteButton from "@/components/admin/ResendQuoteButton";
 import type { LineItem } from "@/lib/types";
 
 export const metadata: Metadata = { title: "Quote" };
@@ -17,10 +20,11 @@ export default async function QuotePage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const [quote, versions, settings] = await Promise.all([
+  const [quote, versions, settings, job] = await Promise.all([
     getQuote(id),
     listQuoteVersions(id),
     getSettings(),
+    getJobByQuote(id),
   ]);
   if (!quote) notFound();
 
@@ -58,6 +62,24 @@ export default async function QuotePage({
           {quote.status}
         </span>
       </div>
+
+      {(["sent", "viewed", "changes-requested", "accepted", "declined", "converted-to-job"].includes(
+        quote.status
+      ) ||
+        job) && (
+        <section className="admin-card admin-card-wide admin-quote-actions-bar">
+          {job ? (
+            <Link href={`/admin/jobs/${job.id}`} className="btn btn-primary">
+              Open job ({job.status})
+            </Link>
+          ) : quote.status === "accepted" ? (
+            <ConvertToJobButton quoteId={quote.id} />
+          ) : null}
+          {["sent", "viewed", "changes-requested"].includes(quote.status) && (
+            <ResendQuoteButton quoteId={quote.id} />
+          )}
+        </section>
+      )}
 
       <div className="admin-detail-grid">
         <section className="admin-card admin-card-wide">
