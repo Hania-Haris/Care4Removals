@@ -161,12 +161,16 @@ export default function ContactForm() {
             aria-invalid={err("privacyAcknowledged") ? "true" : undefined}
           />
           <span>
-            I understand my details will be used to respond to this
-            enquiry.{" "}
-            <em>
-              (A full Privacy Policy is in progress — Phase 10 of this
-              build.)
-            </em>
+            I understand my details will be used to respond to this enquiry,
+            as described in the{" "}
+            <a href="/legal/privacy" target="_blank" rel="noreferrer">
+              Privacy Policy
+            </a>{" "}
+            and{" "}
+            <a href="/legal/terms" target="_blank" rel="noreferrer">
+              Terms
+            </a>
+            .
           </span>
         </label>
         {err("privacyAcknowledged") && (

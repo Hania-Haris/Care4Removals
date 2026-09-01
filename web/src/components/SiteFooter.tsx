@@ -58,6 +58,11 @@ export default function SiteFooter() {
 
         <div className="footer-bottom">
           <span>© 2026 Care4Removals</span>
+          <span className="footer-legal-links">
+            <Link href="/legal/privacy">Privacy</Link>
+            <Link href="/legal/terms">Terms</Link>
+            <Link href="/legal/cookies">Cookies</Link>
+          </span>
           <a href="mailto:m.tayyabi2822@gmail.com">
             m.tayyabi2822@gmail.com
           </a>

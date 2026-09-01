@@ -4298,3 +4298,44 @@ textarea:focus-visible {
 .form-status.error {
     color: #d64545;
 }
+
+/* Phase 10 — legal pages + footer legal links */
+.legal-page {
+    padding: 60px 0 80px;
+}
+.legal-page .container {
+    max-width: 760px;
+}
+.legal-page h1 {
+    font-family: "Baloo 2", Inter, sans-serif;
+    margin-bottom: 24px;
+}
+.legal-page h2 {
+    margin: 28px 0 8px;
+    font-size: 1.15rem;
+}
+.legal-page p {
+    line-height: 1.65;
+    color: var(--muted, #4a5b73);
+}
+.legal-page a {
+    color: var(--coral, #ff6b4a);
+    font-weight: 600;
+}
+.legal-draft {
+    background: #fdf3e7;
+    border: 1px solid #f0c98a;
+    color: #8a5a17;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 0.88rem;
+    margin-bottom: 28px;
+}
+.footer-legal-links {
+    display: inline-flex;
+    gap: 14px;
+}
+.footer-legal-links a {
+    color: inherit;
+    opacity: 0.85;
+}

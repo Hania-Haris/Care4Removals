@@ -2,6 +2,7 @@ import "../site.css";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import ScrollReveal from "@/components/ScrollReveal";
+import StructuredData from "@/components/StructuredData";
 
 export default function MarketingLayout({
   children,
@@ -10,6 +11,7 @@ export default function MarketingLayout({
 }) {
   return (
     <>
+      <StructuredData />
       <a href="#main-content" className="skip-link">
         Skip to content
       </a>
