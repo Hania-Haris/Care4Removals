@@ -1,0 +1,54 @@
+# Firebase App Hosting configuration for the Care4Removals Next.js app.
+# The backend's root directory must be set to `web` when it is created
+# (`firebase apphosting:backends:create` / Console). See DEPLOYMENT.md.
+#
+# Every value below is stored in Cloud Secret Manager, not in this file.
+# Create them once with:
+#   firebase apphosting:secrets:set <NAME>
+# and grant the backend access when prompted (or:
+#   firebase apphosting:secrets:grantaccess <NAME> --backend <backend-id>)
+
+runConfig:
+  minInstances: 0
+  maxInstances: 3
+  concurrency: 80
+  cpu: 1
+  memoryMiB: 512
+
+env:
+  # --- Public Firebase web config (shipped in the client bundle anyway) ---
+  - variable: NEXT_PUBLIC_FIREBASE_API_KEY
+    secret: NEXT_PUBLIC_FIREBASE_API_KEY
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+    secret: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+    secret: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+    secret: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+    secret: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_FIREBASE_APP_ID
+    secret: NEXT_PUBLIC_FIREBASE_APP_ID
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
+    secret: NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_SITE_URL
+    secret: NEXT_PUBLIC_SITE_URL
+    availability: [BUILD, RUNTIME]
+
+  # --- Server-only secrets ---
+  - variable: FIREBASE_SERVICE_ACCOUNT_KEY
+    secret: FIREBASE_SERVICE_ACCOUNT_KEY
+    availability: [BUILD, RUNTIME]
+  - variable: RESEND_API_KEY
+    secret: RESEND_API_KEY
+    availability: [RUNTIME]
+  - variable: LEAD_NOTIFICATION_EMAIL
+    secret: LEAD_NOTIFICATION_EMAIL
+    availability: [RUNTIME]
