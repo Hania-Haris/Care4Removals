@@ -545,3 +545,76 @@
 .admin-quote-actions-bar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;}
 .admin-quote-actions-bar .btn{background:#16273f;color:#e6edf6;}
 .admin-quote-actions-bar .btn.btn-primary{background:#ff6b4a;color:#fff;}
+
+/* Settings page */
+.admin-settings-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.admin-settings-form fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+.admin-settings-form fieldset[disabled] {
+  opacity: 0.75;
+}
+.admin-settings-form .admin-card label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #c4d2e4;
+  margin-top: 14px;
+}
+.admin-settings-form .admin-card label:first-of-type {
+  margin-top: 8px;
+}
+.admin-settings-form input,
+.admin-settings-form select,
+.admin-settings-form textarea {
+  display: block;
+  width: 100%;
+  margin-top: 5px;
+  background: #0c1a30;
+  border: 1px solid #2b3e5a;
+  color: #e6edf6;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-family: inherit;
+}
+.admin-settings-form .admin-checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-weight: 500;
+}
+.admin-settings-form .admin-checkbox-row input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  flex-shrink: 0;
+  accent-color: #ff6b4a;
+}
+.admin-settings-form code {
+  background: #16273f;
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 0.8em;
+}
+.admin-settings-save {
+  margin-top: 20px;
+}
+.admin-settings-form .field-error {
+  display: block;
+  color: #f08a8a;
+  font-size: 0.78rem;
+  margin-top: 4px;
+  font-weight: 600;
+}
+@media (max-width: 900px) {
+  .admin-settings-grid {
+    grid-template-columns: 1fr;
+  }
+}

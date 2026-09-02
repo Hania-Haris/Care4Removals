@@ -48,7 +48,7 @@ export const DEFAULT_SETTINGS: Settings = {
   emailRecipientAddress: "m.tayyabi2822@gmail.com",
 };
 
-const SETTINGS_DOC_ID = "general";
+export const SETTINGS_DOC_ID = "general";
 
 /**
  * Reads the singleton settings document, falling back to DEFAULT_SETTINGS
@@ -56,11 +56,24 @@ const SETTINGS_DOC_ID = "general";
  * ever been saved). Never throws for a missing document — that's the normal
  * state before Phase 5's admin UI exists.
  */
+// Whitelist the known keys so Firestore-only fields (updatedAt Timestamp,
+// updatedBy, …) never leak into the serialisable Settings object that gets
+// passed to client components.
+function pickSettings(raw: Record<string, unknown>): Settings {
+  const merged = { ...DEFAULT_SETTINGS, ...raw } as Record<string, unknown>;
+  const out = {} as Settings;
+  (Object.keys(DEFAULT_SETTINGS) as (keyof Settings)[]).forEach((k) => {
+    // @ts-expect-error index assignment across the union is safe here
+    out[k] = merged[k] ?? DEFAULT_SETTINGS[k];
+  });
+  return out;
+}
+
 async function readSettings(): Promise<Settings> {
   try {
     const snap = await getAdminDb().collection("settings").doc(SETTINGS_DOC_ID).get();
     if (!snap.exists) return DEFAULT_SETTINGS;
-    return { ...DEFAULT_SETTINGS, ...(snap.data() as Partial<Settings>) };
+    return pickSettings(snap.data() ?? {});
   } catch (error) {
     console.error("readSettings() failed, using defaults:", error);
     return DEFAULT_SETTINGS;

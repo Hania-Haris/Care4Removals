@@ -25,6 +25,9 @@ export default async function ProtectedAdminLayout({
           <Link href="/admin/dashboard">Dashboard</Link>
           <Link href="/admin/leads">Leads</Link>
           <Link href="/admin/jobs">Jobs</Link>
+          {(user.role === "admin" || user.role === "manager") && (
+            <Link href="/admin/settings">Settings</Link>
+          )}
         </nav>
         <div className="admin-user">
           <span className="admin-user-email">{user.email}</span>
