@@ -35,19 +35,32 @@ export default async function LeadDetailPage({
   const assignedName =
     staff.find((s) => s.uid === lead.assignedTo)?.displayName ?? null;
 
-  const detailRows: [string, string | undefined][] =
+  const floorText = (floor?: string | null, lift?: string | null, legacy?: string) => {
+    const parts = [floor || (legacy ? `Ground floor: ${legacy}` : null), lift].filter(Boolean);
+    return parts.length ? parts.join(" · ") : "Not specified";
+  };
+
+  const detailRows: [string, string | undefined | null][] =
     lead.source === "quote-form"
       ? [
           ["Phone", lead.phone],
           ["Email", lead.email],
-          ["Moving date", lead.movingDate || "Not specified"],
-          ["Service", lead.serviceType || "Not specified"],
-          ["From", lead.pickupAddress],
-          ["From — property", lead.pickupPropertyType],
-          ["From — ground floor", lead.pickupGroundFloor || "Not specified"],
-          ["To", lead.deliveryAddress],
-          ["To — property", lead.deliveryPropertyType],
-          ["To — ground floor", lead.deliveryGroundFloor || "Not specified"],
+          ["Moving date", lead.movingDate || "Flexible / not set"],
+          ["Dates flexible", lead.dateFlexible ? "Yes" : "No"],
+          ["Main service", lead.serviceType || "Not specified"],
+          ["From", `${lead.pickupAddress ?? ""}${lead.pickupPostcode ? ", " + lead.pickupPostcode : ""}`],
+          ["From — property", `${lead.pickupPropertyType ?? "—"}${lead.pickupBedrooms ? " · " + lead.pickupBedrooms : ""}`],
+          ["From — access", floorText(lead.pickupFloor, lead.pickupLift, lead.pickupGroundFloor)],
+          ["From — parking notes", lead.pickupAccess || "None"],
+          ["To", `${lead.deliveryAddress ?? ""}${lead.deliveryPostcode ? ", " + lead.deliveryPostcode : ""}`],
+          ["To — property", lead.deliveryPropertyType ?? "—"],
+          ["To — access", floorText(lead.deliveryFloor, lead.deliveryLift, lead.deliveryGroundFloor)],
+          ["To — parking notes", lead.deliveryAccess || "None"],
+          ["Packing", lead.packingNeeded || "Not specified"],
+          ["Dismantling / reassembly", lead.dismantlingNeeded || "Not specified"],
+          ["Storage", lead.storageNeeded || "Not specified"],
+          ["Heavy / special items", lead.heavyItems || "None noted"],
+          ["Approximate inventory", lead.inventoryNotes || "None provided"],
           ["Special instructions", lead.specialInstructions || "None"],
         ]
       : [
@@ -92,6 +105,29 @@ export default async function LeadDetailPage({
               </div>
             ))}
           </dl>
+
+          {(lead.uploadedFiles?.length ?? 0) > 0 && (
+            <div className="admin-lead-files">
+              <dt>Attachments ({lead.uploadedFiles!.length})</dt>
+              <ul>
+                {lead.uploadedFiles!.map((f) => (
+                  <li key={f.path}>
+                    <a
+                      href={`/api/admin/lead-file?path=${encodeURIComponent(f.path)}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {f.name}
+                    </a>
+                    <span className="admin-muted">
+                      {" "}
+                      ({Math.round(f.size / 1024)} KB)
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
           {lead.source === "quote-form" && (
             <div className="admin-quote-cta">
               {quote ? (

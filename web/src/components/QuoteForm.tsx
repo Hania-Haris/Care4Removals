@@ -2,8 +2,26 @@
 
 import { useActionState, useEffect, useRef, useState } from "react";
 import { submitQuoteLead, type ActionResult } from "@/app/actions/leads";
+import {
+  UPLOAD_MAX_FILES,
+  UPLOAD_MAX_BYTES,
+} from "@/lib/validation/lead";
 
 const initialState: ActionResult = { status: "idle", message: "" };
+
+const PROPERTY_TYPES = [
+  "House",
+  "Flat / Apartment",
+  "Bungalow",
+  "Maisonette",
+  "Office / Commercial",
+  "Storage unit",
+  "Other",
+];
+const BEDROOMS = ["Studio", "1 bed", "2 bed", "3 bed", "4 bed", "5+ bed"];
+const FLOORS = ["Ground floor", "1st floor", "2nd floor", "3rd floor", "4th floor +", "Whole house"];
+const YES_NO = ["Yes", "No"];
+const LIFT = ["Lift available", "No lift", "Not applicable"];
 
 export default function QuoteForm() {
   const [state, formAction, pending] = useActionState(
@@ -12,31 +30,105 @@ export default function QuoteForm() {
   );
   const formRef = useRef<HTMLFormElement>(null);
   const [submissionId, setSubmissionId] = useState(() => crypto.randomUUID());
+  const [fileCount, setFileCount] = useState(0);
+  const [fileError, setFileError] = useState("");
   const todayISO = new Date().toISOString().slice(0, 10);
 
-  // Regenerate the idempotency key when a submit just succeeded, derived
-  // during render rather than in an effect (see
-  // https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes).
-  // A resubmission carrying the SAME key (double-click, network retry) is
-  // recognized server-side and not duplicated; a genuinely new enquiry after
-  // a successful one gets a fresh key so it isn't mistaken for a repeat.
   const [prevStatus, setPrevStatus] = useState(state.status);
   if (state.status !== prevStatus) {
     setPrevStatus(state.status);
-    if (state.status === "success") {
-      setSubmissionId(crypto.randomUUID());
-    }
+    if (state.status === "success") setSubmissionId(crypto.randomUUID());
   }
 
-  // Imperative DOM side effects only (form reset, scroll) — no setState here.
   useEffect(() => {
     if (state.status === "success") {
       formRef.current?.reset();
+      setFileCount(0);
+      setFileError("");
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [state.status]);
 
-  const err = (field: string) => state.fieldErrors?.[field];
+  const err = (f: string) => state.fieldErrors?.[f];
+  const val = (f: string) => state.values?.[f] ?? "";
+
+  function onFiles(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(e.target.files ?? []);
+    if (files.length > UPLOAD_MAX_FILES) {
+      setFileError(`Please choose ${UPLOAD_MAX_FILES} files or fewer.`);
+    } else if (files.some((f) => f.size > UPLOAD_MAX_BYTES)) {
+      setFileError("Each file must be under 8 MB.");
+    } else {
+      setFileError("");
+    }
+    setFileCount(files.length);
+  }
+
+  const field = (
+    name: string,
+    label: string,
+    opts: {
+      type?: string;
+      required?: boolean;
+      full?: boolean;
+      autoComplete?: string;
+      min?: string;
+      placeholder?: string;
+    } = {}
+  ) => (
+    <div className={`form-group${opts.full ? " full" : ""}`}>
+      <label htmlFor={name}>
+        {label}
+        {opts.required && <span className="required">*</span>}
+      </label>
+      <input
+        type={opts.type ?? "text"}
+        id={name}
+        name={name}
+        required={opts.required}
+        autoComplete={opts.autoComplete}
+        min={opts.min}
+        placeholder={opts.placeholder}
+        defaultValue={val(name)}
+        aria-invalid={err(name) ? "true" : undefined}
+        aria-describedby={err(name) ? `${name}-error` : undefined}
+      />
+      {err(name) && (
+        <span className="field-error" id={`${name}-error`}>
+          {err(name)}
+        </span>
+      )}
+    </div>
+  );
+
+  const select = (
+    name: string,
+    label: string,
+    options: string[],
+    opts: { required?: boolean; placeholder?: string } = {}
+  ) => (
+    <div className="form-group">
+      <label htmlFor={name}>
+        {label}
+        {opts.required && <span className="required">*</span>}
+      </label>
+      <select
+        id={name}
+        name={name}
+        required={opts.required}
+        defaultValue={val(name)}
+        aria-invalid={err(name) ? "true" : undefined}
+      >
+        <option value="">{opts.placeholder ?? "Select…"}</option>
+        {options.map((o) => (
+          <option key={o} value={o}>
+            {o}
+          </option>
+        ))}
+      </select>
+      {err(name) && <span className="field-error">{err(name)}</span>}
+    </div>
+  );
 
   return (
     <>
@@ -52,9 +144,6 @@ export default function QuoteForm() {
       </div>
 
       <form id="quoteForm" ref={formRef} action={formAction} noValidate>
-        {/* suppressHydrationWarning: the UUID legitimately differs between the
-            server-rendered and client-hydrated value; hidden, no visual/user
-            impact, and the client value is what actually gets submitted. */}
         <input
           type="hidden"
           name="submissionId"
@@ -62,275 +151,123 @@ export default function QuoteForm() {
           suppressHydrationWarning
         />
 
-        {/* ================= YOUR DETAILS ================= */}
+        {/* YOUR DETAILS */}
         <div className="form-section">
           <h2>Your details</h2>
           <p className="form-section-description">How can we contact you?</p>
-
           <div className="form-grid">
-            <div className="form-group">
-              <label htmlFor="customerName">
-                Full name<span className="required">*</span>
-              </label>
-              <input
-                type="text"
-                id="customerName"
-                name="customerName"
-                required
-                autoComplete="name"
-                defaultValue={state.values?.customerName ?? ""}
-                aria-invalid={err("customerName") ? "true" : undefined}
-                aria-describedby={
-                  err("customerName") ? "customerName-error" : undefined
-                }
-              />
-              {err("customerName") && (
-                <span className="field-error" id="customerName-error">
-                  {err("customerName")}
-                </span>
-              )}
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="phone">
-                Phone number<span className="required">*</span>
-              </label>
-              <input
-                type="tel"
-                id="phone"
-                name="phone"
-                required
-                autoComplete="tel"
-                defaultValue={state.values?.phone ?? ""}
-                aria-invalid={err("phone") ? "true" : undefined}
-                aria-describedby={err("phone") ? "phone-error" : undefined}
-              />
-              {err("phone") && (
-                <span className="field-error" id="phone-error">
-                  {err("phone")}
-                </span>
-              )}
-            </div>
-
-            <div className="form-group full">
-              <label htmlFor="email">
-                Email address<span className="required">*</span>
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                required
-                autoComplete="email"
-                defaultValue={state.values?.email ?? ""}
-                aria-invalid={err("email") ? "true" : undefined}
-                aria-describedby={err("email") ? "email-error" : undefined}
-              />
-              {err("email") && (
-                <span className="field-error" id="email-error">
-                  {err("email")}
-                </span>
-              )}
-            </div>
+            {field("customerName", "Full name", { required: true, autoComplete: "name" })}
+            {field("phone", "Phone number", { required: true, type: "tel", autoComplete: "tel" })}
+            {field("email", "Email address", { required: true, type: "email", full: true, autoComplete: "email" })}
           </div>
         </div>
 
-        {/* ================= CURRENT PROPERTY ================= */}
+        {/* CURRENT PROPERTY */}
         <div className="form-section">
           <h2>Current property</h2>
-          <p className="form-section-description">
-            Tell us where you&apos;re moving from.
-          </p>
-
+          <p className="form-section-description">Where you&apos;re moving from.</p>
           <div className="form-grid">
-            <div className="form-group full">
-              <label htmlFor="pickupAddress">
-                Pickup address<span className="required">*</span>
-              </label>
-              <input
-                type="text"
-                id="pickupAddress"
-                name="pickupAddress"
-                required
-                autoComplete="street-address"
-                defaultValue={state.values?.pickupAddress ?? ""}
-                aria-invalid={err("pickupAddress") ? "true" : undefined}
-                aria-describedby={
-                  err("pickupAddress") ? "pickupAddress-error" : undefined
-                }
-              />
-              {err("pickupAddress") && (
-                <span className="field-error" id="pickupAddress-error">
-                  {err("pickupAddress")}
-                </span>
-              )}
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="pickupPropertyType">
-                Property type<span className="required">*</span>
-              </label>
-              <select
-                id="pickupPropertyType"
-                name="pickupPropertyType"
-                required
-                defaultValue={state.values?.pickupPropertyType ?? ""}
-                aria-invalid={err("pickupPropertyType") ? "true" : undefined}
-              >
-                <option value="">Select property type</option>
-                <option value="House">House</option>
-                <option value="Flat / Apartment">Flat / Apartment</option>
-                <option value="Bungalow">Bungalow</option>
-                <option value="Office / Commercial">
-                  Office / Commercial
-                </option>
-                <option value="Other">Other</option>
-              </select>
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="pickupGroundFloor">
-                Is the property ground floor?
-              </label>
-              <select
-                id="pickupGroundFloor"
-                name="pickupGroundFloor"
-                defaultValue={state.values?.pickupGroundFloor ?? ""}
-              >
-                <option value="">Select</option>
-                <option value="Yes">Yes</option>
-                <option value="No">No</option>
-              </select>
-            </div>
+            {field("pickupAddress", "Address", { required: true, full: true, autoComplete: "street-address" })}
+            {field("pickupPostcode", "Postcode")}
+            {select("pickupPropertyType", "Property type", PROPERTY_TYPES, { required: true, placeholder: "Select property type" })}
+            {select("pickupBedrooms", "Size", BEDROOMS)}
+            {select("pickupFloor", "Which floor?", FLOORS)}
+            {select("pickupLift", "Lift access", LIFT)}
+            {field("pickupAccess", "Parking / access notes", {
+              full: true,
+              placeholder: "e.g. permit parking only, long carry, narrow stairs",
+            })}
           </div>
         </div>
 
-        {/* ================= DESTINATION ================= */}
+        {/* NEW PROPERTY */}
         <div className="form-section">
           <h2>New property</h2>
-          <p className="form-section-description">
-            Tell us where you&apos;re moving to.
-          </p>
-
+          <p className="form-section-description">Where you&apos;re moving to.</p>
           <div className="form-grid">
-            <div className="form-group full">
-              <label htmlFor="deliveryAddress">
-                Delivery address<span className="required">*</span>
-              </label>
-              <input
-                type="text"
-                id="deliveryAddress"
-                name="deliveryAddress"
-                required
-                defaultValue={state.values?.deliveryAddress ?? ""}
-                aria-invalid={err("deliveryAddress") ? "true" : undefined}
-                aria-describedby={
-                  err("deliveryAddress") ? "deliveryAddress-error" : undefined
-                }
-              />
-              {err("deliveryAddress") && (
-                <span className="field-error" id="deliveryAddress-error">
-                  {err("deliveryAddress")}
-                </span>
-              )}
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="deliveryPropertyType">
-                Property type<span className="required">*</span>
-              </label>
-              <select
-                id="deliveryPropertyType"
-                name="deliveryPropertyType"
-                required
-                defaultValue={state.values?.deliveryPropertyType ?? ""}
-              >
-                <option value="">Select property type</option>
-                <option value="House">House</option>
-                <option value="Flat / Apartment">Flat / Apartment</option>
-                <option value="Bungalow">Bungalow</option>
-                <option value="Office / Commercial">
-                  Office / Commercial
-                </option>
-                <option value="Other">Other</option>
-              </select>
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="deliveryGroundFloor">
-                Is the property ground floor?
-              </label>
-              <select
-                id="deliveryGroundFloor"
-                name="deliveryGroundFloor"
-                defaultValue={state.values?.deliveryGroundFloor ?? ""}
-              >
-                <option value="">Select</option>
-                <option value="Yes">Yes</option>
-                <option value="No">No</option>
-              </select>
-            </div>
+            {field("deliveryAddress", "Address", { required: true, full: true })}
+            {field("deliveryPostcode", "Postcode")}
+            {select("deliveryPropertyType", "Property type", PROPERTY_TYPES, { required: true, placeholder: "Select property type" })}
+            {select("deliveryFloor", "Which floor?", FLOORS)}
+            {select("deliveryLift", "Lift access", LIFT)}
+            {field("deliveryAccess", "Parking / access notes", {
+              full: true,
+              placeholder: "e.g. driveway, permit needed, restricted hours",
+            })}
           </div>
         </div>
 
-        {/* ================= MOVE DETAILS ================= */}
+        {/* MOVE DETAILS */}
         <div className="form-section">
           <h2>Move details</h2>
-          <p className="form-section-description">
-            Give us a little more information.
-          </p>
-
+          <p className="form-section-description">A little more information.</p>
           <div className="form-grid">
+            {field("movingDate", "Preferred moving date", { type: "date", min: todayISO })}
+            {select("dateFlexible", "Are your dates flexible?", ["yes", "no"], {
+              placeholder: "Select…",
+            })}
             <div className="form-group">
-              <label htmlFor="movingDate">Preferred moving date</label>
-              <input
-                type="date"
-                id="movingDate"
-                name="movingDate"
-                min={todayISO}
-                defaultValue={state.values?.movingDate ?? ""}
-                aria-invalid={err("movingDate") ? "true" : undefined}
-                aria-describedby={
-                  err("movingDate") ? "movingDate-error" : undefined
-                }
-              />
-              {err("movingDate") && (
-                <span className="field-error" id="movingDate-error">
-                  {err("movingDate")}
-                </span>
-              )}
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="serviceType">Service required</label>
-              {/* Options aligned to the confirmed services listed on /services —
-                  "Office Move" and "Storage" were removed here: they were offered
-                  in the legacy form but are not sellable services on the site
-                  (Phase 2 QA finding, DECISIONS_REQUIRED.md #4). */}
-              <select id="serviceType" name="serviceType" defaultValue="">
+              <label htmlFor="serviceType">Main service needed</label>
+              <select id="serviceType" name="serviceType" defaultValue={val("serviceType")}>
                 <option value="">Select service</option>
-                <option value="House Removal">House Removal</option>
+                <option value="House Removal">House removal</option>
                 <option value="Packing">Packing</option>
-                <option value="Transport">Reliable Transport</option>
-                <option value="Multiple Services">Multiple Services</option>
+                <option value="Transport">Reliable transport</option>
+                <option value="Multiple Services">Multiple services</option>
               </select>
             </div>
-
+            {select("packingNeeded", "Packing help?", ["Yes — full pack", "Yes — fragile only", "No"])}
+            {select("dismantlingNeeded", "Furniture dismantling / reassembly?", YES_NO)}
+            {select("storageNeeded", "Storage needed?", YES_NO)}
+            {field("heavyItems", "Heavy or special items", {
+              full: true,
+              placeholder: "e.g. piano, safe, American fridge, gym equipment",
+            })}
             <div className="form-group full">
-              <label htmlFor="specialInstructions">
-                Special instructions
-              </label>
+              <label htmlFor="inventoryNotes">Approximate inventory</label>
+              <textarea
+                id="inventoryNotes"
+                name="inventoryNotes"
+                placeholder="Rough list of rooms / large items so we can size the move"
+                defaultValue={val("inventoryNotes")}
+              />
+            </div>
+            <div className="form-group full">
+              <label htmlFor="specialInstructions">Anything else?</label>
               <textarea
                 id="specialInstructions"
                 name="specialInstructions"
                 placeholder="Anything else we should know about your move?"
-                defaultValue={state.values?.specialInstructions ?? ""}
-              ></textarea>
+                defaultValue={val("specialInstructions")}
+              />
             </div>
           </div>
         </div>
 
-        {/* ================= PRIVACY ================= */}
+        {/* PHOTOS */}
+        <div className="form-section">
+          <h2>Photos (optional)</h2>
+          <p className="form-section-description">
+            A few photos of the larger rooms or tricky items help us quote
+            accurately. Up to {UPLOAD_MAX_FILES} images or PDFs, 8 MB each.
+          </p>
+          <div className="form-group full">
+            <label htmlFor="photos" className="file-label">
+              <span>{fileCount ? `${fileCount} file${fileCount > 1 ? "s" : ""} selected` : "Choose files"}</span>
+              <input
+                id="photos"
+                name="photos"
+                type="file"
+                multiple
+                accept="image/jpeg,image/png,image/webp,image/heic,application/pdf"
+                onChange={onFiles}
+              />
+            </label>
+            {fileError && <span className="field-error">{fileError}</span>}
+          </div>
+        </div>
+
+        {/* PRIVACY */}
         <div className="form-section">
           <div className="form-group full form-checkbox-group">
             <label htmlFor="privacyAcknowledged" className="checkbox-label">
@@ -339,14 +276,7 @@ export default function QuoteForm() {
                 id="privacyAcknowledged"
                 name="privacyAcknowledged"
                 required
-                aria-invalid={
-                  err("privacyAcknowledged") ? "true" : undefined
-                }
-                aria-describedby={
-                  err("privacyAcknowledged")
-                    ? "privacyAcknowledged-error"
-                    : undefined
-                }
+                aria-invalid={err("privacyAcknowledged") ? "true" : undefined}
               />
               <span>
                 I understand my details will be used to respond to this
@@ -362,25 +292,21 @@ export default function QuoteForm() {
               </span>
             </label>
             {err("privacyAcknowledged") && (
-              <span className="field-error" id="privacyAcknowledged-error">
-                {err("privacyAcknowledged")}
-              </span>
+              <span className="field-error">{err("privacyAcknowledged")}</span>
             )}
           </div>
         </div>
 
-        {/* ================= SUBMIT ================= */}
         <div className="form-submit-area">
           <button
             type="submit"
             className="btn btn-primary"
             id="submitQuote"
-            disabled={pending}
+            disabled={pending || !!fileError}
           >
-            {pending ? "Sending..." : "Request My Quote"}
+            {pending ? "Sending..." : "Request my quote"}
             {!pending && <span aria-hidden="true">→</span>}
           </button>
-
           <p className="form-note">
             We&apos;ll use the information you provide to respond to your
             removal enquiry.

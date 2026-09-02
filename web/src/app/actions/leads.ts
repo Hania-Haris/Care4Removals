@@ -10,6 +10,62 @@ import {
 } from "@/lib/validation/lead";
 import { notifyNewLead } from "@/lib/email/notify";
 import { checkPublicSubmissionRate } from "@/lib/rate-limit";
+import { getAdminStorage } from "@/lib/firebase/admin";
+import {
+  UPLOAD_MAX_FILES,
+  UPLOAD_MAX_BYTES,
+  UPLOAD_ALLOWED,
+} from "@/lib/validation/lead";
+
+type UploadedFile = {
+  path: string;
+  name: string;
+  size: number;
+  contentType: string;
+};
+
+/**
+ * Uploads the quote form's optional inventory photos to protected Storage
+ * under leads/{leadId}/. Silently skips anything oversized, wrong-type, or
+ * beyond the file-count cap — a bad file must never fail the whole enquiry.
+ */
+async function handleLeadUploads(
+  leadId: string,
+  formData: FormData
+): Promise<UploadedFile[]> {
+  const files = formData
+    .getAll("photos")
+    .filter((f): f is File => f instanceof File && f.size > 0)
+    .slice(0, UPLOAD_MAX_FILES);
+  if (files.length === 0) return [];
+
+  const bucket = getAdminStorage().bucket();
+  const out: UploadedFile[] = [];
+
+  for (const file of files) {
+    if (file.size > UPLOAD_MAX_BYTES) continue;
+    if (!UPLOAD_ALLOWED.includes(file.type)) continue;
+    try {
+      const buf = Buffer.from(await file.arrayBuffer());
+      const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_").slice(0, 120);
+      const path = `leads/${leadId}/${Date.now()}-${safeName}`;
+      await bucket.file(path).save(buf, {
+        contentType: file.type,
+        resumable: false,
+        metadata: { cacheControl: "private, max-age=0" },
+      });
+      out.push({
+        path,
+        name: safeName,
+        size: file.size,
+        contentType: file.type,
+      });
+    } catch (e) {
+      console.error("lead upload failed for", file.name, e);
+    }
+  }
+  return out;
+}
 
 async function clientIp(): Promise<string> {
   const h = await headers();
@@ -92,19 +148,43 @@ export async function submitQuoteLead(
       };
     }
 
+    const clean = (v: string) => v.trim() || null;
     const docRef = await leadsRef.add({
       customerName: data.customerName,
       email: data.email,
       phone: data.phone,
+
       pickupAddress: data.pickupAddress,
+      pickupPostcode: clean(data.pickupPostcode),
       pickupPropertyType: data.pickupPropertyType,
-      pickupGroundFloor: data.pickupGroundFloor || null,
+      pickupBedrooms: clean(data.pickupBedrooms),
+      pickupFloor: clean(data.pickupFloor),
+      pickupLift: clean(data.pickupLift),
+      pickupAccess: clean(data.pickupAccess),
+
       deliveryAddress: data.deliveryAddress,
+      deliveryPostcode: clean(data.deliveryPostcode),
       deliveryPropertyType: data.deliveryPropertyType,
-      deliveryGroundFloor: data.deliveryGroundFloor || null,
-      movingDate: data.movingDate || null,
-      serviceType: data.serviceType || null,
-      specialInstructions: data.specialInstructions || null,
+      deliveryFloor: clean(data.deliveryFloor),
+      deliveryLift: clean(data.deliveryLift),
+      deliveryAccess: clean(data.deliveryAccess),
+
+      movingDate: clean(data.movingDate),
+      dateFlexible: data.dateFlexible === "yes",
+      serviceType: clean(data.serviceType),
+      packingNeeded: clean(data.packingNeeded),
+      dismantlingNeeded: clean(data.dismantlingNeeded),
+      storageNeeded: clean(data.storageNeeded),
+      heavyItems: clean(data.heavyItems),
+      inventoryNotes: clean(data.inventoryNotes),
+      specialInstructions: clean(data.specialInstructions),
+
+      uploadedFiles: [] as {
+        path: string;
+        name: string;
+        size: number;
+        contentType: string;
+      }[],
       submissionId: data.submissionId,
       source: "quote-form",
       status: "new",
@@ -114,12 +194,18 @@ export async function submitQuoteLead(
       updatedAt: FieldValue.serverTimestamp(),
     });
 
+    // ---- optional file uploads ----
+    const uploaded = await handleLeadUploads(docRef.id, formData);
+    if (uploaded.length) {
+      await docRef.update({ uploadedFiles: uploaded });
+    }
+
     await db.collection("activities").add({
       entityType: "lead",
       entityId: docRef.id,
       type: "created",
       actor: "system",
-      metadata: { source: "quote-form" },
+      metadata: { source: "quote-form", files: uploaded.length },
       createdAt: FieldValue.serverTimestamp(),
     });
 

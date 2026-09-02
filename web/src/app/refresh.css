@@ -1077,3 +1077,33 @@ textarea:focus {
     padding-bottom: 130px;
   }
 }
+
+/* =========================================================================
+   QUOTE FORM — file input
+========================================================================= */
+.file-label {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px;
+  border: 1.5px dashed var(--line-strong);
+  border-radius: 12px;
+  background: var(--paper-2);
+  color: var(--ink-2);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.file-label:hover {
+  border-color: var(--amber);
+  background: #fff;
+}
+.file-label input[type="file"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}

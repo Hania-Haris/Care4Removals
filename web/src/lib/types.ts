@@ -34,21 +34,47 @@ export type JobStatus =
 
 export type LeadSource = "quote-form" | "contact-form";
 
+export type LeadFile = {
+  path: string;
+  name: string;
+  size: number;
+  contentType: string;
+};
+
 export type Lead = {
   id: string;
   customerName: string;
   email: string;
   phone: string;
+
   pickupAddress?: string;
+  pickupPostcode?: string | null;
   pickupPropertyType?: string;
-  pickupGroundFloor?: string;
+  pickupBedrooms?: string | null;
+  pickupFloor?: string | null;
+  pickupLift?: string | null;
+  pickupAccess?: string | null;
+  pickupGroundFloor?: string; // legacy
+
   deliveryAddress?: string;
+  deliveryPostcode?: string | null;
   deliveryPropertyType?: string;
-  deliveryGroundFloor?: string;
-  movingDate?: string;
+  deliveryFloor?: string | null;
+  deliveryLift?: string | null;
+  deliveryAccess?: string | null;
+  deliveryGroundFloor?: string; // legacy
+
+  movingDate?: string | null;
   dateFlexible?: boolean;
-  serviceType?: string;
-  specialInstructions?: string;
+  serviceType?: string | null;
+  packingNeeded?: string | null;
+  dismantlingNeeded?: string | null;
+  storageNeeded?: string | null;
+  heavyItems?: string | null;
+  inventoryNotes?: string | null;
+  specialInstructions?: string | null;
+
+  uploadedFiles?: LeadFile[];
   subject?: string; // contact-form only
   message?: string; // contact-form only
   source: LeadSource;
