@@ -21,7 +21,9 @@ type IconName =
   | "lock"
   | "file"
   | "map-pin"
-  | "camera";
+  | "camera"
+  | "message"
+  | "heart";
 
 const paths: Record<IconName, React.ReactNode> = {
   "shield-check": (
@@ -126,6 +128,15 @@ const paths: Record<IconName, React.ReactNode> = {
       <path d="M4 8h3l1.5-2.5h7L18 8h2a1.5 1.5 0 0 1 1.5 1.5V18A1.5 1.5 0 0 1 20 19.5H4A1.5 1.5 0 0 1 2.5 18V9.5A1.5 1.5 0 0 1 4 8Z" />
       <circle cx="12" cy="13" r="3.4" />
     </>
+  ),
+  message: (
+    <>
+      <path d="M5 5.5h14a1.5 1.5 0 0 1 1.5 1.5v8a1.5 1.5 0 0 1-1.5 1.5H9l-4 3.5V16H5A1.5 1.5 0 0 1 3.5 14.5V7A1.5 1.5 0 0 1 5 5.5Z" />
+      <path d="M8 10h8M8 12.5h5" />
+    </>
+  ),
+  heart: (
+    <path d="M12 20s-7-4.4-7-9.6A4.4 4.4 0 0 1 12 7.2 4.4 4.4 0 0 1 19 10.4c0 5.2-7 9.6-7 9.6Z" />
   ),
 };
 
