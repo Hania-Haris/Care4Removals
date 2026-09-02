@@ -15,7 +15,13 @@ function todayISO() {
   return new Date().toISOString().slice(0, 10);
 }
 
-const optStr = (max: number) => z.string().trim().max(max).optional().default("");
+const optStr = (max: number) =>
+  z
+    .string()
+    .trim()
+    .max(max, `Please keep this under ${max} characters.`)
+    .optional()
+    .default("");
 
 export const quoteFormSchema = z.object({
   customerName: nonEmptyTrimmed(200, "Full name"),
@@ -26,17 +32,17 @@ export const quoteFormSchema = z.object({
   pickupAddress: nonEmptyTrimmed(300, "Current address"),
   pickupPostcode: optStr(12),
   pickupPropertyType: nonEmptyTrimmed(50, "Current property type"),
-  pickupBedrooms: optStr(20),
-  pickupFloor: optStr(20),
-  pickupLift: optStr(12),
+  pickupBedrooms: optStr(40),
+  pickupFloor: optStr(40),
+  pickupLift: optStr(40),
   pickupAccess: optStr(400),
 
   // ---- new property ----
   deliveryAddress: nonEmptyTrimmed(300, "New address"),
   deliveryPostcode: optStr(12),
   deliveryPropertyType: nonEmptyTrimmed(50, "New property type"),
-  deliveryFloor: optStr(20),
-  deliveryLift: optStr(12),
+  deliveryFloor: optStr(40),
+  deliveryLift: optStr(40),
   deliveryAccess: optStr(400),
 
   // ---- move ----
@@ -48,11 +54,11 @@ export const quoteFormSchema = z.object({
       (val) => val === "" || val >= todayISO(),
       "Moving date can't be in the past."
     ),
-  dateFlexible: optStr(12),
+  dateFlexible: optStr(40),
   serviceType: optStr(50),
-  packingNeeded: optStr(20),
-  dismantlingNeeded: optStr(20),
-  storageNeeded: optStr(20),
+  packingNeeded: optStr(40),
+  dismantlingNeeded: optStr(40),
+  storageNeeded: optStr(40),
   heavyItems: optStr(600),
   inventoryNotes: optStr(2000),
   specialInstructions: optStr(2000),

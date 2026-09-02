@@ -1,6 +1,14 @@
 "use client";
 
-import { useActionState, useMemo, useRef, useState } from "react";
+import {
+  useActionState,
+  useMemo,
+  useRef,
+  useState,
+  startTransition,
+  createContext,
+  useContext,
+} from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Icon from "@/components/Icon";
@@ -54,6 +62,44 @@ const EMPTY: Data = {
 };
 
 const emailOk = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+const todayISO = () => new Date().toISOString().slice(0, 10);
+
+// Single source of truth for every field: which step owns it (so a server
+// error jumps there) and a human label (so the error summary can name it).
+// Every <Field>/<Select> passes its `name`; the context below resolves the
+// server error for that name automatically, so a field can never silently
+// swallow a validation error.
+const FIELDS: Record<string, { step: number; label: string }> = {
+  customerName: { step: 0, label: "Full name" },
+  phone: { step: 0, label: "Phone number" },
+  email: { step: 0, label: "Email address" },
+  pickupAddress: { step: 1, label: "Moving from — address" },
+  pickupPostcode: { step: 1, label: "Moving from — postcode" },
+  pickupPropertyType: { step: 1, label: "Moving from — property type" },
+  pickupBedrooms: { step: 1, label: "Moving from — size" },
+  pickupFloor: { step: 1, label: "Moving from — floor" },
+  pickupLift: { step: 1, label: "Moving from — lift access" },
+  pickupAccess: { step: 1, label: "Moving from — parking / access notes" },
+  deliveryAddress: { step: 1, label: "Moving to — address" },
+  deliveryPostcode: { step: 1, label: "Moving to — postcode" },
+  deliveryPropertyType: { step: 1, label: "Moving to — property type" },
+  deliveryFloor: { step: 1, label: "Moving to — floor" },
+  deliveryLift: { step: 1, label: "Moving to — lift access" },
+  deliveryAccess: { step: 1, label: "Moving to — parking / access notes" },
+  movingDate: { step: 2, label: "Preferred moving date" },
+  dateFlexible: { step: 2, label: "Dates flexible" },
+  serviceType: { step: 2, label: "Main service needed" },
+  packingNeeded: { step: 2, label: "Packing help" },
+  dismantlingNeeded: { step: 2, label: "Dismantling / reassembly" },
+  storageNeeded: { step: 2, label: "Storage needed" },
+  heavyItems: { step: 2, label: "Heavy or special items" },
+  inventoryNotes: { step: 2, label: "Approximate inventory" },
+  specialInstructions: { step: 2, label: "Anything else" },
+  privacyAcknowledged: { step: 3, label: "Privacy acknowledgement" },
+};
+const fieldStep = (name: string) => FIELDS[name]?.step ?? -1;
+
+const ErrCtx = createContext<Record<string, string> | undefined>(undefined);
 
 export default function QuoteWizard() {
   const [state, dispatch, pending] = useActionState(
@@ -67,6 +113,24 @@ export default function QuoteWizard() {
   const [ack, setAck] = useState(false);
   const [touched, setTouched] = useState(false);
   const submissionId = useRef(crypto.randomUUID());
+
+  // If the server rejected a field, hop to the step that owns it and mark the
+  // fields dirty so the specific errors show. Derived during render.
+  const [seenErrorAt, setSeenErrorAt] = useState<Record<string, string> | null>(
+    null
+  );
+  if (
+    state.status === "error" &&
+    state.fieldErrors &&
+    state.fieldErrors !== seenErrorAt
+  ) {
+    setSeenErrorAt(state.fieldErrors);
+    const steps = Object.keys(state.fieldErrors)
+      .map(fieldStep)
+      .filter((n) => n >= 0);
+    if (steps.length) setStep(Math.min(...steps));
+    setTouched(true);
+  }
 
   const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
     setData((d) => ({ ...d, [k]: e.target.value }));
@@ -85,6 +149,8 @@ export default function QuoteWizard() {
         data.deliveryAddress.trim() !== "" &&
         data.deliveryPropertyType !== ""
       );
+    if (step === 2)
+      return data.movingDate === "" || data.movingDate >= todayISO();
     if (step === 3) return ack;
     return true;
   }, [step, data, ack]);
@@ -130,7 +196,7 @@ export default function QuoteWizard() {
     fd.set("privacyAcknowledged", "on");
     fd.set("submissionId", submissionId.current);
     files.forEach((f) => fd.append("photos", f));
-    dispatch(fd);
+    startTransition(() => dispatch(fd));
   }
 
   if (state.status === "success") {
@@ -147,8 +213,15 @@ export default function QuoteWizard() {
   }
 
   const err = (cond: boolean) => touched && cond;
+  // client-side message only — server errors are resolved by <Field>/<Select>
+  // themselves via ErrCtx, keyed on their `name`, so none can be missed.
+  const clientErr = (cond: boolean, msg: string) => (touched && cond ? msg : "");
+
+  const serverErrors =
+    state.status === "error" ? state.fieldErrors : undefined;
 
   return (
+   <ErrCtx.Provider value={serverErrors}>
     <div className="qw">
       {/* step indicator */}
       <ol className="qw-steps" aria-label="Progress">
@@ -160,11 +233,11 @@ export default function QuoteWizard() {
             }`}
           >
             <span className="qw-step-badge">
-              {i < step ? <Icon name="check" size={16} /> : i + 1}
+              {i < step ? <Icon name="check" size={20} /> : i + 1}
             </span>
             <span className="qw-step-label">{label}</span>
             {i < STEPS.length - 1 && (
-              <Icon name="arrow-right" size={18} className="qw-step-arrow" />
+              <Icon name="arrow-right" size={22} className="qw-step-arrow" />
             )}
           </li>
         ))}
@@ -173,19 +246,62 @@ export default function QuoteWizard() {
       <div className="qw-layout">
         {/* main card */}
         <div className="qw-card">
-          {state.status === "error" && (
-            <div className="qw-alert" role="status">
-              {state.message}
-            </div>
-          )}
+          {state.status === "error" &&
+            (() => {
+              if (!state.fieldErrors)
+                return (
+                  <div className="qw-alert" role="status">
+                    {state.message}
+                  </div>
+                );
+              const entries = Object.entries(state.fieldErrors);
+              // unknown keys (step < 0) surface on the current step so their
+              // message is never hidden, even with nothing to highlight
+              const here = entries.filter(
+                ([k]) => fieldStep(k) === step || fieldStep(k) < 0
+              );
+              const elsewhere = entries.filter(
+                ([k]) => fieldStep(k) >= 0 && fieldStep(k) !== step
+              );
+              const label = (k: string) => FIELDS[k]?.label ?? k;
+              return (
+                <div className="qw-alert" role="alert">
+                  <strong>
+                    {here.length
+                      ? "Please fix these fields — they're highlighted below:"
+                      : "Some details need fixing on another step:"}
+                  </strong>
+                  <ul>
+                    {(here.length ? here : elsewhere).map(([k, msg]) => (
+                      <li key={k}>
+                        <b>{label(k)}</b> — {msg}
+                        {!here.length && (
+                          <> (step {fieldStep(k) + 1}: {STEPS[fieldStep(k)]})</>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                  {here.length > 0 && elsewhere.length > 0 && (
+                    <span className="qw-alert-more">
+                      Then check {elsewhere.length} more field
+                      {elsewhere.length > 1 ? "s" : ""}:{" "}
+                      {elsewhere.map(([k]) => label(k)).join(", ")}.
+                    </span>
+                  )}
+                </div>
+              );
+            })()}
 
           {step === 0 && (
             <>
               <h1>
                 Tell us about <span>your move.</span>
               </h1>
+              <p className="qw-required-hint">
+                Fields marked <b>*</b> are required.
+              </p>
               <div className="qw-fields">
-                <Field label="Full name" error={err(data.customerName.trim() === "") ? "Please enter your name" : ""}>
+                <Field required name="customerName" label="Full name" error={clientErr(data.customerName.trim() === "", "Please enter your name")}>
                   <span className="qw-input">
                     <Icon name="user" size={18} />
                     <input
@@ -196,7 +312,7 @@ export default function QuoteWizard() {
                     />
                   </span>
                 </Field>
-                <Field label="Phone number" error={err(data.phone.trim() === "") ? "Please enter a phone number" : ""}>
+                <Field required name="phone" label="Phone number" error={clientErr(data.phone.trim() === "", "Please enter a phone number")}>
                   <span className="qw-input">
                     <Icon name="phone" size={18} />
                     <input
@@ -208,7 +324,7 @@ export default function QuoteWizard() {
                     />
                   </span>
                 </Field>
-                <Field label="Email address" error={err(!emailOk(data.email.trim())) ? "Please enter a valid email" : ""}>
+                <Field required name="email" label="Email address" error={clientErr(!emailOk(data.email.trim()), "Please enter a valid email")}>
                   <span className="qw-input">
                     <Icon name="mail" size={18} />
                     <input
@@ -227,36 +343,39 @@ export default function QuoteWizard() {
           {step === 1 && (
             <>
               <h1>Your <span>properties.</span></h1>
+              <p className="qw-required-hint">
+                Fields marked <b>*</b> are required.
+              </p>
               <h3 className="qw-subhead">Moving from</h3>
               <div className="qw-fields qw-grid">
-                <Field label="Address" wide error={err(data.pickupAddress.trim() === "") ? "Required" : ""}>
+                <Field required name="pickupAddress" label="Address" wide error={clientErr(data.pickupAddress.trim() === "", "Please enter the address")}>
                   <input value={data.pickupAddress} onChange={set("pickupAddress")} placeholder="Street and town" autoComplete="street-address" />
                 </Field>
-                <Field label="Postcode">
-                  <input value={data.pickupPostcode} onChange={set("pickupPostcode")} placeholder="LS1 1AA" />
+                <Field name="pickupPostcode" label="Postcode">
+                  <input value={data.pickupPostcode} onChange={set("pickupPostcode")} placeholder="LS1 1AA" maxLength={12} />
                 </Field>
-                <Select label="Property type" value={data.pickupPropertyType} onChange={set("pickupPropertyType")} options={PROPERTY_TYPES} placeholder="Select type" error={err(data.pickupPropertyType === "") ? "Required" : ""} />
-                <Select label="Size" value={data.pickupBedrooms} onChange={set("pickupBedrooms")} options={BEDROOMS} />
-                <Select label="Which floor?" value={data.pickupFloor} onChange={set("pickupFloor")} options={FLOORS} />
-                <Select label="Lift access" value={data.pickupLift} onChange={set("pickupLift")} options={LIFT} />
-                <Field label="Parking / access notes" wide>
-                  <input value={data.pickupAccess} onChange={set("pickupAccess")} placeholder="e.g. permit parking, narrow stairs, long carry" />
+                <Select required name="pickupPropertyType" label="Property type" value={data.pickupPropertyType} onChange={set("pickupPropertyType")} options={PROPERTY_TYPES} placeholder="Select type" error={clientErr(data.pickupPropertyType === "", "Please choose a property type")} />
+                <Select name="pickupBedrooms" label="Size" value={data.pickupBedrooms} onChange={set("pickupBedrooms")} options={BEDROOMS} />
+                <Select name="pickupFloor" label="Which floor?" value={data.pickupFloor} onChange={set("pickupFloor")} options={FLOORS} />
+                <Select name="pickupLift" label="Lift access" value={data.pickupLift} onChange={set("pickupLift")} options={LIFT} />
+                <Field name="pickupAccess" label="Parking / access notes" wide>
+                  <input value={data.pickupAccess} onChange={set("pickupAccess")} placeholder="e.g. permit parking, narrow stairs, long carry" maxLength={400} />
                 </Field>
               </div>
 
               <h3 className="qw-subhead">Moving to</h3>
               <div className="qw-fields qw-grid">
-                <Field label="Address" wide error={err(data.deliveryAddress.trim() === "") ? "Required" : ""}>
+                <Field required name="deliveryAddress" label="Address" wide error={clientErr(data.deliveryAddress.trim() === "", "Please enter the address")}>
                   <input value={data.deliveryAddress} onChange={set("deliveryAddress")} placeholder="Street and town" />
                 </Field>
-                <Field label="Postcode">
-                  <input value={data.deliveryPostcode} onChange={set("deliveryPostcode")} placeholder="B1 1AA" />
+                <Field name="deliveryPostcode" label="Postcode">
+                  <input value={data.deliveryPostcode} onChange={set("deliveryPostcode")} placeholder="B1 1AA" maxLength={12} />
                 </Field>
-                <Select label="Property type" value={data.deliveryPropertyType} onChange={set("deliveryPropertyType")} options={PROPERTY_TYPES} placeholder="Select type" error={err(data.deliveryPropertyType === "") ? "Required" : ""} />
-                <Select label="Which floor?" value={data.deliveryFloor} onChange={set("deliveryFloor")} options={FLOORS} />
-                <Select label="Lift access" value={data.deliveryLift} onChange={set("deliveryLift")} options={LIFT} />
-                <Field label="Parking / access notes" wide>
-                  <input value={data.deliveryAccess} onChange={set("deliveryAccess")} placeholder="e.g. driveway, restricted hours" />
+                <Select required name="deliveryPropertyType" label="Property type" value={data.deliveryPropertyType} onChange={set("deliveryPropertyType")} options={PROPERTY_TYPES} placeholder="Select type" error={clientErr(data.deliveryPropertyType === "", "Please choose a property type")} />
+                <Select name="deliveryFloor" label="Which floor?" value={data.deliveryFloor} onChange={set("deliveryFloor")} options={FLOORS} />
+                <Select name="deliveryLift" label="Lift access" value={data.deliveryLift} onChange={set("deliveryLift")} options={LIFT} />
+                <Field name="deliveryAccess" label="Parking / access notes" wide>
+                  <input value={data.deliveryAccess} onChange={set("deliveryAccess")} placeholder="e.g. driveway, restricted hours" maxLength={400} />
                 </Field>
               </div>
             </>
@@ -266,22 +385,29 @@ export default function QuoteWizard() {
             <>
               <h1>Move <span>details.</span></h1>
               <div className="qw-fields qw-grid">
-                <Field label="Preferred moving date">
-                  <input type="date" value={data.movingDate} onChange={set("movingDate")} min={new Date().toISOString().slice(0, 10)} />
+                <Field
+                  name="movingDate"
+                  label="Preferred moving date"
+                  error={clientErr(
+                    data.movingDate !== "" && data.movingDate < todayISO(),
+                    "Moving date can't be in the past"
+                  )}
+                >
+                  <input type="date" value={data.movingDate} onChange={set("movingDate")} min={todayISO()} />
                 </Field>
-                <Select label="Dates flexible?" value={data.dateFlexible} onChange={set("dateFlexible")} options={["yes", "no"]} />
-                <Select label="Main service needed" value={data.serviceType} onChange={set("serviceType")} options={["House Removal", "Packing", "Transport", "Multiple Services"]} />
-                <Select label="Packing help?" value={data.packingNeeded} onChange={set("packingNeeded")} options={["Yes — full pack", "Yes — fragile only", "No"]} />
-                <Select label="Dismantling / reassembly?" value={data.dismantlingNeeded} onChange={set("dismantlingNeeded")} options={["Yes", "No"]} />
-                <Select label="Storage needed?" value={data.storageNeeded} onChange={set("storageNeeded")} options={["Yes", "No"]} />
-                <Field label="Heavy or special items" wide>
-                  <input value={data.heavyItems} onChange={set("heavyItems")} placeholder="e.g. piano, safe, American fridge" />
+                <Select name="dateFlexible" label="Dates flexible?" value={data.dateFlexible} onChange={set("dateFlexible")} options={["yes", "no"]} />
+                <Select name="serviceType" label="Main service needed" value={data.serviceType} onChange={set("serviceType")} options={["House Removal", "Packing", "Transport", "Multiple Services"]} />
+                <Select name="packingNeeded" label="Packing help?" value={data.packingNeeded} onChange={set("packingNeeded")} options={["Yes — full pack", "Yes — fragile only", "No"]} />
+                <Select name="dismantlingNeeded" label="Dismantling / reassembly?" value={data.dismantlingNeeded} onChange={set("dismantlingNeeded")} options={["Yes", "No"]} />
+                <Select name="storageNeeded" label="Storage needed?" value={data.storageNeeded} onChange={set("storageNeeded")} options={["Yes", "No"]} />
+                <Field name="heavyItems" label="Heavy or special items" wide>
+                  <input value={data.heavyItems} onChange={set("heavyItems")} placeholder="e.g. piano, safe, American fridge" maxLength={600} />
                 </Field>
-                <Field label="Approximate inventory" wide>
-                  <textarea value={data.inventoryNotes} onChange={set("inventoryNotes")} placeholder="Rough list of rooms and large items" />
+                <Field name="inventoryNotes" label="Approximate inventory" wide>
+                  <textarea value={data.inventoryNotes} onChange={set("inventoryNotes")} placeholder="Rough list of rooms and large items" maxLength={2000} />
                 </Field>
-                <Field label="Anything else?" wide>
-                  <textarea value={data.specialInstructions} onChange={set("specialInstructions")} placeholder="Anything else we should know" />
+                <Field name="specialInstructions" label="Anything else?" wide>
+                  <textarea value={data.specialInstructions} onChange={set("specialInstructions")} placeholder="Anything else we should know" maxLength={2000} />
                 </Field>
               </div>
 
@@ -397,7 +523,14 @@ export default function QuoteWizard() {
         <div><Icon name="map-pin" size={20} /><span>Local Leeds &amp; Birmingham support</span></div>
       </div>
     </div>
+   </ErrCtx.Provider>
   );
+}
+
+function useFieldError(name: string | undefined, clientError?: string) {
+  const serverErrors = useContext(ErrCtx);
+  if (name && serverErrors?.[name]) return serverErrors[name];
+  return clientError || "";
 }
 
 function Field({
@@ -405,17 +538,28 @@ function Field({
   children,
   wide,
   error,
+  required,
+  name,
 }: {
   label: string;
   children: React.ReactNode;
   wide?: boolean;
   error?: string;
+  required?: boolean;
+  name?: string;
 }) {
+  const shown = useFieldError(name, error);
   return (
-    <div className={`qw-field${wide ? " wide" : ""}`}>
-      <label>{label}</label>
+    <div
+      className={`qw-field${wide ? " wide" : ""}${shown ? " has-error" : ""}`}
+      data-field={name}
+    >
+      <label>
+        {label}
+        {required && <span className="qw-req" aria-hidden="true"> *</span>}
+      </label>
       {children}
-      {error && <span className="qw-field-error">{error}</span>}
+      {shown && <span className="qw-field-error">{shown}</span>}
     </div>
   );
 }
@@ -427,6 +571,8 @@ function Select({
   options,
   placeholder = "Select…",
   error,
+  required,
+  name,
 }: {
   label: string;
   value: string;
@@ -434,10 +580,16 @@ function Select({
   options: string[];
   placeholder?: string;
   error?: string;
+  required?: boolean;
+  name?: string;
 }) {
+  const shown = useFieldError(name, error);
   return (
-    <div className="qw-field">
-      <label>{label}</label>
+    <div className={`qw-field${shown ? " has-error" : ""}`} data-field={name}>
+      <label>
+        {label}
+        {required && <span className="qw-req" aria-hidden="true"> *</span>}
+      </label>
       <select value={value} onChange={onChange}>
         <option value="">{placeholder}</option>
         {options.map((o) => (
@@ -446,7 +598,7 @@ function Select({
           </option>
         ))}
       </select>
-      {error && <span className="qw-field-error">{error}</span>}
+      {shown && <span className="qw-field-error">{shown}</span>}
     </div>
   );
 }

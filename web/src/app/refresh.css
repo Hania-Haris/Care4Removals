@@ -1250,10 +1250,10 @@ textarea:focus {
 
 .qw-steps {
   list-style: none;
-  margin: 0 0 clamp(24px, 3vw, 36px);
+  margin: 0 0 clamp(28px, 3.5vw, 44px);
   padding: 0;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
   gap: 0;
   flex-wrap: wrap;
@@ -1261,14 +1261,14 @@ textarea:focus {
 .qw-step-tab {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   color: var(--ink-3);
-  font-size: 0.82rem;
-  font-weight: 600;
+  font-size: 1rem;
+  font-weight: 650;
 }
 .qw-step-badge {
-  width: 30px;
-  height: 30px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   border: 2px solid var(--line-strong);
   background: #fff;
@@ -1278,10 +1278,12 @@ textarea:focus {
   justify-content: center;
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 0.9rem;
+  font-size: 1.15rem;
   flex-shrink: 0;
 }
-.qw-step-badge svg { display: block; }
+.qw-step-badge svg {
+  display: block;
+}
 .qw-step-tab.is-current .qw-step-badge {
   background: var(--cyan);
   border-color: var(--cyan);
@@ -1298,7 +1300,8 @@ textarea:focus {
 }
 .qw-step-arrow {
   color: var(--line-strong);
-  margin: 0 clamp(10px, 2vw, 22px);
+  margin: 0 clamp(16px, 2.8vw, 32px);
+  flex-shrink: 0;
 }
 
 .qw-layout {
@@ -1409,6 +1412,38 @@ textarea:focus {
   font-size: 0.78rem;
   font-weight: 600;
 }
+.qw-req {
+  color: #d64545;
+  font-weight: 700;
+}
+.qw-field.has-error label {
+  color: #c0392b;
+}
+.qw-field.has-error input,
+.qw-field.has-error select,
+.qw-field.has-error textarea,
+.qw-field.has-error .qw-input {
+  border-color: #d64545;
+  background: #fdf4f4;
+}
+.qw-field.has-error .qw-input input {
+  background: transparent;
+}
+.qw-field.has-error input:focus,
+.qw-field.has-error select:focus,
+.qw-field.has-error textarea:focus,
+.qw-field.has-error .qw-input:focus-within {
+  border-color: #d64545;
+  box-shadow: 0 0 0 3px rgba(214, 69, 69, 0.16);
+}
+.qw-required-hint {
+  font-size: 0.8rem;
+  color: var(--ink-3);
+  margin: 0 0 18px;
+}
+.qw-required-hint b {
+  color: #d64545;
+}
 
 .qw-upload {
   margin-top: 20px;
@@ -1445,11 +1480,29 @@ textarea:focus {
 .qw-alert {
   background: #fdecec;
   color: #b23b32;
+  border: 1px solid #f3c9c5;
   border-radius: 10px;
-  padding: 11px 14px;
+  padding: 12px 15px;
   font-size: 0.88rem;
   font-weight: 600;
   margin-bottom: 18px;
+}
+.qw-alert strong {
+  display: block;
+}
+.qw-alert ul {
+  margin: 8px 0 0;
+  padding-left: 18px;
+  font-weight: 500;
+}
+.qw-alert li {
+  margin: 2px 0;
+}
+.qw-alert-more {
+  display: block;
+  margin-top: 8px;
+  font-weight: 500;
+  opacity: 0.85;
 }
 
 .qw-review {
@@ -1542,13 +1595,13 @@ textarea:focus {
   gap: 12px;
   align-items: center;
 }
-.qw-summary-ic {
+.qw-summary-row .qw-summary-ic {
   width: 36px;
   height: 36px;
   border-radius: 9px;
   background: rgba(23, 176, 207, 0.12);
   color: #0e7c93;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
@@ -1559,13 +1612,13 @@ textarea:focus {
 .qw-summary-row > div {
   min-width: 0;
 }
-.qw-summary-row strong {
+.qw-summary-row > div strong {
   display: block;
   font-size: 0.88rem;
   line-height: 1.3;
   color: var(--ink);
 }
-.qw-summary-row span {
+.qw-summary-row > div span {
   display: block;
   font-size: 0.82rem;
   line-height: 1.3;
@@ -1693,15 +1746,17 @@ textarea:focus {
     display: block;
   }
 }
-@media (max-width: 620px) {
-  .qw-steps {
-    gap: 4px;
-  }
+@media (max-width: 720px) {
   .qw-step-label {
     display: none;
   }
+  .qw-step-badge {
+    width: 40px;
+    height: 40px;
+    font-size: 1.05rem;
+  }
   .qw-step-arrow {
-    margin: 0 6px;
+    margin: 0 12px;
   }
   .qw-fields.qw-grid {
     grid-template-columns: 1fr;
