@@ -1,202 +1,237 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import Image from "next/image";
+import Icon from "@/components/Icon";
 
 export const metadata: Metadata = {
   title: "About Us",
   description:
-    "Care4Removals is part of the Care4Properties journey — reliable, careful removal support for your move.",
+    "Care4Removals is the moving support service from the Care4Properties team — careful handling, a clear process and reliable transport for your next step.",
 };
+
+const APPROACH = [
+  {
+    img: "/assets/svc-care.png",
+    title: "Care",
+    body: "Your belongings are handled with care at every stage of the move.",
+  },
+  {
+    img: "/assets/why-transparent.png",
+    title: "Clarity",
+    body: "We keep the process clear so you always know what happens next.",
+  },
+  {
+    img: "/assets/svc-transport.png",
+    title: "Reliability",
+    body: "We turn up on time and get the job done properly.",
+  },
+];
+
+const JOURNEY = [
+  {
+    img: "/assets/svc-calendar.png",
+    title: "Request a quote",
+    body: "Tell us about your move and get a clear, no-obligation quote.",
+  },
+  {
+    img: "/assets/svc-transport.png",
+    title: "Plan & move",
+    body: "We plan the details and take care of your move with care and efficiency.",
+  },
+  {
+    img: "/assets/svc-house.png",
+    title: "Settle in",
+    body: "We deliver to your new home so you can get on with settling in.",
+  },
+];
 
 export default function AboutPage() {
   return (
-    <>
-
-
-<main>
-
-<section className="about-hero">
-    <div className="container">
-        <div className="about-hero-inner">
+    <main className="svc ab">
+      {/* ---------- HERO ---------- */}
+      <section className="svc-hero">
+        <div className="container svc-hero-grid">
+          <div className="svc-hero-copy">
             <div className="eyebrow">
-                <span className="eyebrow-dot"></span>
-                About Care4Removals
+              <span className="eyebrow-dot" />
+              About Care4Removals
             </div>
-
-            <h1>More than a move.<br /><span>It&apos;s your next step.</span></h1>
-
+            <h1>
+              More than a move.
+              <br />
+              It&apos;s <span>your next step.</span>
+            </h1>
             <p>
-                Care4Removals is part of the Care4Properties property journey,
-                providing removal support when it&apos;s time to move from one
-                property to another.
+              Care4Removals is property support that continues when it&apos;s
+              time to move forward — the removals arm of the Care4Properties
+              team.
             </p>
-        </div>
-    </div>
-</section>
+            <div className="svc-hero-actions">
+              <Link href="/get-a-quote" className="btn btn-primary">
+                Get a free quote
+                <Icon name="arrow-right" size={18} />
+              </Link>
+              <Link href="/contact" className="btn btn-secondary">
+                Contact the team
+              </Link>
+            </div>
+          </div>
 
-<section className="about-section">
-    <div className="container about-grid">
-        <div>
+          <div className="svc-hero-art">
+            <Image
+              src="/assets/svc-hero.png"
+              alt="A removal truck outside two houses with packed boxes"
+              width={1000}
+              height={490}
+              priority
+              sizes="(max-width: 900px) 90vw, 520px"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* ---------- WHO WE ARE ---------- */}
+      <section className="section ab-who-section">
+        <div className="container ab-who">
+          <div className="ab-who-copy">
             <div className="eyebrow">
-                <span className="eyebrow-dot"></span>
-                Who we are
+              <span className="eyebrow-dot" />
+              Who we are
             </div>
-
-            <h2>Property support that continues <span>when you move.</span></h2>
-
+            <h2>Property support that continues when you move.</h2>
             <p>
-                Care4Properties supports customers across different stages of
-                the property journey. Care4Removals extends that support to the
-                practical part of moving between properties.
+              Care4Removals is the moving support service from the
+              Care4Properties team. The same people who help customers through
+              the property journey now help with the move itself.
             </p>
-
             <p>
-                Our focus is simple: make the removal process easier to
-                understand, easier to arrange and less stressful for the
-                customer.
+              From organising the packing to safe delivery at the other end,
+              we&apos;re here to make your next step simple and stress-free —
+              with one team accountable from your first enquiry to the last box.
             </p>
+          </div>
 
-            <p>
-                From the first quote request through to delivery, the aim is to
-                provide a straightforward service built around your move.
-            </p>
-        </div>
-
-        <div className="brand-panel">
-            <div className="about-visual">
-                <span className="about-visual-kicker">MOVING SUPPORT</span>
-                <div className="about-visual-brand">care4<span>removals</span></div>
-                <div className="about-visual-line"></div>
-                <p>Simple, careful and straightforward support from quote to delivery.</p>
+          <div className="ab-relate">
+            <div className="ab-relate-node">
+              <span className="ab-relate-ic ab-relate-ic-navy">
+                <Icon name="home" size={26} />
+              </span>
+              <strong>Care4Properties</strong>
+              <span>Property support before you move.</span>
             </div>
+            <span className="ab-relate-link" aria-hidden="true">
+              <Icon name="arrow-right" size={20} />
+            </span>
+            <div className="ab-relate-node">
+              <span className="ab-relate-ic ab-relate-ic-amber">
+                <Icon name="truck" size={26} />
+              </span>
+              <strong className="ab-relate-brand">
+                care4<b>removals</b>
+              </strong>
+              <span>Moving support when you move.</span>
+            </div>
+          </div>
         </div>
-    </div>
-</section>
+      </section>
 
-
-<section className="about-story-band" data-reveal>
-  <div className="container about-story-grid"><div className="story-visual" aria-hidden="true"><div className="story-circle"></div><div className="story-card story-card-main"><span>CARE4REMOVALS</span><strong>Moving with care</strong><small>People first. Homes respected.</small></div><div className="story-chip">01 → 02 → 03</div></div><div><span className="eyebrow">More than moving boxes</span><h2>We make the <span>moving day</span> feel manageable.</h2><p>Moving can involve dozens of small decisions. Our role is to bring structure to the process, handle belongings carefully and keep communication simple.</p><p>That means thoughtful preparation, dependable transport and a team that understands that every home is different.</p><div className="about-promise"><div><strong>Care</strong><span>Respect for your belongings and your space.</span></div><div><strong>Clarity</strong><span>Simple communication from start to finish.</span></div><div><strong>Consistency</strong><span>A dependable process you can follow.</span></div></div></div></div>
-</section>
-
-<section className="values-section">
-    <div className="container">
-        <div className="values-heading">
+      {/* ---------- OUR APPROACH ---------- */}
+      <section className="section ab-approach-section">
+        <div className="container">
+          <div className="section-heading centered">
             <div className="eyebrow">
-                <span className="eyebrow-dot"></span>
-                Our approach
+              <span className="eyebrow-dot" />
+              Our approach
             </div>
-
-            <h2>What matters on <span>moving day.</span></h2>
-
+            <h2>What matters on moving day.</h2>
             <p>
-                Moving involves enough decisions already. Our service is
-                designed around the things that matter most during a move.
+              Moving already involves enough decisions. Our service is built
+              around the things that matter most on the day.
             </p>
-        </div>
+          </div>
 
-        <div className="values-grid">
-            <article className="value-card">
-                <div className="value-icon">♡</div>
-                <h3>Care</h3>
-                <p>
-                    Your belongings are an important part of your move.
-                    Careful handling is central to the service from collection
-                    through delivery.
-                </p>
-            </article>
-
-            <article className="value-card">
-                <div className="value-icon">✓</div>
-                <h3>Clarity</h3>
-                <p>
-                    We keep the enquiry and quote process straightforward so
-                    you can provide the information the team needs without
-                    unnecessary complication.
-                </p>
-            </article>
-
-            <article className="value-card">
-                <div className="value-icon">→</div>
-                <h3>Reliability</h3>
-                <p>
-                    A move depends on things coming together at the right time.
-                    Our service is focused on dependable transport and delivery.
-                </p>
-            </article>
-        </div>
-    </div>
-</section>
-
-<section className="journey-section">
-    <div className="container journey-layout">
-        <div className="journey-heading">
-            <div className="eyebrow">
-                <span className="eyebrow-dot"></span>
-                Your removal journey
-            </div>
-
-            <h2>Simple from start to <span>finish.</span></h2>
-
-            <p>
-                The removal process is designed to keep things clear at every stage.
-            </p>
-        </div>
-
-        <div className="journey-steps">
-            <div className="journey-step">
-                <div className="journey-number">01</div>
-                <h3>Request a Quote</h3>
-                <p>
-                    Tell us about your current property, new property and
-                    preferred moving date.
-                </p>
-            </div>
-
-            <div className="journey-step">
-                <div className="journey-number">02</div>
-                <h3>Plan & Move</h3>
-                <p>
-                    Once your move is confirmed, the removal service takes care
-                    of the practical work.
-                </p>
-            </div>
-
-            <div className="journey-step">
-                <div className="journey-number">03</div>
-                <h3>Settle In</h3>
-                <p>
-                    Your belongings are delivered to your new property so you
-                    can get on with settling into your new space.
-                </p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section className="about-cta">
-    <div className="container">
-        <div className="about-cta-card">
-            <div>
-                <div className="eyebrow">
-                    <span className="eyebrow-dot"></span>
-                    Start your move
+          <ul className="svc-grid ab-approach-grid">
+            {APPROACH.map((a) => (
+              <li key={a.title} className="svc-card">
+                <div className="svc-card-art">
+                  <Image
+                    src={a.img}
+                    alt=""
+                    fill
+                    sizes="(max-width: 640px) 90vw, 360px"
+                  />
                 </div>
-
-                <h2>Ready to make moving <span>easier?</span></h2>
-
-                <p>
-                    Tell us about your move and request a free quote from the
-                    Care4Removals team.
-                </p>
-            </div>
-
-            <a href="/get-a-quote" className="btn btn-white">
-                Get a Free Quote <span>→</span>
-            </a>
+                <h3>{a.title}</h3>
+                <p>{a.body}</p>
+              </li>
+            ))}
+          </ul>
         </div>
-    </div>
-</section>
+      </section>
 
-</main>
+      {/* ---------- REMOVAL JOURNEY ---------- */}
+      <section className="section svc-process-section ab-journey-section">
+        <div className="container">
+          <div className="section-heading centered">
+            <div className="eyebrow">
+              <span className="eyebrow-dot" />
+              Your removal journey
+            </div>
+            <h2>Simple from start to finish.</h2>
+            <p>Three clear stages, so you always know what happens next.</p>
+          </div>
 
-    </>
+          <ol className="svc-steps">
+            {JOURNEY.map((s, i) => (
+              <li key={s.title} className="svc-step">
+                <div className="svc-step-head">
+                  <span className="svc-step-no">{`0${i + 1}`}</span>
+                  <h3>{s.title}</h3>
+                </div>
+                <div className="svc-step-art">
+                  <Image
+                    src={s.img}
+                    alt=""
+                    fill
+                    sizes="(max-width: 900px) 80vw, 320px"
+                  />
+                </div>
+                <p>{s.body}</p>
+                {i < JOURNEY.length - 1 && (
+                  <span className="svc-step-arrow" aria-hidden="true">
+                    <Icon name="arrow-right" size={22} />
+                  </span>
+                )}
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      {/* ---------- CTA ---------- */}
+      <section className="section ab-cta-section">
+        <div className="container">
+          <div className="ab-cta-card">
+            <div>
+              <div className="eyebrow eyebrow-light">
+                <span className="eyebrow-dot" />
+                Start your move
+              </div>
+              <h2>
+                Ready to make moving <span>easier?</span>
+              </h2>
+              <p>
+                Tell us about your move and request a free quote from the
+                Care4Removals team.
+              </p>
+            </div>
+            <Link href="/get-a-quote" className="btn btn-primary">
+              Get a free quote
+              <Icon name="arrow-right" size={18} />
+            </Link>
+          </div>
+        </div>
+      </section>
+    </main>
   );
 }
