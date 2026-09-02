@@ -840,33 +840,30 @@ textarea:focus {
 }
 
 /* =========================================================================
-   LOGO LOCKUP
+   LOGO LOCKUP  (raster brand artwork, white+cyan on transparency)
 ========================================================================= */
 
-.c4r-logo {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  line-height: 1;
-  text-decoration: none;
-}
-.c4r-logo-mark {
-  width: 34px;
-  height: auto;
-  flex-shrink: 0;
-}
-.c4r-logo-word {
-  font-family: var(--font-display);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  font-size: 1.28rem;
-}
-.site-footer .c4r-logo-word {
-  font-size: 1.15rem;
-}
 .brand,
 .removals-footer-logo {
   display: inline-flex !important;
+  align-items: center;
+  text-decoration: none;
+}
+.c4r-logo-img {
+  width: auto;
+  height: 34px;
+  display: block;
+}
+.site-footer .c4r-logo-img {
+  height: 30px;
+}
+.c4r-logo-img--mark {
+  height: 32px;
+}
+@media (max-width: 720px) {
+  .c4r-logo-img {
+    height: 30px;
+  }
 }
 
 /* =========================================================================
@@ -961,14 +958,6 @@ textarea:focus {
 }
 .hero-illustration svg {
   margin-bottom: 2px;
-}
-
-/* logo mark a touch bigger for presence */
-.c4r-logo-mark {
-  width: 36px;
-}
-.site-header .c4r-logo-word {
-  font-size: 1.3rem;
 }
 
 /* =========================================================================

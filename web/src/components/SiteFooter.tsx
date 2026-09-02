@@ -14,7 +14,7 @@ export default function SiteFooter() {
         <div className="footer-grid">
           <div className="footer-brand">
             <Link href="/" className="removals-footer-logo" aria-label="Care4Removals home">
-              <Logo tone="onDark" />
+              <Logo />
             </Link>
             <p>Reliable removal services from the Care4Properties team.</p>
             <Link href="/get-a-quote" className="footer-quote-link">

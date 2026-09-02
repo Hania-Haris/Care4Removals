@@ -51,7 +51,7 @@ export default function SiteHeader() {
     <header className="site-header">
       <nav className="navbar container">
         <Link href="/" className="brand" aria-label="Care4Removals home">
-          <Logo tone="onDark" />
+          <Logo priority />
         </Link>
 
         <div className="nav-links">
