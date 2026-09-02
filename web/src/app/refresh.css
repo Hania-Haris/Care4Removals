@@ -2560,3 +2560,317 @@ textarea:focus {
     justify-content: center;
   }
 }
+
+/* =========================================================================
+   CONTACT PAGE
+========================================================================= */
+
+.ctp-section {
+  background: var(--paper-2) !important;
+}
+.ctp-grid {
+  display: grid;
+  grid-template-columns: 0.82fr 1.18fr;
+  gap: clamp(28px, 4vw, 56px);
+  align-items: start;
+}
+.ctp-info > h2 {
+  font-size: clamp(1.7rem, 3.4vw, 2.3rem);
+  margin: 0 0 26px;
+}
+.ctp-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.ctp-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: var(--shadow-sm);
+  padding: 20px 20px;
+  color: var(--ink);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+.ctp-card:hover {
+  border-color: var(--line-strong);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+.ctp-card-ic {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(23, 176, 207, 0.14);
+  color: #0e7c93;
+  flex-shrink: 0;
+}
+.ctp-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.ctp-card-body strong {
+  font-family: var(--font-display);
+  font-size: 1.02rem;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+.ctp-card-value {
+  font-size: 0.92rem;
+  color: var(--ink-2);
+  word-break: break-word;
+}
+.ctp-card-sub {
+  font-size: 0.82rem;
+  color: var(--ink-3);
+  line-height: 1.45;
+  margin-top: 2px;
+}
+.ctp-card-go {
+  margin-left: auto;
+  color: var(--amber);
+  flex-shrink: 0;
+}
+
+/* ---- form card ---- */
+.ctp-form-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: clamp(24px, 3.5vw, 44px);
+}
+.ctp-form-card > h2 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  margin: 0 0 8px;
+}
+.ctp-form-card > h2::after {
+  content: "";
+  display: block;
+  width: 46px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--cyan);
+  margin-top: 12px;
+}
+.ctp-form-card .form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.ctp-form-card .form-group {
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.ctp-form-card .form-group label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+.ctp-form-card .form-group .required {
+  color: #d64545;
+}
+.ctp-form-card input,
+.ctp-form-card select,
+.ctp-form-card textarea {
+  width: 100%;
+  padding: 11px 13px !important;
+  font-size: 0.92rem;
+}
+.ctp-form-card textarea {
+  min-height: 96px;
+  resize: vertical;
+}
+.ctp-form-card .form-checkbox-group {
+  flex-direction: row;
+}
+.ctp-form-card .checkbox-label {
+  display: flex;
+  gap: 9px;
+  align-items: flex-start;
+  font-size: 0.84rem;
+  color: var(--ink-2);
+  line-height: 1.5;
+  font-weight: 400;
+}
+.ctp-form-card .checkbox-label input {
+  width: auto;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+.ctp-form-card .form-note {
+  font-size: 0.8rem;
+  color: var(--ink-3);
+  margin: 14px 0 16px;
+}
+.ctp-form-card .btn {
+  min-height: 50px;
+  padding: 0 24px;
+}
+.ctp-form-card .field-error {
+  color: #d64545;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+.ctp-form-card .form-status {
+  margin-top: 14px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.ctp-form-card .form-status.error {
+  color: #b23b32;
+}
+
+/* ---- what happens next ---- */
+.ctp-next-section {
+  background: var(--paper) !important;
+}
+.ctp-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(16px, 2.5vw, 26px);
+}
+.ctp-step {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 22px 22px 24px;
+}
+.ctp-step-ic {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(23, 176, 207, 0.14);
+  color: #0e7c93;
+  flex-shrink: 0;
+}
+.ctp-step-no {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: var(--cyan);
+  letter-spacing: 0.04em;
+}
+.ctp-step-copy h3 {
+  font-size: 1.04rem;
+  margin: 4px 0 6px;
+}
+.ctp-step-copy p {
+  color: var(--ink-2);
+  font-size: 0.9rem;
+  line-height: 1.55;
+  margin: 0;
+}
+.ctp-step-arrow {
+  position: absolute;
+  right: clamp(-22px, -1.4vw, -13px);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid var(--line-strong);
+  color: var(--amber);
+  box-shadow: var(--shadow-md);
+}
+
+/* ---- CTA ---- */
+.ctp-cta-section {
+  background: var(--paper-2) !important;
+}
+.ctp-cta-card {
+  display: flex;
+  align-items: center;
+  gap: clamp(20px, 3vw, 40px);
+  flex-wrap: wrap;
+  background: linear-gradient(160deg, var(--navy), var(--navy-deep));
+  border-radius: var(--radius-lg);
+  padding: clamp(28px, 4vw, 48px);
+}
+.ctp-cta-art {
+  width: clamp(90px, 12vw, 140px);
+  flex-shrink: 0;
+}
+.ctp-cta-art img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.ctp-cta-copy {
+  flex: 1;
+  min-width: 240px;
+}
+.ctp-cta-copy h2 {
+  color: #fff !important;
+  font-size: clamp(1.6rem, 3.2vw, 2.2rem);
+  margin: 12px 0 8px;
+}
+.ctp-cta-copy h2 span {
+  color: var(--cyan) !important;
+}
+.ctp-cta-copy p {
+  color: rgba(255, 255, 255, 0.78) !important;
+  font-size: 0.98rem;
+  margin: 0;
+  max-width: 32rem;
+}
+.ctp-cta-card .btn {
+  min-height: 50px;
+  padding: 0 24px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 900px) {
+  .ctp-grid {
+    grid-template-columns: 1fr;
+  }
+  .ctp-steps {
+    grid-template-columns: 1fr;
+  }
+  .ctp-step-arrow {
+    right: auto;
+    left: 34px;
+    top: auto;
+    bottom: -18px;
+    transform: rotate(90deg);
+  }
+}
+@media (max-width: 520px) {
+  .ctp-form-card .form-row {
+    grid-template-columns: 1fr;
+  }
+  .ctp-cta-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .ctp-cta-card .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
