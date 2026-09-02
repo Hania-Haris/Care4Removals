@@ -13,7 +13,15 @@ type IconName =
   | "phone"
   | "mail"
   | "arrow-right"
-  | "check";
+  | "arrow-left"
+  | "check"
+  | "user"
+  | "building"
+  | "calendar"
+  | "lock"
+  | "file"
+  | "map-pin"
+  | "camera";
 
 const paths: Record<IconName, React.ReactNode> = {
   "shield-check": (
@@ -75,7 +83,50 @@ const paths: Record<IconName, React.ReactNode> = {
     </>
   ),
   "arrow-right": <path d="M5 12h14M13 6l6 6-6 6" />,
+  "arrow-left": <path d="M19 12H5M11 6l-6 6 6 6" />,
   check: <path d="m5 12.5 4.5 4.5L19 7" />,
+  user: (
+    <>
+      <circle cx="12" cy="8" r="3.6" />
+      <path d="M5.5 20a6.5 6.5 0 0 1 13 0" />
+    </>
+  ),
+  building: (
+    <>
+      <rect x="5" y="3.5" width="14" height="17" rx="1.5" />
+      <path d="M9 8h1.5M13.5 8H15M9 12h1.5M13.5 12H15M10 20.5v-4h4v4" />
+    </>
+  ),
+  calendar: (
+    <>
+      <rect x="4" y="5" width="16" height="15" rx="2" />
+      <path d="M4 9.5h16M8 3.5v3M16 3.5v3" />
+    </>
+  ),
+  lock: (
+    <>
+      <rect x="5" y="10.5" width="14" height="9.5" rx="2" />
+      <path d="M8 10.5V8a4 4 0 0 1 8 0v2.5" />
+    </>
+  ),
+  file: (
+    <>
+      <path d="M7 3.5h7L18.5 8v11a1.5 1.5 0 0 1-1.5 1.5H7A1.5 1.5 0 0 1 5.5 19V5A1.5 1.5 0 0 1 7 3.5Z" />
+      <path d="M13.5 3.5V8H18M8.5 13h7M8.5 16.5h7" />
+    </>
+  ),
+  "map-pin": (
+    <>
+      <path d="M12 21s7-6.5 7-12a7 7 0 0 0-14 0c0 5.5 7 12 7 12Z" />
+      <circle cx="12" cy="9" r="2.6" />
+    </>
+  ),
+  camera: (
+    <>
+      <path d="M4 8h3l1.5-2.5h7L18 8h2a1.5 1.5 0 0 1 1.5 1.5V18A1.5 1.5 0 0 1 20 19.5H4A1.5 1.5 0 0 1 2.5 18V9.5A1.5 1.5 0 0 1 4 8Z" />
+      <circle cx="12" cy="13" r="3.4" />
+    </>
+  ),
 };
 
 export default function Icon({
