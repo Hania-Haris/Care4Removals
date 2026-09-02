@@ -23,7 +23,9 @@ type IconName =
   | "map-pin"
   | "camera"
   | "message"
-  | "heart";
+  | "heart"
+  | "search"
+  | "star";
 
 const paths: Record<IconName, React.ReactNode> = {
   "shield-check": (
@@ -137,6 +139,15 @@ const paths: Record<IconName, React.ReactNode> = {
   ),
   heart: (
     <path d="M12 20s-7-4.4-7-9.6A4.4 4.4 0 0 1 12 7.2 4.4 4.4 0 0 1 19 10.4c0 5.2-7 9.6-7 9.6Z" />
+  ),
+  search: (
+    <>
+      <circle cx="11" cy="11" r="6.5" />
+      <path d="m20 20-4.2-4.2" />
+    </>
+  ),
+  star: (
+    <path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.6 1-5.8L3.5 9.7l5.9-.9L12 3.5Z" />
   ),
 };
 
