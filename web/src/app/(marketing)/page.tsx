@@ -2,21 +2,27 @@ import Link from "next/link";
 import Icon from "@/components/Icon";
 import Image from "next/image";
 
-const BENEFITS = [
+const WHY_STEPS = [
   {
-    icon: "shield-check" as const,
-    title: "Handled with care",
-    body: "Your belongings are protected at every step — proper packing, secure loading, careful handling from door to door.",
+    img: "/assets/why-protected.png",
+    w: 640,
+    h: 620,
+    label: "Protected",
+    body: "Packed and handled with care.",
   },
   {
-    icon: "box" as const,
-    title: "One team, start to finish",
-    body: "The team behind Care4Properties handles your whole move — packing, transport and delivery organised as one job.",
+    img: "/assets/why-coordinated.png",
+    w: 760,
+    h: 321,
+    label: "Coordinated",
+    body: "One team manages the whole move.",
   },
   {
-    icon: "tag" as const,
-    title: "Clear, upfront pricing",
-    body: "A written quotation based on your actual move. No hidden fees, no surprises on the day.",
+    img: "/assets/why-transparent.png",
+    w: 640,
+    h: 557,
+    label: "Transparent",
+    body: "Clear pricing before moving day.",
   },
 ];
 
@@ -112,20 +118,40 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="feature-grid">
-            {BENEFITS.map((b, i) => (
-              <article
-                key={b.title}
-                className={`feature-card${i === 1 ? " feature-card-highlight" : ""}`}
-              >
-                <span className="feature-icon">
-                  <Icon name={b.icon} />
-                </span>
-                <h3>{b.title}</h3>
-                <p>{b.body}</p>
-              </article>
+          <ol className="why-steps">
+            {WHY_STEPS.map((s, i) => (
+              <li key={s.label} className="why-step">
+                <div className="why-step-art">
+                  <Image
+                    src={s.img}
+                    alt=""
+                    width={s.w}
+                    height={s.h}
+                    sizes="(max-width: 860px) 70vw, 300px"
+                  />
+                </div>
+                <div className="why-step-body">
+                  <span className="why-step-no">{i + 1}</span>
+                  <h3>{s.label}</h3>
+                  <p>{s.body}</p>
+                </div>
+                {i < WHY_STEPS.length - 1 && (
+                  <span className="why-connector" aria-hidden="true">
+                    <svg viewBox="0 0 92 34" fill="none">
+                      <path
+                        d="M3 6 C 22 6, 26 28, 46 28 S 70 6, 89 6"
+                        stroke="#3fc0dd"
+                        strokeWidth="3"
+                        strokeDasharray="1 8"
+                        strokeLinecap="round"
+                      />
+                      <circle cx="46" cy="28" r="6.5" fill="#fff" stroke="#e2660f" strokeWidth="3" />
+                    </svg>
+                  </span>
+                )}
+              </li>
             ))}
-          </div>
+          </ol>
         </div>
       </section>
 
@@ -150,10 +176,8 @@ export default function HomePage() {
                 <span className="feature-icon">
                   <Icon name={s.icon} />
                 </span>
-                <div>
-                  <h3>{s.title}</h3>
-                  <p>{s.body}</p>
-                </div>
+                <h3>{s.title}</h3>
+                <p>{s.body}</p>
               </div>
             ))}
           </div>
